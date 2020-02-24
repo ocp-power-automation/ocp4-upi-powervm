@@ -27,5 +27,13 @@ sudo systemctl enable --now named
 
 sudo sed -i '/search /a nameserver ${bastion_ip}' $etc_resolv_conf
 
+#systemd config to restart DNS
+named_systemd_dir=/usr/lib/systemd/system/named-chroot.service.d
+sudo mkdir -p $named_systemd_dir
+sudo chmod 755 $named_systemd_dir
+echo "[Service]" | sudo tee -a $named_systemd_dir/restart.conf
+echo "Restart=always" | sudo tee -a $named_systemd_dir/restart.conf
+echo "RestartSec=3" | sudo tee -a $named_systemd_dir/restart.conf
+
 echo "Enabled DNS Server."
 
