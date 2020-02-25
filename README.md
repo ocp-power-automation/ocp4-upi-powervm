@@ -88,6 +88,14 @@ If you're unable to create and publish these DNS records, you can add them to yo
 
 Hint: For your convenience entries specific to your cluster will be printed at the end of a successful run. Just copy and paste value of output variable `etc_hosts_entries` to your hosts file.
 
+## OCP login credentials for CLI and GUI
+The OCP login credentials are in bastion host. In order to retrieve the same follow these steps:
+1. `ssh -i data/id_rsa root@<bastion_ip>`
+2. `cd ~/openstack-upi/auth`
+3. `kubeconfig` can be used for CLI (`oc` or `kubectl`)
+4. `kubeadmin` user and content of `kubeadmin-pasword` as password for GUI
+ 
+
 ## Cleaning up
 Run `terraform destroy -var-file var.tfvars` to make sure that all resources are properly cleaned up. Do not manually clean up your environment unless both of the following are true:
 
