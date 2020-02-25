@@ -42,3 +42,8 @@ output "oc_server_url" {
 output "web_console_url" {
     value = "https://console-openshift-console.apps.${var.cluster_id}.${var.cluster_domain}"
 }
+
+output "storageclass_name" {
+    value = module.storage.storageclass_name
+}
+

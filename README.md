@@ -52,6 +52,8 @@ Edit the var.tfvars file with following values:
  * pull_secret_file : Location of the pull-secret file to be used.
  * cluster_domain : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
  * cluster_id : Cluster identifier. Should not be more than 14 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
+ * storage_type : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
+ * nfs_volume_size : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
 
 ## How-to set required data files
 You need to have following files in data/ directory before running the Terraform templates.

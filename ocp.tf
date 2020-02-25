@@ -98,3 +98,18 @@ module "install" {
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
 }
+
+module "storage" {
+    source                          = "./modules/7_storage"
+
+    install_status                  = module.install.install_status
+    cluster_id                      = var.cluster_id
+    bastion_ip                      = module.bastion.bastion_ip
+    bastion_id                      = module.bastion.bastion_id
+    storage_type                    = var.storage_type
+    nfs_volume_size                 = var.nfs_volume_size
+    rhel_username                   = var.rhel_username
+    private_key                     = local.private_key
+    ssh_agent                       = var.ssh_agent
+}
+

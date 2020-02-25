@@ -163,3 +163,14 @@ variable "cluster_domain" {
 variable "cluster_id" {
     default   = "test-ocp"
 }
+
+variable "storage_type" {
+    default = "nfs"
+}
+
+variable "nfs_volume_size" {
+    # If storage_type = nfs, a new volume of this size will be attached to the bastion node.
+    # Value in GB
+    default = "300"
+}
+
