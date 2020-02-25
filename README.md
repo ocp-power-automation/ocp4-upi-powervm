@@ -1,7 +1,9 @@
-# Terraform for OpenShift 4.3 on HDC OpenStack
+# Terraform for OpenShift 4.X on PowerVC
 This repo contains Terraform templates required to deploy OCP 4.3 on VMs running on IBM PowerVC. Terraform resources are implemented by refering to https://github.com/openshift/installer/blob/release-4.3/docs/user/openstack/install_upi.md.
 
 This module with not setup a private network for running the cluster. Instead, it will create the nodes on same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. This module also setup a DNS server and HAPROXY server on the bastion node.
+
+Run this code from either Mac or Linux (Intel) system.
 
 ## How-to install Terraform
 https://learn.hashicorp.com/terraform/getting-started/install.html
