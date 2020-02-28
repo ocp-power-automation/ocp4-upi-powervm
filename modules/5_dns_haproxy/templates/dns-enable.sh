@@ -8,7 +8,7 @@ sudo firewall-cmd --reload
 
 echo "Enabling DNS Server..."
 if [[ -f $etc_named_conf ]]; then
-   sudo mv $etc_named_conf $etc_named_conf.orig
+    sudo mv $etc_named_conf $etc_named_conf.orig
 fi
 sudo cp ${sourcedir}/named.conf $etc_named_conf
 sudo chcon -t named_conf_t $etc_named_conf
@@ -19,21 +19,19 @@ sudo chcon -R -t named_conf_t $etc_named_zones_dir
 
 sudo systemctl enable --now named
 
-#if [[ -f $etc_resolv_conf ]]; then
-#   sudo mv $etc_resolv_conf $etc_resolv_conf.orig
-#fi
-#sudo cp ${sourcedir}/resolv.conf $etc_resolv_conf
-#sudo chcon -R -t net_conf_t $etc_resolv_conf
+if [[ -f $etc_resolv_conf ]]; then
+    sudo cp $etc_resolv_conf $etc_resolv_conf.orig
+fi
 
 sudo sed -i '/search /a nameserver ${bastion_ip}' $etc_resolv_conf
+sudo chcon -R -t named_conf_t $etc_resolv_conf
 
 #systemd config to restart DNS
-named_systemd_dir=/usr/lib/systemd/system/named-chroot.service.d
+named_systemd_dir=/usr/lib/systemd/system/named.service.d
 sudo mkdir -p $named_systemd_dir
 sudo chmod 755 $named_systemd_dir
-echo "[Service]" | sudo tee -a $named_systemd_dir/restart.conf
+echo "[Service]" | sudo tee $named_systemd_dir/restart.conf
 echo "Restart=always" | sudo tee -a $named_systemd_dir/restart.conf
 echo "RestartSec=3" | sudo tee -a $named_systemd_dir/restart.conf
 
 echo "Enabled DNS Server."
-

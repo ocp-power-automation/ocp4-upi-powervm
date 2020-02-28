@@ -164,6 +164,10 @@ variable "cluster_id" {
     default   = "test-ocp"
 }
 
+variable "dns_enabled" {
+    default   = "true"
+}
+
 variable "storage_type" {
     default = "nfs"
 }

@@ -18,42 +18,42 @@ On your Terraform client machine:
 
 ## How-to set Terraform variables
 Edit the var.tfvars file with following values:
- * auth_url : Endpoint URL used to connect Openstack.
- * user_name : OpenStack username.
- * password :  Openstack password.
- * tenant_name :  The Name of the Tenant (Identity v2) or Project (Identity v3) to login with.
- * domain_name : The Name of the Domain to scope to.
- * openstack_availability_zone : The availability zone in which to create the servers.
- * network_name : An array of one or more networks to attach to the bastion host.
- * rhel_username : The user that we should use for the connection to the bastion host.
- * keypair_name : Optional value for keypair used. Default is <cluster_id>-keypair.
- * public_key_file : A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.
- * private_key_file : Corresponding private key file. Default path is 'data/id_rsa'.
- * private_key : The contents of an SSH key to use for the connection. Ignored if public_key_file is provided.
- * public_key : The contents of corresponding key to use for the connection. Ignored if public_key_file is provided.
- * rhel_subscription_username : The username required for RHEL subcription on bastion host.
- * rhel_subscription_password : The password required for RHEL subcription on bastion host.
- * bastion : Map of below parameters for bastion host.
-    * instance_type : The name of the desired flavor.
-    * image_id : The image ID of the desired RHEL image.
- * bootstrap : Map of below parameters for bootstrap host.
-    * instance_type : The name of the desired flavor.
-    * image_id : The image ID of the desired CoreOS image
- * master : Map of below parameters for master hosts.
-    * instance_type : The name of the desired flavor.
-    * image_id : The image ID of the desired CoreOS image
-    * count : Number of master nodes.
- * worker : Map of below parameters for worker hosts. (Atleaset 2 Workers are required for running router pods)
-    * instance_type : The name of the desired flavor.
-    * image_id : The image ID of the desired CoreOS image.
-    * count : Number of worker nodes.
- * openshift_install_tarball : HTTP URL for openhift-install tarball.
- * release_image_override : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
- * pull_secret_file : Location of the pull-secret file to be used.
- * cluster_domain : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
- * cluster_id : Cluster identifier. Should not be more than 14 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
- * storage_type : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
- * nfs_volume_size : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
+ * `auth_url` : Endpoint URL used to connect Openstack.
+ * `user_name` : OpenStack username.
+ * `password` :  Openstack password.
+ * `tenant_name` :  The Name of the Tenant (Identity v2) or Project (Identity v3) to login with.
+ * `domain_name` : The Name of the Domain to scope to.
+ * `openstack_availability_zone` : The availability zone in which to create the servers.
+ * `network_name` : An array of one or more networks to attach to the bastion host.
+ * `rhel_username` : The user that we should use for the connection to the bastion host.
+ * `keypair_name` : Optional value for keypair used. Default is <cluster_id>-keypair.
+ * `public_key_file` : A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.
+ * `private_key_file` : Corresponding private key file. Default path is 'data/id_rsa'.
+ * `private_key` : The contents of an SSH key to use for the connection. Ignored if `public_key_file` is provided.
+ * `public_key` : The contents of corresponding key to use for the connection. Ignored if `public_key_file` is provided.
+ * `rhel_subscription_username` : The username required for RHEL subcription on bastion host.
+ * `rhel_subscription_password` : The password required for RHEL subcription on bastion host.
+ * `bastion` : Map of below parameters for bastion host.
+    * `instance_type` : The name of the desired flavor.
+    * `image_id` : The image ID of the desired RHEL image.
+ * `bootstrap` : Map of below parameters for bootstrap host.
+    * `instance_type` : The name of the desired flavor.
+    * `image_id` : The image ID of the desired CoreOS image
+ * `master` : Map of below parameters for master hosts.
+    * `instance_type` : The name of the desired flavor.
+    * `image_id` : The image ID of the desired CoreOS image
+    * `count` : Number of master nodes.
+ * `worker` : Map of below parameters for worker hosts. (Atleaset 2 Workers are required for running router pods)
+    * `instance_type` : The name of the desired flavor.
+    * `image_id` : The image ID of the desired CoreOS image.
+    * `count` : Number of worker nodes.
+ * `openshift_install_tarball` : HTTP URL for openhift-install tarball.
+ * `release_image_override` : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
+ * `pull_secret_file` : Location of the pull-secret file to be used.
+ * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
+ * `cluster_id` : Cluster identifier. Should not be more than 14 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
+ * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
+ * `nfs_volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
 
 ## How-to set required data files
 You need to have following files in data/ directory before running the Terraform templates.
@@ -61,8 +61,8 @@ You need to have following files in data/ directory before running the Terraform
 # ls data/
 id_rsa  id_rsa.pub  pull-secret.txt
 ```
- * id_rsa & id_rsa.pub : The key pair used for accessing the hosts. Note: default user for CoreOS is 'core'.
- * pull-secret.txt : File containing keys required to pull images on the cluster. You can download it from RH portal after login https://cloud.redhat.com/openshift/install/pull-secret.
+ * `id_rsa` & `id_rsa.pub` : The key pair used for accessing the hosts. These files are not required if you provide `public_key_file` and `private_key_file`.
+ * `pull-secret.txt` : File containing keys required to pull images on the cluster. You can download it from RH portal after login https://cloud.redhat.com/openshift/install/pull-secret.
 
 ## How-to run Terraform resources
 On your Terraform client machine & tf_openshift4_pvc directory:

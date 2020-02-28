@@ -1,42 +1,13 @@
 locals {
-    setup_dir_name          = "dns-setup"
-    setup_remote_dir        = "$HOME/setup-files"
-    local_temp_render_dir   = "/tmp/setup-files"
-}
-
-# Render BIND config files:
-resource "local_file" "named_conf" {
-    filename             = "${local.local_temp_render_dir}/${local.setup_dir_name}/named.conf"
-    sensitive_content    = templatefile("${path.module}/template-files/named.conf", local.named_cfg)
-    file_permission      = "0644"
-    directory_permission = "0755"
-}
-
-resource "local_file" "cluster_zone_db" {
-    filename        = "${local.local_temp_render_dir}/${local.setup_dir_name}/cluster-zone.db"
-    content    = templatefile("${path.module}/template-files/cluster-zone.db", local.named_cfg)
-    file_permission      = "0644"
-    directory_permission = "0755"
-}
-
-locals {
     script_cfg = {
         bastion_ip = var.bastion_ip
-        sourcedir = "${local.setup_remote_dir}/${local.setup_dir_name}"
+        sourcedir = "$HOME/setup-files/dns-setup"
     }
-}
-
-resource local_file dns_script {
-    filename   = "${local.local_temp_render_dir}/${local.setup_dir_name}/dns-enable.sh"
-    content    = templatefile("${path.module}/scripts/dns-enable.sh", local.script_cfg)
-    file_permission      = "0644"
-    directory_permission = "0755"
 }
 
 # Setup BIND.
 resource "null_resource" "do_setup" {
-    depends_on = [local_file.named_conf, local_file.cluster_zone_db]
-
+    count       = var.dns_enabled == "true" ? 1 : 0
     connection {
         type        = "ssh"
         user        = var.rhel_username
@@ -45,23 +16,41 @@ resource "null_resource" "do_setup" {
         agent       = var.ssh_agent
         timeout     = "15m"
     }
-
     provisioner "remote-exec" {
-        inline = [
-            "rm -rf ${local.setup_remote_dir}/${local.setup_dir_name}",
-            "mkdir -p ${local.setup_remote_dir}/${local.setup_dir_name}"
+        inline  = [
+            "rm -rf ${local.script_cfg.sourcedir}",
+            "mkdir -p ${local.script_cfg.sourcedir}"
         ]
     }
-
     provisioner "file" {
-        source      = "${local.local_temp_render_dir}/${local.setup_dir_name}/"
-        destination = "${local.setup_remote_dir}/${local.setup_dir_name}"
+        content     = templatefile("${path.module}/templates/dns-enable.sh", local.script_cfg)
+        destination = "${local.script_cfg.sourcedir}/dns-enable.sh"
     }
-
+    provisioner "file" {
+        content     = templatefile("${path.module}/templates/dns-disable.sh", local.script_cfg)
+        destination = "${local.script_cfg.sourcedir}/dns-disable.sh"
+    }
+    provisioner "file" {
+        content     = templatefile("${path.module}/templates/named.conf", local.named_cfg)
+        destination = "${local.script_cfg.sourcedir}/named.conf"
+    }
+    provisioner "file" {
+        content     = templatefile("${path.module}/templates/cluster-zone.db", local.named_cfg)
+        destination = "${local.script_cfg.sourcedir}/cluster-zone.db"
+    }
     provisioner "remote-exec" {
-        inline = [
-            "chmod +x ${local.setup_remote_dir}/${local.setup_dir_name}/*.sh",
-            "${local.setup_remote_dir}/${local.setup_dir_name}/dns-enable.sh",
+        inline  = [
+            "chmod +x ${local.script_cfg.sourcedir}/dns-enable.sh",
+            "${local.script_cfg.sourcedir}/dns-enable.sh",
+        ]
+    }
+    provisioner "remote-exec" {
+        when    = destroy
+        on_failure = continue
+        inline  = [
+            "chmod +x ${local.script_cfg.sourcedir}/dns-disable.sh",
+            "${local.script_cfg.sourcedir}/dns-disable.sh || true",
+            "rmdir --ignore-fail-on-non-empty ${local.script_cfg.sourcedir}"
         ]
     }
 }

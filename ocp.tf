@@ -85,6 +85,7 @@ module "dns_haproxy" {
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
+    dns_enabled                     = var.dns_enabled
 }
 
 module "install" {
