@@ -113,13 +113,22 @@ resource "null_resource" "patch_image_registry" {
         agent       = var.ssh_agent
         timeout     = "15m"
     }
+    provisioner "file" {
+        content = <<EOF
+#!/bin/bash
+
+# The image-registry is not always available immediately after the OCP installer
+while [ $(oc get configs.imageregistry.operator.openshift.io/cluster | wc -l) == 0 ]; do sleep 30; done
+oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
+oc patch configs.imageregistry.operator.openshift.io cluster --type json -p '[{ "op": "remove", "path": "/spec/storage/swift" }]'
+oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
+
+EOF
+        destination = "/tmp/patch_image_registry.sh"
+    }
     provisioner "remote-exec" {
         inline = [
-            # The image-registry is not always available immediately after the OCP installer
-            "while [ $(oc get configs.imageregistry.operator.openshift.io/cluster | wc -l) == 0 ]; do sleep 30; done",
-            "oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{\"spec\":{\"storage\":{\"emptyDir\":{}}}}'",
-            "oc patch configs.imageregistry.operator.openshift.io cluster --type json -p '[{ \"op\": \"remove\", \"path\": \"/spec/storage/swift\" }]'",
-            "oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{\"spec\":{\"managementState\":\"Managed\"}}'",
+            "chmod +x /tmp/patch_image_registry.sh; bash /tmp/patch_image_registry.sh",
         ]
     }
 }
@@ -138,6 +147,7 @@ resource "null_resource" "wait_install" {
         inline = [
             "cd ~/openstack-upi",
             "./openshift-install wait-for install-complete",
+            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
     }
 }
