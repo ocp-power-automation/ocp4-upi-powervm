@@ -136,8 +136,6 @@ locals {
     public_key_file     = "${var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : "${var.public_key_file}" }"
     private_key         = "${var.private_key == "" ? file(coalesce(local.private_key_file, "/dev/null")) : "${var.private_key}" }"
     public_key          = "${var.public_key == "" ? file(coalesce(local.public_key_file, "/dev/null")) : "${var.public_key}" }"
-
-    keypair_name        = "${var.keypair_name == "" ? "${var.cluster_id}-keypair" : "${var.keypair_name}" }"
     create_keypair      = "${var.keypair_name == "" ? "1": "0"}"
 }
 
@@ -161,7 +159,7 @@ variable "cluster_domain" {
 }
 # Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
 # Should not be more than 14 characters
-variable "cluster_id" {
+variable "cluster_id_prefix" {
     default   = "test-ocp"
 }
 

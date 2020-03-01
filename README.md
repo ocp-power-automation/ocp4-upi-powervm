@@ -52,8 +52,8 @@ Edit the var.tfvars file with following values:
  * `release_image_override` : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
  * `pull_secret_file` : Location of the pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
- * `cluster_id` : Cluster identifier. Should not be more than 14 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
  * `dns_enabled` : Flag for installing and configuring DNS server on bastion node. Any value other than "true" will delete the DNS configurations.
+ * `cluster_id_prefix` : Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
  * `nfs_volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
 

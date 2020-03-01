@@ -26,4 +26,9 @@ openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64
 release_image_override = ""
 pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"
-cluster_id = "test"
+
+dns_enabled     = "true"
+
+storage_type    = "nfs"
+nfs_volume_size = "300" # Value in GB
+cluster_id_prefix = "test"
