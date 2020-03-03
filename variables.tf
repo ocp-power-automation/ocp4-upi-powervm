@@ -48,8 +48,9 @@ variable "bastion" {
     }
 }
 variable "bootstrap" {
-    # only one node is supported
     default = {
+        # only one node is supported
+        count = 1
         instance_type = "m1.xlarge"
         # rhcos image id
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"

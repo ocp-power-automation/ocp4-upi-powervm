@@ -11,6 +11,7 @@ variable "bootstrap" {
         instance_type = "m1.xlarge"
         # rhcos image id
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+        count = 1
     }
 }
 variable "master" {

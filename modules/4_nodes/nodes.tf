@@ -20,6 +20,8 @@ EOF
 }
 
 resource "openstack_compute_instance_v2" "bootstrap" {
+    # Only 1 node is supported
+    count       = var.bootstrap["count"] == 0 ? 0 : 1
     name        = "${var.cluster_id}-bootstrap"
     flavor_name = var.bootstrap["instance_type"]
     image_id    = var.bootstrap["image_id"]

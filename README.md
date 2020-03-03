@@ -38,10 +38,11 @@ Edit the var.tfvars file with following values:
     * `image_id` : The image ID of the desired RHEL image.
  * `bootstrap` : Map of below parameters for bootstrap host.
     * `instance_type` : The name of the desired flavor.
-    * `image_id` : The image ID of the desired CoreOS image
+    * `image_id` : The image ID of the desired CoreOS image.
+    * `count` : Always set the value to 1 before starting the deployment. When the deployment is completed successfully set to 0 to delete the bootstrap node.
  * `master` : Map of below parameters for master hosts.
     * `instance_type` : The name of the desired flavor.
-    * `image_id` : The image ID of the desired CoreOS image
+    * `image_id` : The image ID of the desired CoreOS image.
     * `count` : Number of master nodes.
  * `worker` : Map of below parameters for worker hosts. (Atleaset 2 Workers are required for running router pods)
     * `instance_type` : The name of the desired flavor.
@@ -52,6 +53,7 @@ Edit the var.tfvars file with following values:
  * `pull_secret_file` : Location of the pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
  * `cluster_id` : Cluster identifier. Should not be more than 14 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
+ * `dns_enabled` : Flag for installing and configuring DNS server on bastion node. Any value other than "true" will delete the DNS configurations.
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
  * `nfs_volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
 
@@ -70,6 +72,13 @@ On your Terraform client machine & tf_openshift4_pvc directory:
 2. `terraform apply -var-file var.tfvars`
 
 Now wait for the installation to complete. It may take around 40 mins to complete provisioning.
+
+**IMPORTANT**: Once the deployment is completed successfully, you can safely delete the bootstrap node. After this, the HAPROXY server will not point to the APIs from bootstrap node once the cluster is up and running. Clients will start consuming APIs from master nodes once the bootstrap node is deleted.
+
+To delete the bootstrap node:
+1. Change the `count` value to 0 in `bootstrap` map variable and re-run the apply command. Eg: `bootstrap = {instance_type = "medium", image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4", "count" = 0}`
+2. Run command `terraform apply -var-file var.tfvars`
+
 
 ## Create API and Ingress DNS Records
 You will also need to add the following records to your DNS:

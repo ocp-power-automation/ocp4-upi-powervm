@@ -10,10 +10,6 @@ output "bootstrap_ip" {
     value = module.nodes.bootstrap_ip
 }
 
-output "bootstrap_ssh_command" {
-    value = "ssh core@${module.nodes.bootstrap_ip}"
-}
-
 output "master_ips" {
     value = module.nodes.master_ips
 }

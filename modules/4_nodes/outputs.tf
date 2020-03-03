@@ -1,5 +1,5 @@
 output "bootstrap_ip" {
-    value = openstack_compute_instance_v2.bootstrap.access_ip_v4
+    value = "${join("", openstack_compute_instance_v2.bootstrap.*.access_ip_v4)}"
 }
 
 output "master_ips" {
