@@ -24,7 +24,7 @@ Edit the var.tfvars file with following values:
  * `tenant_name` :  The Name of the Tenant (Identity v2) or Project (Identity v3) to login with.
  * `domain_name` : The Name of the Domain to scope to.
  * `openstack_availability_zone` : The availability zone in which to create the servers.
- * `network_name` : An array of one or more networks to attach to the bastion host.
+ * `network_name` : Name of the network to use for deploying all the hosts.
  * `rhel_username` : The user that we should use for the connection to the bastion host.
  * `keypair_name` : Optional value for keypair used. Default is <cluster_id>-keypair.
  * `public_key_file` : A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.
