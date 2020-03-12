@@ -34,4 +34,7 @@ echo "[Service]" | sudo tee $named_systemd_dir/restart.conf
 echo "Restart=always" | sudo tee -a $named_systemd_dir/restart.conf
 echo "RestartSec=3" | sudo tee -a $named_systemd_dir/restart.conf
 
+sudo systemctl daemon-reload
+sudo systemctl restart named
+
 echo "Enabled DNS Server."
