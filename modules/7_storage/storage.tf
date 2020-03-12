@@ -63,9 +63,14 @@ resource "null_resource" "setup_nfs_disk" {
         inline = [
             "sudo chmod +x /tmp/create_disk_link.sh",
             "/tmp/create_disk_link.sh",
+            "while [ ! -L /dev/${local.disk_config.disk_name} ]; do sleep 2; echo 'Disk not ready, sleeping for 2s..'; done",
             "sudo mkfs.ext4 -F /dev/${local.disk_config.disk_name}",
             "rm -rf mkdir /var/nfsshare && mkdir /var/nfsshare && chmod -R 755 /var/nfsshare",
             "sudo mount /dev/${local.disk_config.disk_name} /var/nfsshare",
+        ]
+    }
+    provisioner "remote-exec" {
+        inline = [
             "sudo sed -i '/^\\/var\\/nfsshare /d' /etc/exports",
             "echo '/var/nfsshare *(rw,sync,no_root_squash)' | sudo tee -a /etc/exports",
             "sudo exportfs -rav",
