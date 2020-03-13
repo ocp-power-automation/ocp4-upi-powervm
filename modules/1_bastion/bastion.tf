@@ -72,7 +72,9 @@ resource "null_resource" "bastion_init" {
             "sudo subscription-manager refresh",
             "sudo subscription-manager attach --auto",
             "#sudo yum update -y --skip-broken",
-            "sudo yum install -y wget jq git net-tools bind-utils vim python3 httpd"
+            "sudo yum install -y wget jq git net-tools bind-utils vim python3 httpd tar",
+            "sudo systemctl enable firewalld",
+            "sudo systemctl start firewalld"
         ]
     }
     provisioner "remote-exec" {
