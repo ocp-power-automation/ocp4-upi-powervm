@@ -14,7 +14,7 @@ data "ignition_file" "b_hostname" {
     path        = "/etc/hostname"
     content {
         content = <<EOF
-${var.cluster_id}-bootstrap
+bootstrap-${var.cluster_id}.${var.cluster_domain}
 EOF
     }
 }
@@ -53,7 +53,7 @@ data "ignition_file" "m_hostname" {
     path        = "/etc/hostname"
     content {
     content     = <<EOF
-${var.cluster_id}-master-${count.index}
+master-${count.index}.${var.cluster_id}.${var.cluster_domain}
 EOF
     }
 }
@@ -85,7 +85,7 @@ data "ignition_file" "w_hostname" {
 
     content {
     content     = <<EOF
-${var.cluster_id}-worker-${count.index}
+worker-${count.index}.${var.cluster_id}.${var.cluster_domain}
 EOF
     }
 }

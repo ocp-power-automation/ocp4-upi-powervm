@@ -36,10 +36,10 @@ _etcd-server-ssl._tcp  IN   SRV   0 10 2380 etcd-${m.index}.${cluster_zone}.
 %{ endfor ~}
 
 %{ for m in masters ~}
-${cluster_id}-master-${m.index}     IN   A     ${m.ip}
+master-${m.index}     IN   A     ${m.ip}
 %{ endfor ~}
 %{ for w in workers ~}
-${cluster_id}-worker-${w.index}     IN   A     ${w.ip}
+worker-${w.index}     IN   A     ${w.ip}
 %{ endfor ~}
 
-${cluster_id}-bootstrap         IN   A     ${bootstrap_ip}
+bootstrap         IN   A     ${bootstrap_ip}
