@@ -10,6 +10,10 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
     name = "${var.cluster_id}-bootstrap-port"
     network_id  = data.openstack_networking_network_v2.network.id
     admin_state_up = "true"
+    binding {
+       vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
+       profile   = var.network_type == "SRIOV" ?  local.sriov : null
+     }
     extra_dhcp_option {
         name  = "domain-search"
         value = var.cluster_domain
@@ -21,6 +25,10 @@ resource "openstack_networking_port_v2" "master_port" {
     name            = "${var.cluster_id}-master-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
     admin_state_up  = "true"
+    binding {
+       vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
+       profile   = var.network_type == "SRIOV" ?  local.sriov : null
+     }
     extra_dhcp_option {
         name        = "domain-search"
         value       = var.cluster_domain
@@ -32,6 +40,10 @@ resource "openstack_networking_port_v2" "worker_port" {
     name            = "${var.cluster_id}-worker-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
     admin_state_up  = "true"
+    binding {
+       vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
+       profile   = var.network_type == "SRIOV" ?  local.sriov : null
+     }
     extra_dhcp_option {
         name  = "domain-search"
         value = var.cluster_domain
@@ -56,6 +68,15 @@ locals {
         worker_info         = [for ix in range(length(local.worker_mac)): {index = ix, ip = local.worker_ip[ix][0], mac = local.worker_mac[ix]}]
         cluster_id          = var.cluster_id
     }
+
+   sriov   = <<EOF
+   {
+       "delete_with_instance": 1,
+       "vnic_required_vfs": 1,
+       "capacity": 0.02,
+       "vlan_type": "allowed"
+   }
+   EOF  
 }
 
 resource "null_resource" "setup_dhcp" {

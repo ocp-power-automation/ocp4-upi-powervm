@@ -12,3 +12,5 @@ variable "bastion_ip" {}
 variable "rhel_username" {}
 variable "private_key" {}
 variable "ssh_agent" {}
+variable "network_type" {}
+

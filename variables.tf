@@ -80,6 +80,12 @@ variable "network_name" {
     default = "my_network_name"
 }
 
+variable "network_type" {
+    #Eg: SEA or SRIOV
+    default = "SEA"
+    description = "Specify the name of the network adapter type to use for creating hosts"
+}
+
 variable "rhel_username" {
     default = "root"
 }

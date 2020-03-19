@@ -8,6 +8,7 @@ openstack_availability_zone = ""
 
 # Configure the Instance details
 network_name                = "network_name"
+#network_type               = "SRIOV"
 rhel_username               = "root"
 #keypair_name                = "mykeypair"
 public_key_file             = "data/id_rsa.pub"

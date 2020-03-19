@@ -58,6 +58,7 @@ module "network" {
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
+    network_type                    = var.network_type
 }
 
 module "nodes" {
