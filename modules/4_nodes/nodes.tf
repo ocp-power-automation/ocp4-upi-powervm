@@ -14,7 +14,7 @@ data "ignition_file" "b_hostname" {
     path        = "/etc/hostname"
     content {
         content = <<EOF
-bootstrap-${var.cluster_id}.${var.cluster_domain}
+bootstrap.${var.cluster_id}.${var.cluster_domain}
 EOF
     }
 }
