@@ -1,7 +1,8 @@
 resource "openstack_blockstorage_volume_v2" "storage_volume" {
     depends_on  = [var.install_status]
     name        = "${var.cluster_id}-${var.storage_type}-storage-vol"
-    size        = var.nfs_volume_size
+    size        = var.volume_size
+    volume_type = var.volume_storage_template
     count       = var.storage_type == "nfs" ? 1 : 0
 }
 
@@ -39,8 +40,8 @@ resource "null_resource" "setup_nfs_server" {
 
 locals {
     disk_config = {
-        nfs_volume_size = var.nfs_volume_size
-        disk_name       = "disk/nfs-storage-disk"
+        volume_size = var.volume_size
+        disk_name   = "disk/pv-storage-disk"
     }
 }
 
@@ -63,7 +64,6 @@ resource "null_resource" "setup_nfs_disk" {
         inline = [
             "sudo chmod +x /tmp/create_disk_link.sh",
             "/tmp/create_disk_link.sh",
-            "while [ ! -L /dev/${local.disk_config.disk_name} ]; do sleep 2; echo 'Disk not ready, sleeping for 2s..'; done",
             "sudo mkfs.ext4 -F /dev/${local.disk_config.disk_name}",
             "rm -rf mkdir /var/nfsshare && mkdir /var/nfsshare && chmod -R 755 /var/nfsshare",
             "sudo mount /dev/${local.disk_config.disk_name} /var/nfsshare",
@@ -84,8 +84,8 @@ locals {
         server_ip   = var.bastion_ip
         server_path = "/var/nfsshare"
     }
-    nfs_storageclass_config = {
-        storageclass_name   = "managed-nfs-storage"
+    storageclass_config = {
+        storageclass_name   = var.storageclass_name
     }
     
 }
@@ -106,7 +106,7 @@ resource "null_resource" "configure_nfs_storage" {
         destination = "/tmp/deployment.yaml"
     }
     provisioner "file" {
-        content     = templatefile("${path.module}/templates/class.yaml", local.nfs_storageclass_config)
+        content     = templatefile("${path.module}/templates/class.yaml", local.storageclass_config)
         destination = "/tmp/class.yaml"
     }
     provisioner "file" {

@@ -31,5 +31,6 @@ cluster_domain = "example.com"
 dns_enabled     = "true"
 
 storage_type    = "nfs"
-nfs_volume_size = "300" # Value in GB
+volume_size = "300" # Value in GB
+volume_storage_template = ""
 cluster_id_prefix = "test"

@@ -114,7 +114,9 @@ module "storage" {
     bastion_ip                      = module.bastion.bastion_ip
     bastion_id                      = module.bastion.bastion_id
     storage_type                    = var.storage_type
-    nfs_volume_size                 = var.nfs_volume_size
+    storageclass_name               = var.storageclass_name
+    volume_size                     = var.volume_size
+    volume_storage_template         = var.volume_storage_template
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent

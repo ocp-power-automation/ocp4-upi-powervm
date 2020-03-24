@@ -1,7 +1,7 @@
 locals {
     bootstrap_entry = [{name = "${var.cluster_id}-bootstrap", ip = var.bootstrap_ip}]
-    master_entries  = [for ix in range(length(var.master_ips)): {name = "${var.cluster_id}-master-${ix} ", ip = var.master_ips[ix]}]
-    worker_entries  = [for ix in range(length(var.worker_ips)): {name = "${var.cluster_id}-worker-${ix} ", ip = var.worker_ips[ix]}]
+    master_entries  = [for ix in range(length(var.master_ips)): {name = "${var.cluster_id}-master-${ix}", ip = var.master_ips[ix]}]
+    worker_entries  = [for ix in range(length(var.worker_ips)): {name = "${var.cluster_id}-worker-${ix}", ip = var.worker_ips[ix]}]
 
     haproxy_config = {
         api_servers = concat(local.bootstrap_entry, local.master_entries),

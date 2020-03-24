@@ -56,7 +56,9 @@ Edit the var.tfvars file with following values:
  * `dns_enabled` : Flag for installing and configuring DNS server on bastion node. Any value other than "true" will delete the DNS configurations.
  * `cluster_id_prefix` : Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
- * `nfs_volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
+ * `storageclass_name` : StorageClass name to be given.
+ * `volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
+ * `volume_storage_template` : Storage template name or ID for creating the volume. Empty value will use default template.
 
 ## How-to set required data files
 You need to have following files in data/ directory before running the Terraform templates.
