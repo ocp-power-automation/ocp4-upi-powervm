@@ -66,6 +66,7 @@ resource "null_resource" "bastion_init" {
             "echo ' - preserve_hostname: true' | sudo tee -a /etc/cloud/cloud.cfg  > /dev/null",
             "sudo hostname -F /etc/hostname",
             "echo 'vm.max_map_count = 262144' | sudo tee --append /etc/sysctl.conf > /dev/null",
+            "echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.conf > /dev/null",
             "sudo sysctl -p",
             "sudo subscription-manager clean",
             "sudo subscription-manager register --username=${var.rhel_subscription_username} --password=${var.rhel_subscription_password} --force",
