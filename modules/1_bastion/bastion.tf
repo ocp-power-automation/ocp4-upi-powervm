@@ -4,11 +4,14 @@ resource "openstack_compute_keypair_v2" "key-pair" {
     public_key  = var.public_key
 }
 
+data "openstack_compute_flavor_v2" "bastion" {
+    name = var.bastion["instance_type"]
+}
 
 resource "openstack_compute_instance_v2" "bastion" {
     name            = "${var.cluster_id}-bastion"
     image_id        = var.bastion["image_id"]
-    flavor_name     = var.bastion["instance_type"]
+    flavor_id       = data.openstack_compute_flavor_v2.bastion.id
     key_pair        = openstack_compute_keypair_v2.key-pair.0.name
     network {
         name    = var.network_name

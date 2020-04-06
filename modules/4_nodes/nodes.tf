@@ -33,11 +33,15 @@ EOF
     }
 }
 
+data "openstack_compute_flavor_v2" "bootstrap" {
+    name = var.bootstrap["instance_type"]
+}
+
 resource "openstack_compute_instance_v2" "bootstrap" {
     # Only 1 node is supported
     count       = var.bootstrap["count"] == 0 ? 0 : 1
     name        = "${var.cluster_id}-bootstrap"
-    flavor_name = var.bootstrap["instance_type"]
+    flavor_id   = data.openstack_compute_flavor_v2.bootstrap.id
     image_id    = var.bootstrap["image_id"]
     availability_zone   = var.openstack_availability_zone
 
@@ -73,10 +77,14 @@ EOF
     }
 }
 
+data "openstack_compute_flavor_v2" "master" {
+    name = var.master["instance_type"]
+}
+
 resource "openstack_compute_instance_v2" "master" {
     name        = "${var.cluster_id}-master-${count.index}"
     count       = var.master["count"]
-    flavor_name = var.master["instance_type"]
+    flavor_id   = data.openstack_compute_flavor_v2.master.id
     image_id    = var.master["image_id"]
     availability_zone   = var.openstack_availability_zone
 
@@ -116,10 +124,14 @@ data "ignition_config" "worker" {
     ]
 }
 
+data "openstack_compute_flavor_v2" "worker" {
+    name = var.worker["instance_type"]
+}
+
 resource "openstack_compute_instance_v2" "worker" {
     name        = "${var.cluster_id}-worker-${count.index}"
     count       = var.worker["count"]
-    flavor_name = var.worker["instance_type"]
+    flavor_id   = data.openstack_compute_flavor_v2.worker.id
     image_id    = var.worker["image_id"]
     availability_zone   = var.openstack_availability_zone
 
