@@ -4,14 +4,32 @@ resource "openstack_compute_keypair_v2" "key-pair" {
     public_key  = var.public_key
 }
 
+resource "random_id" "label" {
+    count       = var.scg_id == "" ? 0 : 1
+    byte_length = "2"
+}
+
+resource "openstack_compute_flavor_v2" "bastion_scg" {
+    count       = var.scg_id == "" ? 0 : 1
+    name        = "${var.bastion["instance_type"]}-${random_id.label[0].hex}-scg"
+    region      = data.openstack_compute_flavor_v2.bastion.region
+    ram         = data.openstack_compute_flavor_v2.bastion.ram
+    vcpus       = data.openstack_compute_flavor_v2.bastion.vcpus
+    disk        = data.openstack_compute_flavor_v2.bastion.disk
+    swap        = data.openstack_compute_flavor_v2.bastion.swap
+    rx_tx_factor    = data.openstack_compute_flavor_v2.bastion.rx_tx_factor
+    is_public   = data.openstack_compute_flavor_v2.bastion.is_public
+    extra_specs = merge(data.openstack_compute_flavor_v2.bastion.extra_specs, {"powervm:storage_connectivity_group": var.scg_id})
+}
+
 data "openstack_compute_flavor_v2" "bastion" {
-    name = var.bastion["instance_type"]
+    name        = var.bastion["instance_type"]
 }
 
 resource "openstack_compute_instance_v2" "bastion" {
     name            = "${var.cluster_id}-bastion"
     image_id        = var.bastion["image_id"]
-    flavor_id       = data.openstack_compute_flavor_v2.bastion.id
+    flavor_id       = var.scg_id == "" ? data.openstack_compute_flavor_v2.bastion.id : openstack_compute_flavor_v2.bastion_scg[0].id
     key_pair        = openstack_compute_keypair_v2.key-pair.0.name
     network {
         name    = var.network_name

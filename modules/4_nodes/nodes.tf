@@ -1,3 +1,8 @@
+resource "random_id" "label" {
+    count       = var.scg_id == "" ? 0 : 3
+    byte_length = "2"
+}
+
 #common
 data "ignition_file" "pmtu" {
     filesystem  = "root"
@@ -33,6 +38,19 @@ EOF
     }
 }
 
+resource "openstack_compute_flavor_v2" "bootstrap_scg" {
+    count       = var.scg_id == "" || var.bootstrap["count"] == 0 ? 0 : 1
+    name        = "${var.bootstrap["instance_type"]}-${random_id.label[0].hex}-scg"
+    region      = data.openstack_compute_flavor_v2.bootstrap.region
+    ram         = data.openstack_compute_flavor_v2.bootstrap.ram
+    vcpus       = data.openstack_compute_flavor_v2.bootstrap.vcpus
+    disk        = data.openstack_compute_flavor_v2.bootstrap.disk
+    swap        = data.openstack_compute_flavor_v2.bootstrap.swap
+    rx_tx_factor    = data.openstack_compute_flavor_v2.bootstrap.rx_tx_factor
+    is_public   = data.openstack_compute_flavor_v2.bootstrap.is_public
+    extra_specs = merge(data.openstack_compute_flavor_v2.bootstrap.extra_specs, {"powervm:storage_connectivity_group": var.scg_id})
+}
+
 data "openstack_compute_flavor_v2" "bootstrap" {
     name = var.bootstrap["instance_type"]
 }
@@ -41,7 +59,7 @@ resource "openstack_compute_instance_v2" "bootstrap" {
     # Only 1 node is supported
     count       = var.bootstrap["count"] == 0 ? 0 : 1
     name        = "${var.cluster_id}-bootstrap"
-    flavor_id   = data.openstack_compute_flavor_v2.bootstrap.id
+    flavor_id   = var.scg_id == "" ? data.openstack_compute_flavor_v2.bootstrap.id : openstack_compute_flavor_v2.bootstrap_scg[0].id
     image_id    = var.bootstrap["image_id"]
     availability_zone   = var.openstack_availability_zone
 
@@ -77,6 +95,19 @@ EOF
     }
 }
 
+resource "openstack_compute_flavor_v2" "master_scg" {
+    count       = var.scg_id == "" || var.master["count"] == 0 ? 0 : 1
+    name        = "${var.master["instance_type"]}-${random_id.label[1].hex}-scg"
+    region      = data.openstack_compute_flavor_v2.master.region
+    ram         = data.openstack_compute_flavor_v2.master.ram
+    vcpus       = data.openstack_compute_flavor_v2.master.vcpus
+    disk        = data.openstack_compute_flavor_v2.master.disk
+    swap        = data.openstack_compute_flavor_v2.master.swap
+    rx_tx_factor    = data.openstack_compute_flavor_v2.master.rx_tx_factor
+    is_public   = data.openstack_compute_flavor_v2.master.is_public
+    extra_specs = merge(data.openstack_compute_flavor_v2.master.extra_specs, {"powervm:storage_connectivity_group": var.scg_id})
+}
+
 data "openstack_compute_flavor_v2" "master" {
     name = var.master["instance_type"]
 }
@@ -84,7 +115,7 @@ data "openstack_compute_flavor_v2" "master" {
 resource "openstack_compute_instance_v2" "master" {
     name        = "${var.cluster_id}-master-${count.index}"
     count       = var.master["count"]
-    flavor_id   = data.openstack_compute_flavor_v2.master.id
+    flavor_id   = var.scg_id == "" ? data.openstack_compute_flavor_v2.master.id : openstack_compute_flavor_v2.master_scg[0].id
     image_id    = var.master["image_id"]
     availability_zone   = var.openstack_availability_zone
 
@@ -124,6 +155,19 @@ data "ignition_config" "worker" {
     ]
 }
 
+resource "openstack_compute_flavor_v2" "worker_scg" {
+    count       = var.scg_id == "" || var.worker["count"] == 0 ? 0 : 1
+    name        = "${var.worker["instance_type"]}-${random_id.label[2].hex}-scg"
+    region      = data.openstack_compute_flavor_v2.worker.region
+    ram         = data.openstack_compute_flavor_v2.worker.ram
+    vcpus       = data.openstack_compute_flavor_v2.worker.vcpus
+    disk        = data.openstack_compute_flavor_v2.worker.disk
+    swap        = data.openstack_compute_flavor_v2.worker.swap
+    rx_tx_factor    = data.openstack_compute_flavor_v2.worker.rx_tx_factor
+    is_public   = data.openstack_compute_flavor_v2.worker.is_public
+    extra_specs = merge(data.openstack_compute_flavor_v2.worker.extra_specs, {"powervm:storage_connectivity_group": var.scg_id})
+}
+
 data "openstack_compute_flavor_v2" "worker" {
     name = var.worker["instance_type"]
 }
@@ -131,7 +175,7 @@ data "openstack_compute_flavor_v2" "worker" {
 resource "openstack_compute_instance_v2" "worker" {
     name        = "${var.cluster_id}-worker-${count.index}"
     count       = var.worker["count"]
-    flavor_id   = data.openstack_compute_flavor_v2.worker.id
+    flavor_id   = var.scg_id == "" ? data.openstack_compute_flavor_v2.worker.id : openstack_compute_flavor_v2.worker_scg[0].id
     image_id    = var.worker["image_id"]
     availability_zone   = var.openstack_availability_zone
 

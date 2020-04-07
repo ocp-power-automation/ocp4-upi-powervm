@@ -12,12 +12,15 @@ variable "bastion" {
     }
 }
 variable "network_name" {}
+variable "scg_id" {}
 variable "openstack_availability_zone" {}
+
 variable "rhel_username" {}
 variable "private_key" {}
 variable "public_key" {}
 variable "create_keypair" {}
 variable "keypair_name" {}
 variable "ssh_agent" {}
+
 variable "rhel_subscription_username" {}
 variable "rhel_subscription_password" {}

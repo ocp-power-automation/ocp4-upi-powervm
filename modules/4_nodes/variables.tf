@@ -31,6 +31,7 @@ variable "worker" {
     }
 }
 
+variable "scg_id" {}
 variable "openstack_availability_zone" {}
 
 variable "bootstrap_port_id" {}

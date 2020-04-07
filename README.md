@@ -26,6 +26,7 @@ Edit the var.tfvars file with following values:
  * `openstack_availability_zone` : The availability zone in which to create the servers.
  * `network_name` : Name of the network to use for deploying all the hosts.
  * `network_type` (Optional) : Type of the network adapter for cluster hosts. You can set the value as "SRIOV", any other value will use "SEA". More info [here](https://www.ibm.com/support/knowledgecenter/SSXK2N_1.4.0/com.ibm.powervc.standard.help.doc/powervc_sriov_overview.html).
+ * `scg_id` : ID of the PowerVC [Storage Connectivity Group](https://www.ibm.com/support/knowledgecenter/SSVSPA_1.4.4/com.ibm.powervc.cloud.help.doc/powervc_storage_connectivity_groups_cloud.html) (SCG) to use for all nodes. Empty value will use the default SCG. Deployments might fail if you don't provide this value and have more than one default SCG configured on PowerVC.
  * `rhel_username` : The user that we should use for the connection to the bastion host.
  * `keypair_name` : Optional value for keypair used. Default is <cluster_id>-keypair.
  * `public_key_file` : A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.

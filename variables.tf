@@ -86,6 +86,11 @@ variable "network_type" {
     description = "Specify the name of the network adapter type to use for creating hosts"
 }
 
+variable "scg_id" {
+    description = "The id of PowerVC Storage Connectivity Group to use for all nodes"
+    default = ""
+}
+
 variable "rhel_username" {
     default = "root"
 }

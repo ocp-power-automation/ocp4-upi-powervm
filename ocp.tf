@@ -19,6 +19,7 @@ module "bastion" {
     cluster_id                      = "${random_id.label.hex}"
     bastion                         = var.bastion
     network_name                    = var.network_name
+    scg_id                          = var.scg_id
     openstack_availability_zone     = var.openstack_availability_zone
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
@@ -73,6 +74,7 @@ module "nodes" {
     bootstrap                       = var.bootstrap
     master                          = var.master
     worker                          = var.worker
+    scg_id                          = var.scg_id
     openstack_availability_zone     = var.openstack_availability_zone
     bootstrap_port_id               = module.network.bootstrap_port_id
     master_port_ids                 = module.network.master_port_ids
