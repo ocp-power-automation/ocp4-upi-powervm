@@ -179,6 +179,7 @@ variable "dns_enabled" {
 }
 
 variable "storage_type" {
+    #Supported values: nfs (other value won't setup a storageclass)
     default = "nfs"
 }
 

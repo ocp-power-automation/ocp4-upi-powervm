@@ -1,7 +1,7 @@
 # Terraform for OpenShift 4.X on PowerVC
 This repo contains Terraform templates required to deploy OCP 4.3 on VMs running on IBM PowerVC. Terraform resources are implemented by refering to https://github.com/openshift/installer/blob/release-4.3/docs/user/openstack/install_upi.md.
 
-This module with not setup a private network for running the cluster. Instead, it will create the nodes on same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. This module also setup a DNS server and HAPROXY server on the bastion node.
+This module will not setup a private network for running the cluster. Instead, it will create the nodes on same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. This module also setup a DNS server and HAPROXY server on the bastion node.
 
 Run this code from either Mac or Linux (Intel) system.
 
@@ -77,7 +77,7 @@ On your Terraform client machine & tf_openshift4_pvc directory:
 
 Now wait for the installation to complete. It may take around 40 mins to complete provisioning.
 
-**IMPORTANT**: Once the deployment is completed successfully, you can safely delete the bootstrap node. After this, the HAPROXY server will not point to the APIs from bootstrap node once the cluster is up and running. Clients will start consuming APIs from master nodes once the bootstrap node is deleted.
+**IMPORTANT**: Once the deployment is completed successfully, you can safely delete the bootstrap node. After this, the HAPROXY server will not point to the APIs from bootstrap node once the cluster is up and running. Clients will start consuming APIs from master nodes once the bootstrap node is deleted. Take backup of all the required files from bootstrap node (eg: logs) before running below steps.
 
 To delete the bootstrap node:
 1. Change the `count` value to 0 in `bootstrap` map variable and re-run the apply command. Eg: `bootstrap = {instance_type = "medium", image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4", "count" = 0}`

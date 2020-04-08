@@ -64,7 +64,8 @@ resource "null_resource" "bastion_init" {
         timeout     = "15m"
     }
     provisioner "remote-exec" {
-        when = destroy
+        when        = destroy
+        on_failure  = continue
         inline = [
             "sudo subscription-manager unregister",
             "sudo subscription-manager remove --all",
