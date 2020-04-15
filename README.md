@@ -5,6 +5,8 @@ This module will not setup a private network for running the cluster. Instead, i
 
 Run this code from either Mac or Linux (Intel) system.
 
+:heavy_exclamation_mark: *This automation is intended for test/development purposes only and there is no formal support. For issues please open a GitHub issue*
+
 ## How-to install Terraform
 https://learn.hashicorp.com/terraform/getting-started/install.html
 
