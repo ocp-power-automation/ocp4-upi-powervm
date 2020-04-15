@@ -1,6 +1,5 @@
 
 1. Download and extract the CoreOS image with suffix *-openstack.ppc64le.qcow2.gz*.
-   For example download the current one from the following location and extract it.
 
 2. Convert the CoreOS qcow2 image to raw image
    ```
