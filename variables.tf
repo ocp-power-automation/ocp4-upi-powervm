@@ -2,7 +2,7 @@
 # Configure the OpenStack Provider
 ################################################################
 variable "user_name" {
-    description = "The user name used to connect to OpenStack"
+    description = "The user name used to connect to OpenStack/PowerVC"
     default = "my_user_name"
 }
 
@@ -22,7 +22,7 @@ variable "domain_name" {
 }
 
 variable "auth_url" {
-    description = "The endpoint URL used to connect to OpenStack"
+    description = "The endpoint URL used to connect to OpenStack/PowerVC"
     default = "https://<HOSTNAME>:5000/v3/"
 }
 

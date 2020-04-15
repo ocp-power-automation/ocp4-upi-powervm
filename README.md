@@ -18,9 +18,9 @@ On your Terraform client machine:
 
 ## How-to set Terraform variables
 Edit the var.tfvars file with following values:
- * `auth_url` : Endpoint URL used to connect Openstack.
- * `user_name` : OpenStack username.
- * `password` :  Openstack password.
+ * `auth_url` : Endpoint URL used to connect to PowerVC.
+ * `user_name` : PowerVC login username.
+ * `password` :  PowerVC login password.
  * `tenant_name` :  The Name of the Tenant (Identity v2) or Project (Identity v3) to login with.
  * `domain_name` : The Name of the Domain to scope to.
  * `openstack_availability_zone` : The availability zone in which to create the servers.
