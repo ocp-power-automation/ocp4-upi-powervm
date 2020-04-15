@@ -10,11 +10,21 @@ https://learn.hashicorp.com/terraform/getting-started/install.html
 
 Please follow above link to download and install Terraform on your machine. Here is the download page for your convenience https://www.terraform.io/downloads.html. Ensure you are using Terraform 0.12.20 and above. These modules are tested with the given(latest at this moment) version.
 
+## Image and LPAR requirements
+
+You'll need to create CoreOS image in PowerVC. Follow the steps mentioned [here](./coreos-image-creation.md).
+Following are the recommended LPAR configs for OpenShift nodes
+- Bootstrap, Master - 2 vCPUs, 16GB RAM, 120 GB Disk
+
+   **_This config is suitable for majority of the scenarios_**
+- Worker - 2 vCPUs, 16GB RAM, 120 GB Disk
+
+   **_Increase worker vCPUs, RAM and Disk based on application requirements_**
+
 ## Setup this repo
 On your Terraform client machine:
-1. `git clone git@github.ibm.com:redstack-power/tf_openshift4_pvc.git`
-2. `cd tf_openshift4_pvc`
-3. `git checkout release-4.3`
+1. Clone this repo
+2. `cd ocp4_upi_powervm`
 
 ## How-to set Terraform variables
 Edit the var.tfvars file with following values:
@@ -109,7 +119,7 @@ The OCP login credentials are in bastion host. In order to retrieve the same fol
 2. `cd ~/openstack-upi/auth`
 3. `kubeconfig` can be used for CLI (`oc` or `kubectl`)
 4. `kubeadmin` user and content of `kubeadmin-pasword` as password for GUI
- 
+
 
 ## Cleaning up
 Run `terraform destroy -var-file var.tfvars` to make sure that all resources are properly cleaned up. Do not manually clean up your environment unless both of the following are true:
