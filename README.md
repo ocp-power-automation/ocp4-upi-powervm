@@ -90,6 +90,8 @@ On your Terraform client machine & tf_openshift4_pvc directory:
 
 Now wait for the installation to complete. It may take around 40 mins to complete provisioning.
 
+**IMPORTANT**: When using NFS storage, the OpenShift image registry will be using NFS PV claim. Otherwise the image registry uses ephemeral PV.
+
 **IMPORTANT**: Once the deployment is completed successfully, you can safely delete the bootstrap node. After this, the HAPROXY server will not point to the APIs from bootstrap node once the cluster is up and running. Clients will start consuming APIs from master nodes once the bootstrap node is deleted. Take backup of all the required files from bootstrap node (eg: logs) before running below steps.
 
 To delete the bootstrap node:

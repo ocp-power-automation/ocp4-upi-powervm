@@ -127,8 +127,34 @@ resource "null_resource" "approve_worker_csr" {
     }
 }
 
-resource "null_resource" "patch_image_registry" {
+resource "null_resource" "wait_install" {
     depends_on = [null_resource.approve_worker_csr]
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "15m"
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "cd ~/openstack-upi",
+            "./openshift-install wait-for install-complete",
+        ]
+    }
+
+    # Force copy kubeconfig file again after install
+    provisioner "remote-exec" {
+        inline = [
+            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
+        ]
+    }
+}
+
+resource "null_resource" "patch_image_registry" {
+    depends_on = [null_resource.wait_install]
+    count       = var.storage_type != "nfs" ? 1 : 0
     connection {
         type        = "ssh"
         user        = var.rhel_username
@@ -151,25 +177,6 @@ EOF
     provisioner "remote-exec" {
         inline = [
             "chmod +x /tmp/patch_image_registry.sh; bash /tmp/patch_image_registry.sh",
-        ]
-    }
-}
-
-resource "null_resource" "wait_install" {
-    depends_on = [null_resource.patch_image_registry]
-    connection {
-        type        = "ssh"
-        user        = var.rhel_username
-        host        = var.bastion_ip
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "15m"
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "cd ~/openstack-upi",
-            "./openshift-install wait-for install-complete",
-            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
     }
 }

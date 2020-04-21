@@ -127,6 +127,7 @@ module "install" {
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
     openshift_client_tarball        = var.openshift_client_tarball
+    storage_type                    = var.storage_type
 }
 
 module "storage" {

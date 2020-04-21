@@ -29,3 +29,4 @@ variable "master_ips" {}
 variable "worker_ips" {}
 
 variable openshift_client_tarball {}
+variable "storage_type" {}

@@ -153,3 +153,46 @@ resource "null_resource" "configure_nfs_storage" {
     }
 }
 
+
+resource "null_resource" "patch_image_registry" {
+    depends_on = [null_resource.configure_nfs_storage]
+    count       = var.storage_type == "nfs" ? 1 : 0
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "15m"
+    }
+
+    provisioner "file" {
+        source      = "${path.module}/templates/pvc-nfs.yaml"
+        destination = "/tmp/pvc-nfs.yaml"
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "oc create -f /tmp/pvc-nfs.yaml -n openshift-image-registry",
+        ]
+    }
+
+
+    provisioner "file" {
+        content = <<EOF
+#!/bin/bash
+
+# The image-registry is not always available immediately after the OCP installer
+while [ $(oc get configs.imageregistry.operator.openshift.io/cluster | wc -l) == 0 ]; do sleep 30; done
+oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":"registrypvc"}}, "managementState": "Managed"}}'
+
+EOF
+        destination = "/tmp/patch_image_registry.sh"
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "chmod +x /tmp/patch_image_registry.sh; bash /tmp/patch_image_registry.sh",
+        ]
+    }
+}
+
