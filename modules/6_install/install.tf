@@ -29,6 +29,7 @@ resource "null_resource" "check_bootstrap" {
         }
         inline = [
           "whoami",
+          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
         ]
     }
 }
@@ -45,6 +46,7 @@ resource "null_resource" "check_master" {
         }
         inline = [
           "whoami",
+          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
         ]
     }
 }
@@ -80,6 +82,7 @@ resource "null_resource" "check_worker" {
         }
         inline = [
           "whoami",
+          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
         ]
     }
 }

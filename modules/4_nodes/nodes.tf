@@ -23,19 +23,6 @@ resource "random_id" "label" {
     byte_length = "2"
 }
 
-#common
-data "ignition_file" "pmtu" {
-    filesystem  = "root"
-    mode        = "420"
-    path        = "/etc/sysctl.d/88-sysctl.conf"
-    content {
-        content = <<EOF
-net.ipv4.ip_no_pmtu_disc = 1
-EOF
-    }
-}
-
-
 #bootstrap
 data "ignition_config" "bootstrap" {
     append {
@@ -43,7 +30,6 @@ data "ignition_config" "bootstrap" {
     }
     files       = [
         data.ignition_file.b_hostname.rendered,
-        data.ignition_file.pmtu.rendered
     ]
 }
 
@@ -99,7 +85,6 @@ data "ignition_config" "master" {
     }
     files       = [
         element(data.ignition_file.m_hostname.*.rendered, count.index),
-        data.ignition_file.pmtu.rendered
     ]
 }
 
@@ -171,7 +156,6 @@ data "ignition_config" "worker" {
     }
     files       = [
         element(data.ignition_file.w_hostname.*.rendered, count.index),
-        data.ignition_file.pmtu.rendered
     ]
 }
 
