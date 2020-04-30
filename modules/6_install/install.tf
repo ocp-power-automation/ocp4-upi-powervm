@@ -29,7 +29,7 @@ resource "null_resource" "check_bootstrap" {
         }
         inline = [
           "whoami",
-          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
+          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
         ]
     }
 }
@@ -46,7 +46,7 @@ resource "null_resource" "check_master" {
         }
         inline = [
           "whoami",
-          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
+          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
         ]
     }
 }
@@ -82,7 +82,7 @@ resource "null_resource" "check_worker" {
         }
         inline = [
           "whoami",
-          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
+          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
         ]
     }
 }
