@@ -1,5 +1,6 @@
 
 1. Download and extract the CoreOS image with suffix *-openstack.ppc64le.qcow2.gz*.
+> Note: CoreOS images for ppc64ple architecture can be found here - https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/
 
 2. Convert the CoreOS qcow2 image to raw image
    ```
