@@ -175,7 +175,7 @@ locals {
 ### OpenShift variables
 ################################################################
 variable "openshift_install_tarball" {
-    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.3.0-0.nightly-ppc64le-2020-02-13-160829/openshift-install-linux-4.3.0-0.nightly-ppc64le-2020-02-13-160829.tar.gz"
+    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-install-linux.tar.gz"
 }
 variable "release_image_override" {
     default = ""
