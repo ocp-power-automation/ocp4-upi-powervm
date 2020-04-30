@@ -177,6 +177,11 @@ locals {
 variable "openshift_install_tarball" {
     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-install-linux.tar.gz"
 }
+
+variable "openshift_client_tarball" {
+     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-client-linux.tar.gz"
+}
+
 variable "release_image_override" {
     default = ""
 }

@@ -25,6 +25,7 @@ worker                      = {instance_type    = "large",  image_id     = "4688
 
 # OpenShift variables
 openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-install-linux.tar.gz"
+openshift_client_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-client-linux.tar.gz"
 release_image_override = ""
 pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"

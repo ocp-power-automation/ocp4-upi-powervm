@@ -100,8 +100,9 @@ resource "null_resource" "setup_oc" {
     provisioner "remote-exec" {
         inline = [
             "cd ~/openstack-upi",
-            "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@${var.bootstrap_ip}:/bin/oc ~/openstack-upi",
-            "sudo cp ~/openstack-upi/oc /bin/oc",
+            "wget ${var.openshift_client_tarball}",
+            "tar -xvf openshift-client-linux*.tar.gz",
+            "sudo cp oc kubectl /usr/bin",
             "mkdir -p ~/.kube/",
             "cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
