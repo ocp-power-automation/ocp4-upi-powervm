@@ -32,7 +32,7 @@ resource "null_resource" "ocp_init" {
         inline = [
             "mkdir -p ~/openstack-upi && cd ~/openstack-upi",
             "wget ${var.openshift_install_tarball}",
-            "tar -xvf openshift-install-linux-*.tar.gz",
+            "tar -xvf openshift-install-linux*.tar.gz",
             "./openshift-install version",
         ]
     }
