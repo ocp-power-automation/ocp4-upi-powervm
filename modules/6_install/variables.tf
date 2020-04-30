@@ -27,3 +27,5 @@ variable "ssh_agent" {}
 
 variable "master_ips" {}
 variable "worker_ips" {}
+
+variable openshift_client_tarball {}

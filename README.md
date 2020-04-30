@@ -63,6 +63,7 @@ Edit the var.tfvars file with following values:
     * `image_id` : The image ID of the desired CoreOS image.
     * `count` : Number of worker nodes.
  * `openshift_install_tarball` : HTTP URL for openhift-install tarball.
+ * `openshift_client_tarball` : HTTP URL for openhift client (`oc`) tarball.
  * `release_image_override` : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
  * `pull_secret_file` : Location of the pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.

@@ -126,6 +126,7 @@ module "install" {
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
+    openshift_client_tarball        = var.openshift_client_tarball
 }
 
 module "storage" {

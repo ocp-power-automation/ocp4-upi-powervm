@@ -29,7 +29,7 @@ resource "null_resource" "check_bootstrap" {
         }
         inline = [
           "whoami",
-          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
+          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
         ]
     }
 }
@@ -46,7 +46,7 @@ resource "null_resource" "check_master" {
         }
         inline = [
           "whoami",
-          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
+          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
         ]
     }
 }
@@ -82,7 +82,7 @@ resource "null_resource" "check_worker" {
         }
         inline = [
           "whoami",
-          "sudo nmcli conn modify $(nmcli -t c show --active | cut -d \":\" -f 2) ethtool.feature-tso off"
+          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
         ]
     }
 }
@@ -100,8 +100,9 @@ resource "null_resource" "setup_oc" {
     provisioner "remote-exec" {
         inline = [
             "cd ~/openstack-upi",
-            "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@${var.bootstrap_ip}:/bin/oc ~/openstack-upi",
-            "sudo cp ~/openstack-upi/oc /bin/oc",
+            "wget ${var.openshift_client_tarball}",
+            "tar -xvf openshift-client-linux*.tar.gz",
+            "sudo cp oc kubectl /usr/bin",
             "mkdir -p ~/.kube/",
             "cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
