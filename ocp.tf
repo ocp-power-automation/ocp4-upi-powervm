@@ -65,6 +65,7 @@ module "preinstall" {
     openshift_install_tarball       = var.openshift_install_tarball
     master_count                    = var.master["count"]
     release_image_override          = var.release_image_override
+    log_level                       = var.installer_log_level
 }
 
 module "network" {
@@ -128,6 +129,7 @@ module "install" {
     ssh_agent                       = var.ssh_agent
     openshift_client_tarball        = var.openshift_client_tarball
     storage_type                    = var.storage_type
+    log_level                       = var.installer_log_level
 }
 
 module "storage" {

@@ -157,9 +157,9 @@ variable "ssh_agent" {
   default     = false
 }
 
-variable "verbose" {
+variable "installer_log_level" {
   # if anything is specified, it will be verbose.
-  default = ""
+  default = "info"
 }
 
 locals {

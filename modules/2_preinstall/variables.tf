@@ -37,3 +37,4 @@ variable "master_count" {}
 
 variable "openshift_install_tarball" {}
 variable "release_image_override" {}
+variable "log_level" {}

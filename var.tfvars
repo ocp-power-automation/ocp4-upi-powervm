@@ -29,6 +29,7 @@ openshift_client_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64l
 release_image_override = ""
 pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"
+#installer_log_level = "info"
 
 dns_enabled     = "true"
 

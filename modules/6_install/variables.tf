@@ -30,3 +30,5 @@ variable "worker_ips" {}
 
 variable openshift_client_tarball {}
 variable "storage_type" {}
+
+variable "log_level" {}

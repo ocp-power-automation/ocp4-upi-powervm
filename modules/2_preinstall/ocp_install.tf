@@ -33,7 +33,7 @@ resource "null_resource" "ocp_init" {
             "mkdir -p ~/openstack-upi && cd ~/openstack-upi",
             "wget ${var.openshift_install_tarball}",
             "tar -xvf openshift-install-linux*.tar.gz",
-            "./openshift-install version",
+            "./openshift-install version --log-level ${var.log_level}",
         ]
     }
 }
@@ -101,7 +101,7 @@ resource "null_resource" "ocp_manifest" {
     #GENERATE MANIFEST
     provisioner "remote-exec" {
         inline = [
-            "cd ~/openstack-upi && ./openshift-install create manifests",
+            "cd ~/openstack-upi && ./openshift-install create manifests --log-level ${var.log_level}",
             #Remove the control-plane Machines and compute MachineSets, because we'll be providing those ourselves.
             "rm -f openshift/99_openshift-cluster-api_master-machines-*.yaml openshift/99_openshift-cluster-api_worker-machineset-*.yaml",
             #Update the scheduler configuration to keep router pods and other workloads off the control-plane nodes.
@@ -124,7 +124,7 @@ resource "null_resource" "ocp_ignition" {
     provisioner "remote-exec" {
         inline = [
             "cd ~/openstack-upi",
-            "OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${var.release_image_override} ./openshift-install create ignition-configs"
+            "OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${var.release_image_override} ./openshift-install create ignition-configs --log-level ${var.log_level}"
         ]
     }
 }

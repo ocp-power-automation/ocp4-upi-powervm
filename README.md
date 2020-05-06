@@ -65,6 +65,7 @@ Edit the var.tfvars file with following values:
  * `openshift_install_tarball` : HTTP URL for openhift-install tarball.
  * `openshift_client_tarball` : HTTP URL for openhift client (`oc`) tarball.
  * `release_image_override` : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
+ * `installer_log_level` : enable log level for openshift-install (e.g. "debug | info | warn | error") (default "info")
  * `pull_secret_file` : Location of the pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
  * `dns_enabled` : Flag for installing and configuring DNS server on bastion node. Any value other than "true" will delete the DNS configurations.

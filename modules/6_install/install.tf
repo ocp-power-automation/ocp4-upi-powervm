@@ -64,7 +64,7 @@ resource "null_resource" "wait_bootstrap" {
     provisioner "remote-exec" {
         inline = [
             "cd ~/openstack-upi",
-            "./openshift-install wait-for bootstrap-complete",
+            "./openshift-install wait-for bootstrap-complete --log-level ${var.log_level}",
         ]
     }
 }
@@ -140,7 +140,7 @@ resource "null_resource" "wait_install" {
     provisioner "remote-exec" {
         inline = [
             "cd ~/openstack-upi",
-            "./openshift-install wait-for install-complete",
+            "./openshift-install wait-for install-complete --log-level ${var.log_level}",
         ]
     }
 
