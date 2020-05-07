@@ -122,7 +122,7 @@ resource "null_resource" "approve_worker_csr" {
     provisioner "remote-exec" {
         inline = [
             # Approving all CSR requests until worker nodes are Ready...
-            "while [ $(oc get nodes | grep worker | grep NotReady | wc -l) != 0 ]; do oc get csr -ojson | jq -r '.items[] | select(.status == {} ) | .metadata.name' | xargs oc adm certificate approve; sleep 30; echo 'Worker not Ready, sleeping for 30s..'; done"
+            "while [ $(oc get nodes | grep -w worker | grep -w  'Ready' | wc -l) != ${length(var.worker_ips)} ]; do oc get csr -ojson | jq -r '.items[] | select(.status == {} ) | .metadata.name' | xargs oc adm certificate approve; sleep 30; echo 'Worker not Ready, sleeping for 30s..'; done"
         ]
     }
 }
