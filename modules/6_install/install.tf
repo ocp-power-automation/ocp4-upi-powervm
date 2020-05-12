@@ -29,7 +29,7 @@ resource "null_resource" "check_bootstrap" {
         }
         inline = [
           "whoami",
-          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
+          "if lsmod|grep -q 'ibmveth'; then sudo sysctl -w net.ipv4.route.min_pmtu=1450; sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1; echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; fi"
         ]
     }
 }
@@ -46,7 +46,7 @@ resource "null_resource" "check_master" {
         }
         inline = [
           "whoami",
-          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
+          "if lsmod|grep -q 'ibmveth'; then sudo sysctl -w net.ipv4.route.min_pmtu=1450; sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1; echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; fi"
         ]
     }
 }
@@ -82,7 +82,7 @@ resource "null_resource" "check_worker" {
         }
         inline = [
           "whoami",
-          "if lsmod|grep -q 'ibmveth'; then UUID=$(sudo nmcli -t c show --active | cut -d \":\" -f 2) ; sudo nmcli conn modify $UUID ethtool.feature-tso off; fi"
+          "if lsmod|grep -q 'ibmveth'; then sudo sysctl -w net.ipv4.route.min_pmtu=1450; sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1; echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; fi"
         ]
     }
 }
