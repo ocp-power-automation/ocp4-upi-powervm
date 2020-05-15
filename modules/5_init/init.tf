@@ -88,7 +88,7 @@ resource "null_resource" "ocp_init" {
     #INSTALL-CONFIG
     provisioner "file" {
         content      = templatefile("${path.module}/templates/install-config.tpl", local.install_cfg)
-        destination = "/tmp/cp4tf_install-config.tpl"
+        destination = "/tmp/ocp4tf_install-config.tpl"
     }
     provisioner "file" {
         source      = "${path.module}/scripts/update_ignition_bootstrap.py"
@@ -98,7 +98,7 @@ resource "null_resource" "ocp_init" {
     provisioner "remote-exec" {
         inline = [
             "rm -rf ~/openstack-upi && mkdir ~/openstack-upi",
-            "cp /tmp/cp4tf_install-config.tpl ~/openstack-upi/install-config.yaml",
+            "cp /tmp/ocp4tf_install-config.tpl ~/openstack-upi/install-config.yaml",
         ]
     }
 
