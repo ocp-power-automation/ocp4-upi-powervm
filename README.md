@@ -14,7 +14,7 @@ Please follow above link to download and install Terraform on your machine. Here
 
 ## Image and LPAR requirements
 
-You'll need to create CoreOS image in PowerVC. Follow the steps mentioned [here](./coreos-image-creation.md).
+You'll need to create CoreOS image in PowerVC. Follow the steps mentioned [here](./docs/coreos-image-creation.md).
 Following are the recommended LPAR configs for OpenShift nodes
 - Bootstrap, Master - 2 vCPUs, 16GB RAM, 120 GB Disk
 
