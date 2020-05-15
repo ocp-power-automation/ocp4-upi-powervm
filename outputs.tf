@@ -41,13 +41,7 @@ output "worker_ips" {
 output "etc_hosts_entries" {
     value = <<-EOF
 
-${module.bastion.bastion_ip} api.${random_id.label.hex}.${var.cluster_domain}
-${module.bastion.bastion_ip} console-openshift-console.apps.${random_id.label.hex}.${var.cluster_domain}
-${module.bastion.bastion_ip} integrated-oauth-server-openshift-authentication.apps.${random_id.label.hex}.${var.cluster_domain}
-${module.bastion.bastion_ip} oauth-openshift.apps.${random_id.label.hex}.${var.cluster_domain}
-${module.bastion.bastion_ip} prometheus-k8s-openshift-monitoring.apps.${random_id.label.hex}.${var.cluster_domain}
-${module.bastion.bastion_ip} grafana-openshift-monitoring.apps.${random_id.label.hex}.${var.cluster_domain}
-${module.bastion.bastion_ip} example.apps.${random_id.label.hex}.${var.cluster_domain}
+${module.bastion.bastion_ip} api.${random_id.label.hex}.${var.cluster_domain} console-openshift-console.apps.${random_id.label.hex}.${var.cluster_domain} integrated-oauth-server-openshift-authentication.apps.${random_id.label.hex}.${var.cluster_domain} oauth-openshift.apps.${random_id.label.hex}.${var.cluster_domain} prometheus-k8s-openshift-monitoring.apps.${random_id.label.hex}.${var.cluster_domain} grafana-openshift-monitoring.apps.${random_id.label.hex}.${var.cluster_domain} example.apps.${random_id.label.hex}.${var.cluster_domain}
 EOF
 }
 

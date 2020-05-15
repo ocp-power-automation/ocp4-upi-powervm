@@ -1,0 +1,39 @@
+---
+disk: vda
+helper:
+  name: "helper"
+  ipaddr: "${bastion_ip}"
+dns:
+  domain: "${cluster_domain}"
+  clusterid: "${cluster_id}"
+  forwarder1: "${forwarders}"
+dhcp:
+  router: "${gateway_ip}"
+  bcast: "${broadcast}"
+  netmask: "${netmask}"
+  ipid: "${ipid}"
+  netmaskid: "${netmask}"
+  poolstart: "${pool.start}"
+  poolend: "${pool.end}"
+bootstrap:
+  name: "${bootstrap_info.name}"
+  ipaddr: "${bootstrap_info.ip}"
+  macaddr: "${bootstrap_info.mac}"
+masters:
+%{ for m in master_info ~}
+  - name: "${m.name}"
+    ipaddr: "${m.ip}"
+    macaddr: "${m.mac}"
+%{ endfor ~}
+workers:
+%{ for w in worker_info ~}
+  - name: "${w.name}"
+    ipaddr: "${w.ip}"
+    macaddr: "${w.mac}"
+%{ endfor ~}
+
+ppc64le: true
+ssh_gen_key: false
+
+ocp_client: "${client_tarball}"
+ocp_installer: "${install_tarball}"

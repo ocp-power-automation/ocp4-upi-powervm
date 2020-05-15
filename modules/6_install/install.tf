@@ -19,6 +19,8 @@
 ################################################################
 
 resource "null_resource" "check_bootstrap" {
+    depends_on = [var.init_status]
+
     provisioner "remote-exec" {
         connection {
             host        = var.bootstrap_ip
@@ -35,6 +37,8 @@ resource "null_resource" "check_bootstrap" {
 }
 
 resource "null_resource" "check_master" {
+    depends_on = [var.init_status]
+
     count = length(var.master_ips)
     provisioner "remote-exec" {
         connection {
@@ -63,14 +67,14 @@ resource "null_resource" "wait_bootstrap" {
     }
     provisioner "remote-exec" {
         inline = [
-            "cd ~/openstack-upi",
-            "./openshift-install wait-for bootstrap-complete --log-level ${var.log_level}",
+            "openshift-install wait-for bootstrap-complete --dir ~/openstack-upi --log-level ${var.log_level}"
         ]
     }
 }
 
 resource "null_resource" "check_worker" {
     depends_on          = [null_resource.wait_bootstrap]
+
     count               = length(var.worker_ips)
     provisioner "remote-exec" {
         connection {
@@ -99,10 +103,6 @@ resource "null_resource" "setup_oc" {
     }
     provisioner "remote-exec" {
         inline = [
-            "cd ~/openstack-upi",
-            "wget ${var.openshift_client_tarball}",
-            "tar -xvf openshift-client-linux*.tar.gz",
-            "sudo cp oc kubectl /usr/bin",
             "mkdir -p ~/.kube/",
             "cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
@@ -139,15 +139,7 @@ resource "null_resource" "wait_install" {
     }
     provisioner "remote-exec" {
         inline = [
-            "cd ~/openstack-upi",
-            "./openshift-install wait-for install-complete --log-level ${var.log_level}",
-        ]
-    }
-
-    # Force copy kubeconfig file again after install
-    provisioner "remote-exec" {
-        inline = [
-            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
+            "openshift-install wait-for install-complete --dir ~/openstack-upi --log-level ${var.log_level}"
         ]
     }
 }
@@ -177,6 +169,13 @@ EOF
     provisioner "remote-exec" {
         inline = [
             "chmod +x /tmp/patch_image_registry.sh; bash /tmp/patch_image_registry.sh",
+        ]
+    }
+
+    # Force copy kubeconfig file again after install
+    provisioner "remote-exec" {
+        inline = [
+            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
     }
 }

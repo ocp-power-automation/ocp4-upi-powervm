@@ -29,3 +29,27 @@ output "master_port_ids" {
 output "worker_port_ids" {
     value = openstack_networking_port_v2.worker_port.*.id
 }
+
+output bootstrap_mac {
+    value = openstack_networking_port_v2.bootstrap_port.mac_address
+}
+
+output master_macs {
+    value = openstack_networking_port_v2.master_port.*.mac_address
+}
+
+output worker_macs {
+    value = openstack_networking_port_v2.worker_port.*.mac_address
+}
+
+output gateway_ip {
+    value = data.openstack_networking_subnet_v2.subnet.gateway_ip
+}
+
+output cidr {
+    value = data.openstack_networking_subnet_v2.subnet.cidr
+}
+
+output allocation_pools {
+    value = data.openstack_networking_subnet_v2.subnet.allocation_pools
+}
