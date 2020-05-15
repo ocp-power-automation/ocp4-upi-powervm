@@ -26,7 +26,7 @@ resource "random_id" "label" {
 #bootstrap
 data "ignition_config" "bootstrap" {
     append {
-        source  = var.bootstrap_ign_url
+        source  = "http://${var.bastion_ip}:8080/ignition/bootstrap.ign"
     }
     files       = [
         data.ignition_file.b_hostname.rendered,
@@ -81,7 +81,7 @@ resource "openstack_compute_instance_v2" "bootstrap" {
 data "ignition_config" "master" {
     count       = var.master["count"]
     append {
-        source  = var.master_ign_url
+        source  = "http://${var.bastion_ip}:8080/ignition/master.ign"
     }
     files       = [
         element(data.ignition_file.m_hostname.*.rendered, count.index),
@@ -152,7 +152,7 @@ EOF
 data "ignition_config" "worker" {
     count       = var.worker["count"]
     append {
-        source  = var.worker_ign_url
+        source  = "http://${var.bastion_ip}:8080/ignition/worker.ign"
     }
     files       = [
         element(data.ignition_file.w_hostname.*.rendered, count.index),

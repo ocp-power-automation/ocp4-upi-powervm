@@ -28,9 +28,5 @@ variable "cluster_id" {
 variable "network_name" {}
 variable "master_count" {}
 variable "worker_count" {}
-variable "bastion_ip" {}
-variable "rhel_username" {}
-variable "private_key" {}
-variable "ssh_agent" {}
-variable "network_type" {}
 
+variable "network_type" {}

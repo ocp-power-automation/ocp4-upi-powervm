@@ -18,9 +18,6 @@
 #
 ################################################################
 
-variable "bootstrap_ign_url" {}
-variable "master_ign_url" {}
-variable "worker_ign_url" {}
 variable "bastion_ip" {}
 variable "cluster_domain" {}
 variable "cluster_id" {}

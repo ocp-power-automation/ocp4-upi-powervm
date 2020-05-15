@@ -55,26 +55,28 @@ resource "openstack_compute_instance_v2" "bastion" {
         name    = var.network_name
     }
     availability_zone = var.openstack_availability_zone
-}
 
-
-resource "null_resource" "check_bastion" {
     provisioner "remote-exec" {
         connection {
-            host        = openstack_compute_instance_v2.bastion.access_ip_v4
+            type        = "ssh"
             user        = var.rhel_username
+            host        = self.access_ip_v4
             private_key = var.private_key
             agent       = var.ssh_agent
             timeout     = "15m"
         }
+
+        when        = destroy
+        on_failure  = continue
         inline = [
-          "whoami",
+            "sudo subscription-manager unregister",
+            "sudo subscription-manager remove --all",
         ]
     }
 }
 
+
 resource "null_resource" "bastion_init" {
-    depends_on = [null_resource.check_bastion]
     connection {
         type        = "ssh"
         user        = var.rhel_username
@@ -84,11 +86,8 @@ resource "null_resource" "bastion_init" {
         timeout     = "15m"
     }
     provisioner "remote-exec" {
-        when        = destroy
-        on_failure  = continue
         inline = [
-            "sudo subscription-manager unregister",
-            "sudo subscription-manager remove --all",
+            "whoami"
         ]
     }
     provisioner "file" {
@@ -105,18 +104,32 @@ resource "null_resource" "bastion_init" {
             "sudo sed -i.bak -e 's/^ - set_hostname/# - set_hostname/' -e 's/^ - update_hostname/# - update_hostname/' /etc/cloud/cloud.cfg",
             "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion.${var.cluster_domain}",
             "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
-            "echo ' - preserve_hostname: true' | sudo tee -a /etc/cloud/cloud.cfg  > /dev/null",
             "sudo hostname -F /etc/hostname",
             "echo 'vm.max_map_count = 262144' | sudo tee --append /etc/sysctl.conf > /dev/null",
-            "sudo sysctl -p",
+        ]
+    }
+    provisioner "remote-exec" {
+        inline = [
             "sudo subscription-manager clean",
             "sudo subscription-manager register --username=${var.rhel_subscription_username} --password=${var.rhel_subscription_password} --force",
             "sudo subscription-manager refresh",
             "sudo subscription-manager attach --auto",
             "#sudo yum update -y --skip-broken",
-            "sudo yum install -y wget jq git net-tools bind-utils vim python3 httpd tar",
-            "sudo systemctl enable firewalld",
-            "sudo systemctl start firewalld"
+            "sudo yum install -y wget jq git net-tools vim python3 tar"
+        ]
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "sudo pip3 install ansible -q"
+        ]
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "sudo systemctl unmask NetworkManager",
+            "sudo systemctl start NetworkManager",
+            "for i in $(nmcli device | grep unmanaged | awk '{print $1}'); do echo NM_CONTROLLED=yes | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-$i; done",
+            "sudo systemctl restart NetworkManager",
+            "sudo systemctl enable NetworkManager"
         ]
     }
     provisioner "remote-exec" {

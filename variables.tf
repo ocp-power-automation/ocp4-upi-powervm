@@ -153,13 +153,19 @@ variable "rhel_subscription_password" {}
 ### Instrumentation
 ################################################################
 variable "ssh_agent" {
-  description = "Enable or disable SSH Agent. Can correct some connectivity issues. Default: false"
-  default     = false
+    description = "Enable or disable SSH Agent. Can correct some connectivity issues. Default: false"
+    default     = false
 }
 
-variable "verbose" {
-  # if anything is specified, it will be verbose.
-  default = ""
+variable "installer_log_level" {
+    description = "Set the log level required for openshift-install commands"
+    default = "info"
+}
+
+variable "helpernode_tag" {
+    description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
+    # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
+    default = "d6ad30574619ae6427cad9662fe3a4a896a9af11"
 }
 
 locals {
@@ -175,11 +181,11 @@ locals {
 ### OpenShift variables
 ################################################################
 variable "openshift_install_tarball" {
-    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-install-linux.tar.gz"
+    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-05-13-222456/openshift-install-linux.tar.gz"
 }
 
 variable "openshift_client_tarball" {
-     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-client-linux.tar.gz"
+     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-05-13-222456/openshift-client-linux.tar.gz"
 }
 
 variable "release_image_override" {
@@ -199,8 +205,8 @@ variable "cluster_id_prefix" {
     default   = "test-ocp"
 }
 
-variable "dns_enabled" {
-    default   = "true"
+variable "dns_forwarders" {
+    default   = "8.8.8.8; 8.8.4.4"
 }
 
 variable "storage_type" {

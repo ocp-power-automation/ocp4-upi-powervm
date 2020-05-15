@@ -51,22 +51,6 @@ module "bastion" {
     rhel_subscription_password      = var.rhel_subscription_password
 }
 
-module "preinstall" {
-    source                          = "./modules/2_preinstall"
-
-    bastion_ip                      = module.bastion.bastion_ip
-    cluster_domain                  = var.cluster_domain
-    cluster_id                      = "${random_id.label.hex}"
-    rhel_username                   = var.rhel_username
-    private_key                     = local.private_key
-    public_key                      = local.public_key
-    ssh_agent                       = var.ssh_agent
-    pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
-    openshift_install_tarball       = var.openshift_install_tarball
-    master_count                    = var.master["count"]
-    release_image_override          = var.release_image_override
-}
-
 module "network" {
     source                          = "./modules/3_network"
 
@@ -75,19 +59,12 @@ module "network" {
     network_name                    = var.network_name
     master_count                    = var.master["count"]
     worker_count                    = var.worker["count"]
-    bastion_ip                      = module.bastion.bastion_ip
-    rhel_username                   = var.rhel_username
-    private_key                     = local.private_key
-    ssh_agent                       = var.ssh_agent
     network_type                    = var.network_type
 }
 
 module "nodes" {
     source                          = "./modules/4_nodes"
 
-    bootstrap_ign_url               = module.preinstall.bootstrap_ign_url
-    master_ign_url                  = module.preinstall.master_ign_url
-    worker_ign_url                  = module.preinstall.worker_ign_url
     bastion_ip                      = module.bastion.bastion_ip
     cluster_domain                  = var.cluster_domain
     cluster_id                      = "${random_id.label.hex}"
@@ -101,24 +78,38 @@ module "nodes" {
     worker_port_ids                 = module.network.worker_port_ids
 }
 
-module "dns_haproxy" {
-    source                          = "./modules/5_dns_haproxy"
+module "init" {
+    source                          = "./modules/5_init"
 
     cluster_domain                  = var.cluster_domain
     cluster_id                      = "${random_id.label.hex}"
-    bootstrap_ip                    = module.nodes.bootstrap_ip
-    master_ips                      = module.nodes.master_ips
-    worker_ips                      = module.nodes.worker_ips
+    gateway_ip                      = module.network.gateway_ip
+    cidr                            = module.network.cidr
+    allocation_pools                = module.network.allocation_pools
     bastion_ip                      = module.bastion.bastion_ip
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
-    dns_enabled                     = var.dns_enabled
+    bootstrap_ip                    = module.nodes.bootstrap_ip
+    master_ips                      = module.nodes.master_ips
+    worker_ips                      = module.nodes.worker_ips
+    bootstrap_mac                   = module.network.bootstrap_mac
+    master_macs                     = module.network.master_macs
+    worker_macs                     = module.network.worker_macs
+    public_key                      = local.public_key
+    pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
+    openshift_install_tarball       = var.openshift_install_tarball
+    openshift_client_tarball        = var.openshift_client_tarball
+    master_count                    = var.master["count"]
+    release_image_override          = var.release_image_override
+    helpernode_tag                  = var.helpernode_tag
+    log_level                       = var.installer_log_level
 }
 
 module "install" {
     source                          = "./modules/6_install"
 
+    init_status                     = module.init.init_status
     bootstrap_ip                    = module.nodes.bootstrap_ip
     bastion_ip                      = module.bastion.bastion_ip
     master_ips                      = module.nodes.master_ips
@@ -126,7 +117,8 @@ module "install" {
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
-    openshift_client_tarball        = var.openshift_client_tarball
+    storage_type                    = var.storage_type
+    log_level                       = var.installer_log_level
 }
 
 module "storage" {

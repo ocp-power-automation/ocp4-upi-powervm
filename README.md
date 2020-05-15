@@ -1,7 +1,7 @@
 # Terraform for OpenShift 4.X on PowerVM/PowerVC
-This repo contains Terraform templates required to deploy OCP 4.3 on PowerVM LPARs managed via IBM PowerVC. Terraform resources are implemented by refering to https://github.com/openshift/installer/blob/release-4.3/docs/user/openstack/install_upi.md.
+This repo contains Terraform templates required to deploy OCP 4.3 on PowerVM LPARs managed via IBM PowerVC. Terraform resources are implemented by refering to https://github.com/openshift/installer/blob/release-${ocp_version}/docs/user/openstack/install_upi.md.
 
-This module will not setup a private network for running the cluster. Instead, it will create the nodes on same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. This module also setup a DNS server and HAPROXY server on the bastion node.
+This module will not setup a private network for running the cluster. Instead, it will create the nodes on the same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. We make use of [OCP4 Helper Node](https://github.com/RedHatOfficial/ocp4-helpernode) playbook to setup DNS, HAProxy, HTTP and DHCP services on the bastion node.
 
 Run this code from either Mac or Linux (Intel) system.
 
@@ -65,10 +65,12 @@ Edit the var.tfvars file with following values:
  * `openshift_install_tarball` : HTTP URL for openhift-install tarball.
  * `openshift_client_tarball` : HTTP URL for openhift client (`oc`) tarball.
  * `release_image_override` : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
+ * `installer_log_level` : enable log level for openshift-install (e.g. "debug | info | warn | error") (default "info")
+ * `helpernode_tag` : Checkout level for [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) which is used for setting up services required on bastion node.
  * `pull_secret_file` : Location of the pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.
- * `dns_enabled` : Flag for installing and configuring DNS server on bastion node. Any value other than "true" will delete the DNS configurations.
  * `cluster_id_prefix` : Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
+ * `dns_forwarders` : External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
  * `storageclass_name` : StorageClass name to be given.
  * `volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
@@ -89,6 +91,8 @@ On your Terraform client machine & tf_openshift4_pvc directory:
 2. `terraform apply -var-file var.tfvars`
 
 Now wait for the installation to complete. It may take around 40 mins to complete provisioning.
+
+**IMPORTANT**: When using NFS storage, the OpenShift image registry will be using NFS PV claim. Otherwise the image registry uses ephemeral PV.
 
 **IMPORTANT**: Once the deployment is completed successfully, you can safely delete the bootstrap node. After this, the HAPROXY server will not point to the APIs from bootstrap node once the cluster is up and running. Clients will start consuming APIs from master nodes once the bootstrap node is deleted. Take backup of all the required files from bootstrap node (eg: logs) before running below steps.
 
@@ -122,7 +126,7 @@ The OCP login credentials are in bastion host. In order to retrieve the same fol
 2. `cd ~/openstack-upi/auth`
 3. `kubeconfig` can be used for CLI (`oc` or `kubectl`)
 4. `kubeadmin` user and content of `kubeadmin-pasword` as password for GUI
-
+ 
 
 ## Cleaning up
 Run `terraform destroy -var-file var.tfvars` to make sure that all resources are properly cleaned up. Do not manually clean up your environment unless both of the following are true:
