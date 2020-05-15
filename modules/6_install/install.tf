@@ -142,6 +142,13 @@ resource "null_resource" "wait_install" {
             "openshift-install wait-for install-complete --dir ~/openstack-upi --log-level ${var.log_level}"
         ]
     }
+
+    # Force copy kubeconfig file again after install
+    provisioner "remote-exec" {
+        inline = [
+            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
+        ]
+    }
 }
 
 resource "null_resource" "patch_image_registry" {
@@ -169,13 +176,6 @@ EOF
     provisioner "remote-exec" {
         inline = [
             "chmod +x /tmp/patch_image_registry.sh; bash /tmp/patch_image_registry.sh",
-        ]
-    }
-
-    # Force copy kubeconfig file again after install
-    provisioner "remote-exec" {
-        inline = [
-            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
         ]
     }
 }
