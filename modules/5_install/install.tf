@@ -101,7 +101,7 @@ resource "null_resource" "config" {
     }
 }
 
-resource "null_resource" "ocp_init" {
+resource "null_resource" "install" {
     depends_on = [null_resource.config]
 
     connection {
@@ -142,81 +142,8 @@ resource "null_resource" "ocp_init" {
     }
 }
 
-resource "null_resource" "check_bootstrap" {
-    depends_on = [null_resource.ocp_init]
-
-    provisioner "remote-exec" {
-        connection {
-            host        = var.bootstrap_ip
-            user        = "core"
-            private_key = var.private_key
-            agent       = var.ssh_agent
-            timeout     = "15m"
-        }
-        inline = [
-          "whoami",
-          "if lsmod|grep -q 'ibmveth'; then sudo sysctl -w net.ipv4.route.min_pmtu=1450; sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1; echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; fi"
-        ]
-    }
-}
-
-resource "null_resource" "check_master" {
-    depends_on = [null_resource.ocp_init]
-
-    count = length(var.master_ips)
-    provisioner "remote-exec" {
-        connection {
-            host        = var.master_ips[count.index]
-            user        = "core"
-            private_key = var.private_key
-            agent       = var.ssh_agent
-            timeout     = "15m"
-        }
-        inline = [
-          "whoami",
-          "if lsmod|grep -q 'ibmveth'; then sudo sysctl -w net.ipv4.route.min_pmtu=1450; sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1; echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; fi"
-        ]
-    }
-}
-
-resource "null_resource" "wait_bootstrap" {
-    depends_on = [null_resource.check_bootstrap, null_resource.check_master]
-    connection {
-        type        = "ssh"
-        user        = var.rhel_username
-        host        = var.bastion_ip
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "15m"
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "openshift-install wait-for bootstrap-complete --dir ~/openstack-upi --log-level ${var.log_level}"
-        ]
-    }
-}
-
-resource "null_resource" "check_worker" {
-    depends_on          = [null_resource.wait_bootstrap]
-
-    count               = length(var.worker_ips)
-    provisioner "remote-exec" {
-        connection {
-            host        = var.worker_ips[count.index]
-            user        = "core"
-            private_key = var.private_key
-            agent       = var.ssh_agent
-            timeout     = "15m"
-        }
-        inline = [
-          "whoami",
-          "if lsmod|grep -q 'ibmveth'; then sudo sysctl -w net.ipv4.route.min_pmtu=1450; sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1; echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null; fi"
-        ]
-    }
-}
-
 resource "null_resource" "setup_oc" {
-    depends_on = [null_resource.wait_bootstrap]
+    depends_on = [null_resource.install]
     connection {
         type        = "ssh"
         user        = var.rhel_username
@@ -234,7 +161,7 @@ resource "null_resource" "setup_oc" {
 }
 
 resource "null_resource" "approve_worker_csr" {
-    depends_on = [null_resource.setup_oc, null_resource.check_worker]
+    depends_on = [null_resource.setup_oc]
         connection {
         type        = "ssh"
         user        = var.rhel_username

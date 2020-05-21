@@ -1,0 +1,18 @@
+---
+# tasks file for ocp4 cluster nodes configuration
+
+# Wait at least 30m for node connection
+- name: Check connection
+  wait_for_connection:
+    delay: 15
+    connect_timeout: 15
+    timeout: 1800
+
+- name: Configure node
+  shell: |
+    if lsmod|grep -q 'ibmveth'; then
+      sudo sysctl -w net.ipv4.route.min_pmtu=1450;
+      sudo sysctl -w net.ipv4.ip_no_pmtu_disc=1;
+      echo 'net.ipv4.route.min_pmtu = 1450' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null;
+      echo 'net.ipv4.ip_no_pmtu_disc = 1' | sudo tee --append /etc/sysctl.d/88-sysctl.conf > /dev/null;
+    fi
