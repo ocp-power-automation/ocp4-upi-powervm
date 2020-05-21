@@ -78,8 +78,8 @@ module "nodes" {
     worker_port_ids                 = module.network.worker_port_ids
 }
 
-module "init" {
-    source                          = "./modules/5_init"
+module "install" {
+    source                          = "./modules/5_install"
 
     cluster_domain                  = var.cluster_domain
     cluster_id                      = "${random_id.label.hex}"
@@ -103,20 +103,6 @@ module "init" {
     master_count                    = var.master["count"]
     release_image_override          = var.release_image_override
     helpernode_tag                  = var.helpernode_tag
-    log_level                       = var.installer_log_level
-}
-
-module "install" {
-    source                          = "./modules/6_install"
-
-    init_status                     = module.init.init_status
-    bootstrap_ip                    = module.nodes.bootstrap_ip
-    bastion_ip                      = module.bastion.bastion_ip
-    master_ips                      = module.nodes.master_ips
-    worker_ips                      = module.nodes.worker_ips
-    rhel_username                   = var.rhel_username
-    private_key                     = local.private_key
-    ssh_agent                       = var.ssh_agent
     storage_type                    = var.storage_type
     log_level                       = var.installer_log_level
 }

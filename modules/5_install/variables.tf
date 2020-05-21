@@ -34,4 +34,5 @@ variable "master_count" {}
 variable "release_image_override" {}
 
 variable helpernode_tag { default = "master" }
+variable "storage_type" {}
 variable "log_level" {}
