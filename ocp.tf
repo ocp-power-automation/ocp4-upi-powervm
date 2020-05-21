@@ -83,6 +83,7 @@ module "install" {
 
     cluster_domain                  = var.cluster_domain
     cluster_id                      = "${random_id.label.hex}"
+    dns_forwarders                  = var.dns_forwarders
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
     allocation_pools                = module.network.allocation_pools
@@ -100,11 +101,11 @@ module "install" {
     pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
     openshift_install_tarball       = var.openshift_install_tarball
     openshift_client_tarball        = var.openshift_client_tarball
-    master_count                    = var.master["count"]
+    storage_type                    = var.storage_type
     release_image_override          = var.release_image_override
     helpernode_tag                  = var.helpernode_tag
-    storage_type                    = var.storage_type
     log_level                       = var.installer_log_level
+    ansible_extra_options           = var.ansible_extra_options
 }
 
 module "storage" {

@@ -1,0 +1,6 @@
+---
+# defaults file
+
+workdir: ~/ocp4-workdir
+log_level: info
+release_image_override: ""

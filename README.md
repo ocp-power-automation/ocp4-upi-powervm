@@ -1,7 +1,9 @@
 # Terraform for OpenShift 4.X on PowerVM/PowerVC
-This repo contains Terraform templates required to deploy OCP 4.3 on PowerVM LPARs managed via IBM PowerVC. Terraform resources are implemented by refering to https://github.com/openshift/installer/blob/release-${ocp_version}/docs/user/openstack/install_upi.md.
+This repo contains Terraform templates required to deploy OCP 4.X on PowerVM LPARs managed via IBM PowerVC. Terraform resources are implemented by refering to https://github.com/openshift/installer/blob/master/docs/user/openstack/install_upi.md.
 
-This module will not setup a private network for running the cluster. Instead, it will create the nodes on the same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. We make use of [OCP4 Helper Node](https://github.com/RedHatOfficial/ocp4-helpernode) playbook to setup DNS, HAProxy, HTTP and DHCP services on the bastion node.
+This repo also contain extra Ansible playbooks for the installation steps which are executed by the Terraform module. No need to run the playbooks manually.
+
+The Terraform module will not setup a private network for running the cluster. Instead, it will create the nodes on the same network as provided in the inputs. Initially network ports are created for 1 bootstrap, N masters and M workers nodes. This is required for setting up a DHCP server for nodes to pick up the port IPs. We make use of [OCP4 Helper Node](https://github.com/RedHatOfficial/ocp4-helpernode) playbook to setup DNS, HAProxy, HTTP and DHCP services on the bastion node.
 
 Run this code from either Mac or Linux (Intel) system.
 
@@ -66,6 +68,7 @@ Edit the var.tfvars file with following values:
  * `openshift_client_tarball` : HTTP URL for openhift client (`oc`) tarball.
  * `release_image_override` : This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to pull-secret.txt file.
  * `installer_log_level` : enable log level for openshift-install (e.g. "debug | info | warn | error") (default "info")
+ * `ansible_extra_options` : Ansible options to append to the ansible-playbook commands. Default is set to "-v".
  * `helpernode_tag` : Checkout level for [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) which is used for setting up services required on bastion node.
  * `pull_secret_file` : Location of the pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. cluster_id.cluster_domain together form the fully qualified domain name.

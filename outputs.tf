@@ -18,6 +18,10 @@
 #
 ################################################################
 
+output "cluster_id" {
+    value = random_id.label.hex
+}
+
 output "bastion_ip" {
     value = module.bastion.bastion_ip
 }
@@ -55,5 +59,9 @@ output "web_console_url" {
 
 output "storageclass_name" {
     value = module.storage.storageclass_name
+}
+
+output "install_status" {
+    value = module.install.install_status
 }
 

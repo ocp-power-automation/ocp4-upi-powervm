@@ -1,0 +1,81 @@
+---
+# tasks file for ocp4 config
+
+- name: Skip config if install workdir exist
+  stat:
+    path: "{{ workdir }}"
+  register: dir_status
+
+- meta: end_play
+  when: dir_status.stat.exists
+
+- name: Setup openshift workdir
+  file:
+    path: "{{ workdir }}"
+    state: "{{ item }}"
+    mode: '0755'
+  with_items:
+#  - absent
+  - directory
+
+
+- name: Generate install-config.yaml
+  template:
+    src: ../templates/install-config.yaml.j2
+    dest: "{{ workdir }}/install-config.yaml"
+
+- name: backup the install-config.yaml
+  copy:
+    src: "{{ workdir }}/install-config.yaml"
+    dest: "{{ workdir }}/install-config.yaml.back"
+    remote_src: yes
+    force: yes
+
+- name: Generate manifest files
+  shell: "openshift-install create manifests --log-level {{ log_level }}"
+  args:
+    chdir: "{{ workdir }}"
+
+- name: Remove the machines yaml files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_fileglob:
+    - "{{ workdir }}/openshift/99_openshift-cluster-api_master-machines-*.yaml"
+    - "{{ workdir }}/openshift/99_openshift-cluster-api_worker-machineset-*.yaml"
+
+- name: Make the control-plane un-schedulable
+  lineinfile:
+    path: "{{ workdir }}/manifests/cluster-scheduler-02-config.yml"
+    regexp: '^(.*)mastersSchedulable: true'
+    line: '\1mastersSchedulable: False'
+    backrefs: yes
+
+- name: Create ignition files
+  shell: "OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE={{ release_image_override }} openshift-install create ignition-configs --log-level {{ log_level }}"
+  args:
+    chdir: "{{ workdir }}"
+
+- name: Copy update_ignition_bootstrap
+  template:
+    src: ../files/update_ignition_bootstrap.py
+    dest: /tmp/update_ignition_bootstrap.py
+    mode: '0755'
+
+- name: Update bootstrap ignition
+  shell: "python3 /tmp/update_ignition_bootstrap.py"
+  args:
+    chdir: "{{ workdir }}"
+
+- name: Host ignition files
+  copy:
+    src: "{{ item }}"
+    dest: /var/www/html/ignition/
+    mode: o+r
+  with_fileglob:
+    - "{{ workdir }}/*.ign"
+
+- name: Best effort SELinux repair - Apache
+  shell: "restorecon -vR /var/www/html || true"
+
+

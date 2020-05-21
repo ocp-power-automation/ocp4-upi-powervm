@@ -1,0 +1,9 @@
+---
+# file: install.yml
+- name: Create OCP config
+  hosts: bastion
+  roles:
+  - ocp-config
+  vars:
+    master_count: "{{ groups['masters'] | length }}"
+

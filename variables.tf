@@ -168,6 +168,11 @@ variable "helpernode_tag" {
     default = "d6ad30574619ae6427cad9662fe3a4a896a9af11"
 }
 
+variable "ansible_extra_options" {
+    description = "Extra options string to append to ansible-playbook commands"
+    default     = "-v"
+}
+
 locals {
     private_key_file    = "${var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : "${var.private_key_file}" }"
     public_key_file     = "${var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : "${var.public_key_file}" }"
