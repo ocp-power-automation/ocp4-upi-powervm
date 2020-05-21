@@ -29,3 +29,9 @@
   roles:
   - nodes-config
 
+- name: Install OCP
+  hosts: bastion
+  roles:
+  - ocp-install
+  vars:
+    worker_count: "{{ groups['workers'] | length }}"

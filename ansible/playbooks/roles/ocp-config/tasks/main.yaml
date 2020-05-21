@@ -36,7 +36,7 @@
   args:
     chdir: "{{ workdir }}"
 
-- name: Remove the machines yaml files
+- name: Remove the machine yaml files
   file:
     path: "{{ item }}"
     state: absent

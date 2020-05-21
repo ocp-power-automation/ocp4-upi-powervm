@@ -19,7 +19,6 @@
 ################################################################
 
 output "install_status" {
-    depends_on = [null_resource.wait_install]
+    depends_on = [null_resource.install]
     value = "COMPLETED"
 }
-

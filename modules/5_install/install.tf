@@ -66,6 +66,7 @@ locals {
         cluster_domain          = var.cluster_domain
         pull_secret             = var.pull_secret
         public_ssh_key          = var.public_key
+        storage_type            = var.storage_type
         log_level               = var.log_level
         release_image_override  = var.release_image_override
     }
@@ -138,95 +139,6 @@ resource "null_resource" "install" {
         inline = [
             "echo 'Running ocp install playbook...'",
             "cd install-playbooks && ansible-playbook  -i inventory -e @install_vars.yaml playbooks/install.yaml ${var.ansible_extra_options}"
-        ]
-    }
-}
-
-resource "null_resource" "setup_oc" {
-    depends_on = [null_resource.install]
-    connection {
-        type        = "ssh"
-        user        = var.rhel_username
-        host        = var.bastion_ip
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "15m"
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "mkdir -p ~/.kube/",
-            "cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
-        ]
-    }
-}
-
-resource "null_resource" "approve_worker_csr" {
-    depends_on = [null_resource.setup_oc]
-        connection {
-        type        = "ssh"
-        user        = var.rhel_username
-        host        = var.bastion_ip
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "15m"
-    }
-    provisioner "remote-exec" {
-        inline = [
-            # Approving all CSR requests until worker nodes are Ready...
-            "while [ $(oc get nodes | grep -w worker | grep -w  'Ready' | wc -l) != ${length(var.worker_ips)} ]; do oc get csr -ojson | jq -r '.items[] | select(.status == {} ) | .metadata.name' | xargs oc adm certificate approve; sleep 30; echo 'Worker not Ready, sleeping for 30s..'; done"
-        ]
-    }
-}
-
-resource "null_resource" "wait_install" {
-    depends_on = [null_resource.approve_worker_csr]
-    connection {
-        type        = "ssh"
-        user        = var.rhel_username
-        host        = var.bastion_ip
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "15m"
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "openshift-install wait-for install-complete --dir ~/openstack-upi --log-level ${var.log_level}"
-        ]
-    }
-
-    # Force copy kubeconfig file again after install
-    provisioner "remote-exec" {
-        inline = [
-            "\\cp ~/openstack-upi/auth/kubeconfig ~/.kube/config"
-        ]
-    }
-}
-
-resource "null_resource" "patch_image_registry" {
-    depends_on = [null_resource.wait_install]
-    count       = var.storage_type != "nfs" ? 1 : 0
-    connection {
-        type        = "ssh"
-        user        = var.rhel_username
-        host        = var.bastion_ip
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "15m"
-    }
-    provisioner "file" {
-        content = <<EOF
-#!/bin/bash
-
-# The image-registry is not always available immediately after the OCP installer
-while [ $(oc get configs.imageregistry.operator.openshift.io/cluster | wc -l) == 0 ]; do sleep 30; done
-oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}, "managementState": "Managed"}}'
-
-EOF
-        destination = "/tmp/patch_image_registry.sh"
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "chmod +x /tmp/patch_image_registry.sh; bash /tmp/patch_image_registry.sh",
         ]
     }
 }

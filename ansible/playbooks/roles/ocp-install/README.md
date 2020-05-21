@@ -1,13 +1,19 @@
-ocp-config: OCP Configuration
+ocp-install: OCP Configuration
 =========
 
-This module will create the ignition files for the cluster nodes. All the ignition files will be hosted at `/var/www/html/ignition/`.
+This module will:
+
+ 1. Approve pending worker CSRs.
+ 1. Setup kubeconfig at `~/.kube/config`.
+ 1. Wait till cluster install is completed.
+ 1. Patch image registry to EmptyDir if storage_type is not 'nfs'.
 
 Requirements
 ------------
 
- - All the required configurations are done on the bastion node eg: HTTP, openshift-install binary is available on $PATH. This can also be achieved by using [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) playbook.
- - Master count can be extracted from host group 'masters'.
+ - The wait-for bootstrap-complete command should succeed before running this role.
+ - The no of worker nodes already created.
+ - Worker count can be extracted from host group 'workers'.
 
 Role Variables
 --------------
@@ -17,22 +23,24 @@ Role Variables
 | workdir                 | no       | ~/ocp4-workdir | Place for config generation and auth files  |
 | log_level               | no       | info           | Option --log-level in openshift-install cmd |
 | release_image_override  | no       | ""             | OCP image overide variable                  |
-| master_count            | yes      |                | Number of master nodes                      |
+| storage_type            | no       | none           | Storage type set for the cluster: Eg: nfs   |
+| worker_count            | yes      |                | Number of worker nodes                      |
 
 Dependencies
 ------------
 
-None
+ - ocp-config
+ - nodes-config
 
 Example Playbook
 ----------------
 
-    - name: Create OCP config
+    - name: Install OCP
       hosts: bastion
       roles:
-      - ocp-config
+      - ocp-install
       vars:
-        master_count: "{{ groups['masters'] | length }}"
+        worker_count: "{{ groups['workers'] | length }}"
 
 License
 -------

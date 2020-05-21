@@ -1,13 +1,13 @@
 # Extra Ansible Playbooks for OCP4 Install
 
-These playbooks are used for installation of OCP on PowerVC and other post installation steps. Before running these playbooks on bastion node, ensure that all the required services are configured. Also, the cluster nodes needs to be booted on PowerVC.
+These playbooks are used for installation of OCP on Power and other post installation steps. Before running these playbooks on bastion node, ensure that all the required services are configured.
 
 ## Assumptions:
 
  - A bastion node is already created where these playbooks would run.
- - The [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) playbook is executed once on the bastion node.
- - The cluster nodes are already created on PowerVC manually, or by using IaC tools such as Terraform.
- - These playbook are supported to use with https://github.com/ppc64le/ocp4_upi_powervm only.
+ - The required services are configured on the bastion node eg: HTTP, HAProxy, DNS, DHCP, etc. This can also be achieved by using [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) playbook.
+ - The cluster nodes are already created.
+ - These playbooks are supported to use with https://github.com/ppc64le/ocp4_upi_powervm only.
 
 ## Set up variables
 
@@ -33,6 +33,7 @@ Below variables will be used by the OCP install playbook.
 
 ```
 workdir: <Directory to use for creating OCP configs>
+storage_type: <Storage type used in the cluster. Eg: nfs (Note: Currently NFS provisioner is not configured using this playbook. This variable is only used for setting up image registry to EmptyDir if storage_type is not nfs)>
 log_level: <Option --log-level in openshift-install commands. Default is 'info'>
 release_image_override: '<This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ign files. If you are using internal artifactory then ensure that you have added auth key to the pull_secret>'
 ```
