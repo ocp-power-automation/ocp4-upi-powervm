@@ -34,7 +34,8 @@ cluster_domain = "example.com"
 cluster_id_prefix = "test"
 
 dns_forwarders = "8.8.8.8; 8.8.4.4"
-#installer_log_level = "info"
+installer_log_level = "info"
+ansible_extra_options = "-v"
 
 ## Currently master branch has support for ppc64le; We will use current(May 15, 2020) commit# which is stable.
 #helpernode_tag = "d6ad30574619ae6427cad9662fe3a4a896a9af11"
@@ -42,4 +43,4 @@ dns_forwarders = "8.8.8.8; 8.8.4.4"
 storage_type    = "nfs"
 volume_size = "300" # Value in GB
 volume_storage_template = ""
-cluster_id_prefix = "test"
+

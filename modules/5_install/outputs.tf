@@ -18,17 +18,7 @@
 #
 ################################################################
 
-variable "bootstrap_ip" {}
-variable "bastion_ip" {}
-
-variable "rhel_username" {}
-variable "private_key" {}
-variable "ssh_agent" {}
-
-variable "master_ips" {}
-variable "worker_ips" {}
-
-variable "storage_type" {}
-
-variable "init_status" {}
-variable "log_level" {}
+output "install_status" {
+    depends_on = [null_resource.install]
+    value = "COMPLETED"
+}

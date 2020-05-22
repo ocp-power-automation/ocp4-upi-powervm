@@ -1,5 +1,25 @@
+################################################################
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Licensed Materials - Property of IBM
+#
+# ©Copyright IBM Corp. 2020
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+################################################################
+
 locals {
-    vars_yaml = {
+    helpernode_vars = {
         cluster_domain  = var.cluster_domain
         cluster_id      = var.cluster_id
         bastion_ip      = var.bastion_ip
@@ -34,12 +54,21 @@ locals {
         install_tarball = var.openshift_install_tarball
     }
 
-    install_cfg = {
-        pull_secret             = var.pull_secret
-        public_ssh_key          = var.public_key
+    inventory = {
+        bastion_ip      = var.bastion_ip
+        bootstrap_ip    = var.bootstrap_ip
+        master_ips      = var.master_ips
+        worker_ips      = var.worker_ips
+    }
+
+    install_vars = {
         cluster_id              = var.cluster_id
         cluster_domain          = var.cluster_domain
-        master_count            = var.master_count
+        pull_secret             = var.pull_secret
+        public_ssh_key          = var.public_key
+        storage_type            = var.storage_type
+        log_level               = var.log_level
+        release_image_override  = var.release_image_override
     }
 }
 
@@ -57,23 +86,23 @@ resource "null_resource" "config" {
         inline = [
             "rm -rf ocp4-helpernode",
             "echo 'Cloning into ocp4-helpernode...'",
-            "git clone https://github.com/RedHatOfficial/ocp4-helpernode >/dev/null",
+            "git clone https://github.com/RedHatOfficial/ocp4-helpernode --quiet",
             "cd ocp4-helpernode && git checkout ${var.helpernode_tag}"
         ]
     }
     provisioner "file" {
-        content     = templatefile("${path.module}/templates/vars.yaml", local.vars_yaml)
-        destination = "~/ocp4-helpernode/vars.yaml"
+        content     = templatefile("${path.module}/templates/helpernode_vars.yaml", local.helpernode_vars)
+        destination = "~/ocp4-helpernode/helpernode_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [
             "echo 'Running ocp4-helpernode playbook...'",
-            "cd ocp4-helpernode && ansible-playbook -e @vars.yaml tasks/main.yml > ocp4-helpernode-ansible.log 2>&1"
+            "cd ocp4-helpernode && ansible-playbook -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
         ]
     }
 }
 
-resource "null_resource" "ocp_init" {
+resource "null_resource" "install" {
     depends_on = [null_resource.config]
 
     connection {
@@ -85,54 +114,31 @@ resource "null_resource" "ocp_init" {
         timeout     = "15m"
     }
 
-    #INSTALL-CONFIG
+    provisioner "remote-exec" {
+        inline = [
+            "rm -rf ~/install-playbooks",
+        ]
+    }
+
     provisioner "file" {
-        content      = templatefile("${path.module}/templates/install-config.tpl", local.install_cfg)
-        destination = "/tmp/ocp4tf_install-config.tpl"
+        source      = "${path.module}/../../ansible"
+        destination = "~/install-playbooks"
     }
+
     provisioner "file" {
-        source      = "${path.module}/scripts/update_ignition_bootstrap.py"
-        destination = "/tmp/update_ignition_bootstrap.py"
+        content     = templatefile("${path.module}/templates/inventory", local.inventory)
+        destination = "~/install-playbooks/inventory"
+    }
+
+    provisioner "file" {
+        content     = templatefile("${path.module}/templates/install_vars.yaml", local.install_vars)
+        destination = "~/install-playbooks/install_vars.yaml"
     }
 
     provisioner "remote-exec" {
         inline = [
-            "rm -rf ~/openstack-upi && mkdir ~/openstack-upi",
-            "cp /tmp/ocp4tf_install-config.tpl ~/openstack-upi/install-config.yaml",
-        ]
-    }
-
-    #create manifests
-    provisioner "remote-exec" {
-        inline = [
-            "openshift-install create manifests  --dir ~/openstack-upi --log-level ${var.log_level}"
-        ]
-    }
-
-    #create ignition-configs
-    provisioner "remote-exec" {
-        inline = [
-            "cd ~/openstack-upi",
-            #Remove the control-plane Machines and compute MachineSets, because we'll be providing those ourselves.
-            "rm -f openshift/99_openshift-cluster-api_master-machines-*.yaml openshift/99_openshift-cluster-api_worker-machineset-*.yaml",
-            #Update the scheduler configuration to keep router pods and other workloads off the control-plane nodes.
-            "sed -i 's/mastersSchedulable: true/mastersSchedulable: False/g' manifests/cluster-scheduler-02-config.yml",
-
-            "OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${var.release_image_override} openshift-install create ignition-configs --log-level ${var.log_level}"
-        ]
-    }
-
-    provisioner "remote-exec" {
-        inline = [
-            "cd ~/openstack-upi && python3 /tmp/update_ignition_bootstrap.py",
-        ]
-    }
-
-    provisioner "remote-exec" {
-        inline = [
-            "cp ~/openstack-upi/*.ign /var/www/html/ignition/",
-            "restorecon -vR /var/www/html/",
-            "chmod o+r /var/www/html/ignition/*.ign"
+            "echo 'Running ocp install playbook...'",
+            "cd install-playbooks && ansible-playbook  -i inventory -e @install_vars.yaml playbooks/install.yaml ${var.ansible_extra_options}"
         ]
     }
 }

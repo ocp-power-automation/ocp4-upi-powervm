@@ -1,0 +1,11 @@
+---
+install-config:
+  cluster_domain: example.com
+  cluster_id: test
+  pull_secret: {json goes here}
+  public_ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYsu4A0p2sMH/7xZAszHrP5lGKkukwE75QF6OO5GHqSdiwTKvF45XF08fR5wmNZV0TWDv+6OZ5goVHx root@machine
+
+workdir: ~/ocp4-workdir
+storage_type: nfs
+log_level: info
+release_image_override: ""

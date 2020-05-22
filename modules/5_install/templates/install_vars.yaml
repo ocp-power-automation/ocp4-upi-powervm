@@ -1,0 +1,11 @@
+---
+install_config:
+   cluster_domain: ${cluster_domain}
+   cluster_id: ${cluster_id}
+   pull_secret: '${pull_secret}'
+   public_ssh_key: '${public_ssh_key}'
+
+workdir: ~/openstack-upi
+storage_type: ${storage_type}
+log_level: ${log_level}
+release_image_override: '${release_image_override}'

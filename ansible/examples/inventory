@@ -1,0 +1,11 @@
+[bastion]
+localhost ansible_connection=local
+
+[bootstrap]
+X.X.X.X ansible_connection=ssh ansible_user=core
+
+[masters]
+Y.Y.Y.Y ansible_connection=ssh ansible_user=core
+
+[workers]
+Z.Z.Z.Z ansible_connection=ssh ansible_user=core
