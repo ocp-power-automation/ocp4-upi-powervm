@@ -1,5 +1,47 @@
 ---
 # tasks file for ocp4 config
+- name: Extract OCP4 tools
+  when: release_image_override != ""
+  block:
+    - name: Set tools directory path
+      set_fact:
+        tools_dir: "~/ocp4_tools"
+
+    - name: Create tools directory
+      file:
+        path: "{{ tools_dir }}"
+        state: "{{ item }}"
+        mode: '0755'
+      with_items:
+      - directory
+
+    - name: Extract OCP4 tools from release image
+      shell: |
+        echo '{{ install_config.pull_secret }}' > pull_secret
+        oc adm release extract --tools {{ release_image_override }} --registry-config='pull_secret'
+      args:
+        chdir: "{{ tools_dir }}"
+
+    - name: Find archive packages
+      find:
+        paths: "{{ tools_dir }}"
+        patterns: "openshift-*.tar.gz"
+      register: find_result
+
+    - name: Unarchive OCP4 tool files
+      unarchive:
+        src: "{{ item.path }}"
+        dest: /usr/local/bin
+        remote_src: yes
+      with_items: "{{ find_result.files }}"
+
+    - name: Remove tools directory
+      file:
+        path: "{{ tools_dir }}"
+        state: "{{ item }}"
+        mode: '0755'
+      with_items:
+      - absent
 
 - name: Skip config if install workdir exist
   stat:
