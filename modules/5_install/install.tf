@@ -80,6 +80,7 @@ resource "null_resource" "config" {
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "15m"
+        bastion_host = var.jump_host
     }
 
     provisioner "remote-exec" {
@@ -112,6 +113,7 @@ resource "null_resource" "install" {
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "15m"
+        bastion_host = var.jump_host
     }
 
     provisioner "remote-exec" {

@@ -42,6 +42,7 @@ resource "null_resource" "setup_nfs_server" {
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "15m"
+        bastion_host = var.jump_host
     }
     provisioner "remote-exec" {
         inline = [
@@ -75,6 +76,7 @@ resource "null_resource" "setup_nfs_disk" {
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "15m"
+        bastion_host = var.jump_host
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/create_disk_link.sh", local.disk_config)
@@ -120,6 +122,7 @@ resource "null_resource" "configure_nfs_storage" {
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "15m"
+        bastion_host = var.jump_host
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/deployment.yaml", local.nfs_storage_config)
@@ -164,6 +167,7 @@ resource "null_resource" "patch_image_registry" {
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "15m"
+        bastion_host = var.jump_host
     }
 
     provisioner "file" {

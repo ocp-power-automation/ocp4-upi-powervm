@@ -32,3 +32,4 @@ variable "volume_storage_template" {}
 variable "rhel_username" {}
 variable "private_key" {}
 variable "ssh_agent" {}
+variable "jump_host" { default = "" }

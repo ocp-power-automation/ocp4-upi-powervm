@@ -36,6 +36,7 @@ variable "bastion_ip" {}
 variable "rhel_username" {}
 variable "private_key" {}
 variable "ssh_agent" {}
+variable "jump_host" { default = "" }
 
 variable "bootstrap_ip" {}
 variable "master_ips" {}
