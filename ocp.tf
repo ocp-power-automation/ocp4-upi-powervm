@@ -49,6 +49,10 @@ module "bastion" {
     ssh_agent                       = var.ssh_agent
     rhel_subscription_username      = var.rhel_subscription_username
     rhel_subscription_password      = var.rhel_subscription_password
+    storage_type                    = var.storage_type
+    volume_size                     = var.volume_size
+    volume_storage_template         = var.volume_storage_template
+
 }
 
 module "network" {
@@ -114,11 +118,8 @@ module "storage" {
     install_status                  = module.install.install_status
     cluster_id                      = "${random_id.label.hex}"
     bastion_ip                      = module.bastion.bastion_ip
-    bastion_id                      = module.bastion.bastion_id
     storage_type                    = var.storage_type
     storageclass_name               = var.storageclass_name
-    volume_size                     = var.volume_size
-    volume_storage_template         = var.volume_storage_template
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent

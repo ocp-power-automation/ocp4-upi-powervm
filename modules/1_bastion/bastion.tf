@@ -138,3 +138,50 @@ resource "null_resource" "bastion_init" {
         ]
     }
 }
+
+resource "openstack_blockstorage_volume_v2" "storage_volume" {
+    count       = var.storage_type == "nfs" ? 1 : 0
+    name        = "${var.cluster_id}-${var.storage_type}-storage-vol"
+    size        = var.volume_size
+    volume_type = var.volume_storage_template
+}
+
+resource "openstack_compute_volume_attach_v2" "storage_v_attach" {
+    count       = var.storage_type == "nfs" ? 1 : 0
+    volume_id   = openstack_blockstorage_volume_v2.storage_volume[count.index].id
+    instance_id = openstack_compute_instance_v2.bastion.id
+}
+
+locals {
+    disk_config = {
+        volume_size = var.volume_size
+        disk_name   = "disk/pv-storage-disk"
+    }
+    storage_path = "/export"
+}
+
+resource "null_resource" "setup_nfs_disk" {
+    depends_on  = [openstack_compute_volume_attach_v2.storage_v_attach, null_resource.bastion_init]
+    count       = var.storage_type == "nfs" ? 1 : 0
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "15m"
+    }
+    provisioner "file" {
+        content     = templatefile("${path.module}/templates/create_disk_link.sh", local.disk_config)
+        destination = "/tmp/create_disk_link.sh"
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "rm -rf mkdir ${local.storage_path}; mkdir -p ${local.storage_path}; chmod -R 755 ${local.storage_path}",
+            "sudo chmod +x /tmp/create_disk_link.sh",
+            "/tmp/create_disk_link.sh",
+            "sudo mkfs.ext4 -F /dev/${local.disk_config.disk_name}",
+            "sudo mount /dev/${local.disk_config.disk_name} ${local.storage_path}",
+        ]
+    }
+}
