@@ -219,10 +219,6 @@ variable "storage_type" {
     default = "nfs"
 }
 
-variable "storageclass_name" {
-    default = "managed-nfs-storage"
-}
-
 variable "volume_size" {
     # If storage_type = nfs, a new volume of this size will be attached to the bastion node.
     # Value in GB
