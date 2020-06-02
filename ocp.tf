@@ -52,7 +52,6 @@ module "bastion" {
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
-
 }
 
 module "network" {
@@ -111,17 +110,3 @@ module "install" {
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
 }
-
-module "storage" {
-    source                          = "./modules/7_storage"
-
-    install_status                  = module.install.install_status
-    cluster_id                      = "${random_id.label.hex}"
-    bastion_ip                      = module.bastion.bastion_ip
-    storage_type                    = var.storage_type
-    storageclass_name               = var.storageclass_name
-    rhel_username                   = var.rhel_username
-    private_key                     = local.private_key
-    ssh_agent                       = var.ssh_agent
-}
-

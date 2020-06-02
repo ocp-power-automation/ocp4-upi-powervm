@@ -58,7 +58,7 @@ output "web_console_url" {
 }
 
 output "storageclass_name" {
-    value = module.storage.storageclass_name
+    value = "nfs-storage-provisioner"
 }
 
 output "install_status" {
