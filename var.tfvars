@@ -38,7 +38,7 @@ installer_log_level = "info"
 ansible_extra_options = "-v"
 
 ## Currently master branch has support for ppc64le; We will use current(May 15, 2020) commit# which is stable.
-#helpernode_tag = "d6ad30574619ae6427cad9662fe3a4a896a9af11"
+#helpernode_tag = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
 
 storage_type    = "nfs"
 volume_size = "300" # Value in GB

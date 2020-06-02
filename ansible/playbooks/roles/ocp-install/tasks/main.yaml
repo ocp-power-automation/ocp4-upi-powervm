@@ -24,6 +24,10 @@
   args:
     chdir: "{{ workdir }}"
 
+- name: Configure nfs-provisioner
+  shell: helpernodecheck nfs-setup
+  when: storage_type == "nfs"
+
 # The image-registry is not always available immediately after the OCP installer
 - name: Wait for image-registry operator
   shell: "oc get configs.imageregistry.operator.openshift.io/cluster --no-headers | wc -l"
@@ -31,9 +35,15 @@
   until: imgreg_operator_count.stdout|int > 0
   retries: 20
   delay: 30
-  when: storage_type != "nfs"
 
-- name: Patch image-registry operator
+- name: Create and patch image-registry operator as registry-pvc
+  tags: image-registry
+  shell: |
+    oc create -f /usr/local/src/registry-pvc.yaml -n openshift-image-registry
+    oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{ "claim": "registry-pvc"}}, "managementState": "Managed"}}'
+  when: storage_type == "nfs"
+
+- name: Patch image-registry operator as emptyDir
   tags: image-registry
   shell: |
     oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}, "managementState": "Managed"}}'

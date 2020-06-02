@@ -75,7 +75,6 @@ Edit the var.tfvars file with following values:
  * `cluster_id_prefix` : Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique (may be with your name).
  * `dns_forwarders` : External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
- * `storageclass_name` : StorageClass name to be given.
  * `volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
  * `volume_storage_template` : Storage template name or ID for creating the volume. Empty value will use default template.
 
