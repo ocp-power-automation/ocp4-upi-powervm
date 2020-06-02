@@ -165,7 +165,7 @@ variable "installer_log_level" {
 variable "helpernode_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
     # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-    default = "d6ad30574619ae6427cad9662fe3a4a896a9af11"
+    default = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
 }
 
 variable "ansible_extra_options" {
