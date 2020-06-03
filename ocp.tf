@@ -107,6 +107,7 @@ module "install" {
     storage_type                    = var.storage_type
     release_image_override          = var.release_image_override
     helpernode_tag                  = var.helpernode_tag
+    install_playbook_tag            = var.install_playbook_tag
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
 }
