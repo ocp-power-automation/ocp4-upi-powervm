@@ -119,6 +119,7 @@ resource "null_resource" "install" {
             "rm -rf ocp4-playbooks",
             "echo 'Cloning into ocp4-playbooks...'",
             "git clone https://github.com/ocp-power-automation/ocp4-playbooks --quiet",
+            "cd ocp4-playbooks && git checkout ${var.install_playbook_tag}"
         ]
     }
     provisioner "file" {

@@ -24,10 +24,10 @@ master                      = {instance_type    = "medium",  image_id     = "468
 worker                      = {instance_type    = "large",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 2}
 
 ### OpenShift variables
-openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-05-13-222456/openshift-install-linux.tar.gz"
-openshift_client_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-05-13-222456/openshift-client-linux.tar.gz"
+openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-02-231523/openshift-install-linux.tar.gz"
+openshift_client_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-02-231523/openshift-client-linux.tar.gz"
 
-#release_image_override = "quay.io/openshift-release-dev/ocp-release-nightly:4.4.0-0.nightly-ppc64le-2020-05-13-222456"
+#release_image_override = ""
 
 pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"
@@ -37,10 +37,9 @@ dns_forwarders = "8.8.8.8; 8.8.4.4"
 installer_log_level = "info"
 ansible_extra_options = "-v"
 
-## Currently master branch has support for ppc64le; We will use current(May 15, 2020) commit# which is stable.
 #helpernode_tag = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
+#install_playbook_tag = "90c7cc478c8751d0b22c163e101a0d49e15e2e08"
 
 storage_type    = "nfs"
 volume_size = "300" # Value in GB
 volume_storage_template = ""
-
