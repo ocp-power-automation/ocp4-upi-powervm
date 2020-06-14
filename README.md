@@ -89,11 +89,11 @@ Update the var.tfvars file with values specific to your environment. Following i
  * `installer_log_level` : enable log level for OpenShift install (e.g. "debug | info | warn | error") (default "info")
  * `ansible_extra_options` : Ansible options to append to the ansible-playbook commands. Default is set to "-v".
  * `helpernode_tag` : [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) ansible playbook version to checkout.
- * `install_playbook_tag` : = [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout.
+ * `install_playbook_tag` : [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout.
  * `pull_secret_file` : Location of the OCP pull-secret file to be used.
  * `cluster_domain` : Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name.
  * `cluster_id_prefix` : Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique.
- * `dns_forwarders` : External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8"`.
+ * `dns_forwarders` : External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
  * `volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
  * `volume_storage_template` : Storage template name or ID for creating the volume. Empty value will use default template.
@@ -118,13 +118,13 @@ Now wait for the installation to complete. It may take around 40 mins to complet
 
 **IMPORTANT**: Once the deployment is completed successfully, you can safely delete the bootstrap node.
 
-## Post Install Steps
+# Post Install Steps
 
-### Delete Bootstrap node
+## Delete Bootstrap node
 1. Change the `count` value to 0 in `bootstrap` map variable and re-run the apply command. Eg: `bootstrap = {instance_type = "medium", image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4", "count" = 0}`
 2. Run command `terraform apply -var-file var.tfvars`
 
-### Create API and Ingress DNS Records
+## Create API and Ingress DNS Records
 You will also need to add the following records to your DNS server:
 ```
 api.<cluster name>.<cluster domain>.  IN  A  <Bastion IP>
@@ -142,7 +142,8 @@ If you're unable to create and publish these DNS records, you can add them to yo
 ```
 
 
-**Note**: For convenience, entries specific to your cluster will be printed at the end of a successful run. Just copy and paste value of output variable `etc_hosts_entries` to your hosts file.
+**Note**: For convenience, entries specific to your cluster will be printed at the end of a successful run.
+Just copy and paste value of output variable `etc_hosts_entries` to your hosts file.
 
 # OCP Login Credentials
 The OCP login credentials are in bastion host. In order to retrieve the same follow these steps:
@@ -153,7 +154,8 @@ The OCP login credentials are in bastion host. In order to retrieve the same fol
 
 
 # Clean up
-Run `terraform destroy -var-file var.tfvars` to make sure that all resources are properly cleaned up. Do not manually clean up your environment unless both of the following are true:
+Run `terraform destroy -var-file var.tfvars` to make sure that all resources are properly cleaned up.
+Do not manually clean up your environment unless both of the following are true:
 
 1. You know what you are doing
 2. Something went wrong with an automated deletion.
