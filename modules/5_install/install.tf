@@ -69,6 +69,7 @@ locals {
         storage_type            = var.storage_type
         log_level               = var.log_level
         release_image_override  = var.release_image_override
+        rhcos_kernel_options    = var.rhcos_kernel_options
     }
 }
 

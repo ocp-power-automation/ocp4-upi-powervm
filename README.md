@@ -68,6 +68,7 @@ Update the var.tfvars file with values specific to your environment. Following i
  * `public_key` : The contents of corresponding key to use for the connection. Ignored if `public_key_file` is provided.
  * `rhel_subscription_username` : The username required for RHEL subcription on bastion host.
  * `rhel_subscription_password` : The password required for RHEL subcription on bastion host.
+ * `rhcos_kernel_options` (Optional) : List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes eg: ["slub_max_order=0","loglevel=7"]. Note that this will be applied after the cluster is installed, hence wait till all the nodes are in `Ready` status before you start using the cluster. Check nodes status using the command `oc get nodes`.
  * `bastion` : Map of below parameters for bastion host.
     * `instance_type` : The name of the desired flavor.
     * `image_id` : The image ID of the RHEL 8.1 image.

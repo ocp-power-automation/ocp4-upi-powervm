@@ -18,10 +18,12 @@ private_key                 = ""
 public_key                  = ""
 rhel_subscription_username  = ""
 rhel_subscription_password  = ""
+rhcos_kernel_options        = []
 bastion                     = {instance_type    = "medium", image_id     = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"}
 bootstrap                   = {instance_type    = "medium", image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 1}
 master                      = {instance_type    = "medium",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 3}
 worker                      = {instance_type    = "large",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 2}
+
 
 ### OpenShift variables
 openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-02-231523/openshift-install-linux.tar.gz"
@@ -38,7 +40,7 @@ installer_log_level = "info"
 ansible_extra_options = "-v"
 
 #helpernode_tag = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
-#install_playbook_tag = "90c7cc478c8751d0b22c163e101a0d49e15e2e08"
+#install_playbook_tag = "3614f1f2b8a5a8db310e0990000c9c6b419ed4f3"
 
 storage_type    = "nfs"
 volume_size = "300" # Value in GB
