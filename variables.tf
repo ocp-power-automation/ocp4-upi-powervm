@@ -149,6 +149,11 @@ variable "rhel_subscription_username" {}
 
 variable "rhel_subscription_password" {}
 
+variable "rhcos_kernel_options" {
+    description = "List of kernel arguments for the cluster nodes"
+    default     = []
+}
+
 ################################################################
 ### Instrumentation
 ################################################################
@@ -171,7 +176,7 @@ variable "helpernode_tag" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "90c7cc478c8751d0b22c163e101a0d49e15e2e08"
+    default = "3614f1f2b8a5a8db310e0990000c9c6b419ed4f3"
 }
 
 variable "ansible_extra_options" {
