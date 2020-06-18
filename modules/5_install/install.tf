@@ -71,6 +71,12 @@ locals {
         release_image_override  = var.release_image_override
         rhcos_kernel_options    = var.rhcos_kernel_options
     }
+
+    upgrade_vars = {
+        upgrade_image   = var.upgrade_image
+        pause_time      = var.upgrade_pause_time
+        delay_time      = var.upgrade_delay_time
+    }
 }
 
 resource "null_resource" "config" {
@@ -138,3 +144,28 @@ resource "null_resource" "install" {
         ]
     }
 }
+
+resource "null_resource" "upgrade" {
+    depends_on = [null_resource.install]
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "15m"
+    }
+
+    provisioner "file" {
+        content     = templatefile("${path.module}/templates/upgrade_vars.yaml", local.upgrade_vars)
+        destination = "~/ocp4-playbooks/upgrade_vars.yaml"
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "echo 'Running ocp upgrade playbook...'",
+            "cd ocp4-playbooks && ansible-playbook -i inventory -e @upgrade_vars.yaml playbooks/upgrade.yaml ${var.ansible_extra_options}"
+        ]
+    }
+}
+

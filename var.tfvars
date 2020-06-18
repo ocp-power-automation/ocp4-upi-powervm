@@ -45,3 +45,8 @@ ansible_extra_options = "-v"
 storage_type    = "nfs"
 volume_size = "300" # Value in GB
 volume_storage_template = ""
+
+#upgrade_image = ""
+#upgrade_pause_time = "90"
+#upgrade_delay_time = "600"
+

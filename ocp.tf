@@ -111,4 +111,7 @@ module "install" {
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
     rhcos_kernel_options            = var.rhcos_kernel_options
+    upgrade_image                   = var.upgrade_image
+    upgrade_pause_time              = var.upgrade_pause_time
+    upgrade_delay_time              = var.upgrade_delay_time
 }
