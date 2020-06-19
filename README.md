@@ -98,6 +98,9 @@ Update the var.tfvars file with values specific to your environment. Following i
  * `storage_type` : Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
  * `volume_size` : If storage_type is nfs, a volume will be created with given size in GB and attached to bastion node. Eg: 1000 for 1TB disk.
  * `volume_storage_template` : Storage template name or ID for creating the volume. Empty value will use default template.
+ * `upgrade_image` : Openshift release image having higher and supported version. If set, OCP cluster will be upgraded to this image version. (e.g. `"quay.io/openshift-release-dev/ocp-release-nightly@sha256:552ed19a988fff336712a50..."`)
+ * `upgrade_pause_time` : Minutes to pause the playbook execution before starting to check the upgrade status once the upgrade command is executed.
+ * `upgrade_delay_time` : Seconds to wait before re-checking the upgrade status once the playbook execution resumes.
 
 ## Setup required data files
 You need to have following files in data/ directory before running the Terraform templates.

@@ -241,3 +241,18 @@ variable "volume_storage_template" {
     default = ""
 }
 
+variable "upgrade_image" {
+    description = "OCP upgrade image"
+    default = ""
+}
+
+variable "upgrade_pause_time" {
+    description = "Number of minutes to pause the playbook execution before starting to check the upgrade status once the upgrade command is executed."
+    default = "90"
+}
+
+variable "upgrade_delay_time" {
+    description = "Number of seconds to wait before re-checking the upgrade status once the playbook execution resumes."
+    default = "600"
+}
+
