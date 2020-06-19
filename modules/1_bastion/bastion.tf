@@ -181,7 +181,8 @@ resource "null_resource" "setup_nfs_disk" {
             "sudo chmod +x /tmp/create_disk_link.sh",
             "/tmp/create_disk_link.sh",
             "sudo mkfs.ext4 -F /dev/${local.disk_config.disk_name}",
-            "sudo mount /dev/${local.disk_config.disk_name} ${local.storage_path}",
+            "echo '/dev/${local.disk_config.disk_name} ${local.storage_path} ext4 defaults 0 0' | sudo tee -a /etc/fstab > /dev/null",
+            "sudo mount ${local.storage_path}",
         ]
     }
 }
