@@ -26,8 +26,8 @@ worker                      = {instance_type    = "large",  image_id     = "4688
 
 
 ### OpenShift variables
-openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-02-231523/openshift-install-linux.tar.gz"
-openshift_client_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-02-231523/openshift-client-linux.tar.gz"
+openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-install-linux.tar.gz"
+openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-client-linux.tar.gz"
 
 #release_image_override = ""
 
