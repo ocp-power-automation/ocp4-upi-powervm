@@ -78,6 +78,12 @@ resource "openstack_compute_instance_v2" "bootstrap" {
 
 
 #master
+data "ignition_systemd_unit" "ramdisk" {
+    count       = var.mount_etcd_ramdisk ? 1 : 0
+    name        = "var-lib-etcd.mount"
+    content     = "[Unit]\nDescription=Mount etcd as a ramdisk\nBefore=local-fs.target\n[Mount]\n What=none\nWhere=/var/lib/etcd\nType=tmpfs\nOptions=size=2G\n[Install]\nWantedBy=local-fs.target"
+}
+
 data "ignition_config" "master" {
     count       = var.master["count"]
     append {
@@ -86,6 +92,7 @@ data "ignition_config" "master" {
     files       = [
         element(data.ignition_file.m_hostname.*.rendered, count.index),
     ]
+    systemd     = var.mount_etcd_ramdisk ? data.ignition_systemd_unit.ramdisk.*.rendered : null
 }
 
 data "ignition_file" "m_hostname" {

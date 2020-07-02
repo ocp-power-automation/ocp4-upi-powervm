@@ -84,6 +84,7 @@ Update the following variables specific to OCP.
  * `install_playbook_tag` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout.
  * `pull_secret_file` : (Optional) Location of the OCP pull-secret file to be used. Default path is 'data/pull-secret.txt'.
  * `dns_forwarders` : (Optional) External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
+ * `mount_etcd_ramdisk` : (Optional) Flag for mounting etcd directory in the ramdisk. Note that the data will not be persistent.
 
 ### Setup Storage Variables
 

@@ -79,6 +79,7 @@ module "nodes" {
     bootstrap_port_id               = module.network.bootstrap_port_id
     master_port_ids                 = module.network.master_port_ids
     worker_port_ids                 = module.network.worker_port_ids
+    mount_etcd_ramdisk              = var.mount_etcd_ramdisk
 }
 
 module "install" {

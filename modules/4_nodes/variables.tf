@@ -54,3 +54,5 @@ variable "openstack_availability_zone" {}
 variable "bootstrap_port_id" {}
 variable "master_port_ids" {}
 variable "worker_port_ids" {}
+
+variable "mount_etcd_ramdisk" {}
