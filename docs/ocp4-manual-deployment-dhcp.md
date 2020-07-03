@@ -53,11 +53,11 @@ workers:
     macaddr: "52:54:00:82:90:00"
 
 ppc64le: true
-ocp_bios: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/pre-release/latest-4.4/rhcos-4.4.0-0.nightly-ppc64le-2020-06-02-231523-metal.ppc64le.raw.gz"
-ocp_initramfs: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/pre-release/latest-4.4/rhcos-4.4.0-0.nightly-ppc64le-2020-06-02-231523-installer-initramfs.ppc64le.img"
-ocp_install_kernel: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/pre-release/latest-4.4/rhcos-4.4.0-0.nightly-ppc64le-2020-06-02-231523-installer-kernel-ppc64le"
-ocp_client: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-17-185455/openshift-client-linux-4.4.0-0.nightly-ppc64le-2020-06-17-185455.tar.gz"
-ocp_installer: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/4.4.0-0.nightly-ppc64le-2020-06-17-185455/openshift-install-linux-4.4.0-0.nightly-ppc64le-2020-06-17-185455.tar.gz"
+ocp_bios: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/latest/rhcos-4.4.9-ppc64le-metal.ppc64le.raw.gz"
+ocp_initramfs: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/latest/rhcos-4.4.9-ppc64le-installer-initramfs.ppc64le.img"
+ocp_install_kernel: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/latest/rhcos-4.4.9-ppc64le-installer-kernel-ppc64le"
+ocp_client: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-client-linux.tar.gz"
+ocp_installer: "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-install-linux.tar.gz"
 ```
 - Run the playbook
 ```
