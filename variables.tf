@@ -225,6 +225,11 @@ variable "dns_forwarders" {
     default   = "8.8.8.8; 8.8.4.4"
 }
 
+variable "mount_etcd_ramdisk" {
+    description = "Whether mount etcd directory in the ramdisk (Only for dev/test) on low performance disk"
+    default     = false
+}
+
 variable "storage_type" {
     #Supported values: nfs (other value won't setup a storageclass)
     default = "nfs"

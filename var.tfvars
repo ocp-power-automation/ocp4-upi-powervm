@@ -35,7 +35,8 @@ pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"
 cluster_id_prefix = "test"
 
-dns_forwarders = "8.8.8.8; 8.8.4.4"
+dns_forwarders      = "8.8.8.8; 8.8.4.4"
+mount_etcd_ramdisk  = false
 installer_log_level = "info"
 ansible_extra_options = "-v"
 
