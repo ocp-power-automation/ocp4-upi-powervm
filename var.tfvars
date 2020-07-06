@@ -18,7 +18,7 @@ private_key                 = ""
 public_key                  = ""
 rhel_subscription_username  = ""
 rhel_subscription_password  = ""
-rhcos_kernel_options        = []
+
 bastion                     = {instance_type    = "medium", image_id     = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"}
 bootstrap                   = {instance_type    = "medium", image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 1}
 master                      = {instance_type    = "medium",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 3}
@@ -39,6 +39,17 @@ dns_forwarders      = "8.8.8.8; 8.8.4.4"
 mount_etcd_ramdisk  = false
 installer_log_level = "info"
 ansible_extra_options = "-v"
+rhcos_kernel_options  = []
+sysctl_tuned_options  = false
+#sysctl_options = ["kernel.shmmni = 16384", "net.ipv4.tcp_tw_reuse = 1"]
+#match_array = <<EOF
+#- label: node-role.kubernetes.io/master
+#- label: icp4data
+#  value: database-db2oltp
+#  type: pod
+#- label: disk
+#  value: ssd
+#EOF
 
 #helpernode_tag = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
 #install_playbook_tag = "47b1fc6caa69f3705419889a9ea47717ec3d8c2e"

@@ -113,6 +113,9 @@ module "install" {
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
     rhcos_kernel_options            = var.rhcos_kernel_options
+    sysctl_tuned_options            = var.sysctl_tuned_options
+    sysctl_options                  = var.sysctl_options
+    match_array                     = var.match_array
     proxy                           = var.proxy
     upgrade_image                   = var.upgrade_image
     upgrade_pause_time              = var.upgrade_pause_time

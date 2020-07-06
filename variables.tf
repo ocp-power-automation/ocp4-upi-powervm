@@ -154,6 +154,22 @@ variable "rhcos_kernel_options" {
     default     = []
 }
 
+variable "sysctl_tuned_options" {
+    description = "Set to true to apply sysctl options via tuned operator. Default: false"
+    default     = false
+}
+
+variable "sysctl_options" {
+    description = "List of sysctl options to apply."
+    default     = []
+}
+
+variable "match_array" {
+    description = "Criteria for node/pod selection."
+    default     = <<EOF
+EOF
+}
+
 ################################################################
 ### Instrumentation
 ################################################################
