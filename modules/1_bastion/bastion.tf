@@ -75,6 +75,15 @@ resource "openstack_compute_instance_v2" "bastion" {
     }
 }
 
+locals {
+    proxy = {
+        server      = lookup(var.proxy, "server", ""),
+        port        = lookup(var.proxy, "port", "3128"),
+        user        = lookup(var.proxy, "user", ""),
+        password    = lookup(var.proxy, "password", "")
+        user_pass   = lookup(var.proxy, "user", "") == "" ? "" : "${lookup(var.proxy, "user", "")}:${lookup(var.proxy, "password", "")}@"
+    }
+}
 
 resource "null_resource" "bastion_init" {
     connection {
@@ -108,6 +117,41 @@ resource "null_resource" "bastion_init" {
             "echo 'vm.max_map_count = 262144' | sudo tee --append /etc/sysctl.conf > /dev/null",
         ]
     }
+
+    # Setup proxy
+    provisioner "remote-exec" {
+        inline = [<<EOF
+
+if [ "${local.proxy.server}" != "" ]; then
+    echo "Setting up proxy details..."
+
+    # System
+    set http_proxy="http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
+    set https_proxy="http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
+    set no_proxy="127.0.0.1,localhost,${var.cluster_domain}"
+    echo "export http_proxy=\"http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}\"" | sudo tee /etc/profile.d/http_proxy.sh > /dev/null
+    echo "export https_proxy=\"http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}\"" | sudo tee -a /etc/profile.d/http_proxy.sh > /dev/null
+    echo "export no_proxy=\"127.0.0.1,localhost,${var.cluster_domain}\"" | sudo tee -a /etc/profile.d/http_proxy.sh > /dev/null
+
+    # RHSM
+    sudo sed -i -e 's/^proxy_hostname =.*/proxy_hostname = ${local.proxy.server}/' /etc/rhsm/rhsm.conf
+    sudo sed -i -e 's/^proxy_port =.*/proxy_port = ${local.proxy.port}/' /etc/rhsm/rhsm.conf
+    sudo sed -i -e 's/^proxy_user =.*/proxy_user = ${local.proxy.user}/' /etc/rhsm/rhsm.conf
+    sudo sed -i -e 's/^proxy_password =.*/proxy_password = ${local.proxy.password}/' /etc/rhsm/rhsm.conf
+
+    # YUM/DNF
+    # Incase /etc/yum.conf is a symlink to /etc/dnf/dnf.conf we try to update the original file
+    yum_dnf_conf=$(readlink -f -q /etc/yum.conf)
+    sudo sed -i -e '/^proxy.*/d' $yum_dnf_conf
+    echo "proxy=http://${local.proxy.server}:${local.proxy.port}" | sudo tee -a $yum_dnf_conf > /dev/null
+    echo "proxy_username=${local.proxy.user}" | sudo tee -a $yum_dnf_conf > /dev/null
+    echo "proxy_password=${local.proxy.password}" | sudo tee -a $yum_dnf_conf > /dev/null
+fi
+
+EOF
+  ]
+    }
+
     provisioner "remote-exec" {
         inline = [
             "sudo subscription-manager clean",
@@ -120,7 +164,7 @@ resource "null_resource" "bastion_init" {
     }
     provisioner "remote-exec" {
         inline = [
-            "sudo pip3 install ansible -q"
+            "pip3 install ansible -q"
         ]
     }
     provisioner "remote-exec" {

@@ -61,6 +61,12 @@ locals {
         worker_ips      = var.worker_ips
     }
 
+    proxy = {
+        server      = lookup(var.proxy, "server", ""),
+        port        = lookup(var.proxy, "port", "3128"),
+        user_pass   = lookup(var.proxy, "user", "") == "" ? "" : "${lookup(var.proxy, "user", "")}:${lookup(var.proxy, "password", "")}@"
+    }
+
     install_vars = {
         cluster_id              = var.cluster_id
         cluster_domain          = var.cluster_domain
@@ -70,6 +76,8 @@ locals {
         log_level               = var.log_level
         release_image_override  = var.release_image_override
         rhcos_kernel_options    = var.rhcos_kernel_options
+        proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
+        no_proxy                = var.cidr
     }
 
     upgrade_vars = {

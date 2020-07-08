@@ -176,7 +176,7 @@ variable "helpernode_tag" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "fd018e391831d431a0828b58c7b25f7c5b0bb581"
+    default = "47b1fc6caa69f3705419889a9ea47717ec3d8c2e"
 }
 
 variable "ansible_extra_options" {
@@ -228,6 +228,17 @@ variable "dns_forwarders" {
 variable "mount_etcd_ramdisk" {
     description = "Whether mount etcd directory in the ramdisk (Only for dev/test) on low performance disk"
     default     = false
+}
+
+variable proxy {
+    description = "Proxy server details in a map of server, port(default=3128), user & password"
+    default = {}
+#    default = {
+#        server = "10.10.1.166",
+#        port = "3128"
+#        user = "pxuser",
+#        password = "pxpassword"
+#    }
 }
 
 variable "storage_type" {

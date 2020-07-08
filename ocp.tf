@@ -52,6 +52,7 @@ module "bastion" {
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
+    proxy                           = var.proxy
 }
 
 module "network" {
@@ -112,6 +113,7 @@ module "install" {
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
     rhcos_kernel_options            = var.rhcos_kernel_options
+    proxy                           = var.proxy
     upgrade_image                   = var.upgrade_image
     upgrade_pause_time              = var.upgrade_pause_time
     upgrade_delay_time              = var.upgrade_delay_time
