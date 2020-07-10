@@ -76,6 +76,9 @@ locals {
         log_level               = var.log_level
         release_image_override  = var.release_image_override
         rhcos_kernel_options    = var.rhcos_kernel_options
+        sysctl_tuned_options    = var.sysctl_tuned_options
+        sysctl_options          = var.sysctl_options
+        match_array             = indent(2,var.match_array)
         proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
         no_proxy                = var.cidr
     }

@@ -12,5 +12,15 @@ release_image_override: '${release_image_override}'
 
 rhcos_kernel_options: [%{ for opt in rhcos_kernel_options ~}"${opt}",%{ endfor ~}]
 
+sysctl_tuned_options: ${sysctl_tuned_options}
+%{ if sysctl_tuned_options ~}
+sysctl_options:
+%{ for opt in sysctl_options ~}
+  -  ${opt}
+%{ endfor ~}
+match_array:
+  ${match_array}
+%{endif ~}
+
 proxy_url: "${proxy_url}"
 no_proxy: "${no_proxy}"

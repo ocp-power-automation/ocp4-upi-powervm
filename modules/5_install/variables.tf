@@ -61,6 +61,10 @@ variable "log_level" {}
 variable "ansible_extra_options" {}
 variable "rhcos_kernel_options" {}
 
+variable "sysctl_tuned_options" {}
+variable "sysctl_options" {}
+variable "match_array" {}
+
 variable proxy {}
 
 variable "upgrade_image" {}

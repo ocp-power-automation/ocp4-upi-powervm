@@ -88,6 +88,9 @@ Update the following variables specific to OCP.
  * `dns_forwarders` : (Optional) External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
  * `mount_etcd_ramdisk` : (Optional) Flag for mounting etcd directory in the ramdisk. Note that the data will not be persistent.
  * `rhcos_kernel_options` : (Optional) List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes eg: ["slub_max_order=0","loglevel=7"]. Note that this will be applied after the cluster is installed, hence wait till all the nodes are in `Ready` status before you start using the cluster. Check nodes status using the command `oc get nodes`.
+ * `sysctl_tuned_options` : (Optional) Set to true to apply sysctl options via tuned operator. For more information check [Using the Node Tuning Operator](https://docs.openshift.com/container-platform/4.3/scalability_and_performance/using-node-tuning-operator.html) & [Using the Red Hat OpenShift Node Tuning Operator to set kernel parameters](https://www.ibm.com/support/producthub/icpdata/docs/content/SSQNUZ_current/cpd/svc/dbs/db2wh-nodetuningop.html)
+ * `sysctl_options` : (Required when `sysctl_tuned_options = true`) List of sysctl options to apply.
+ * `match_array` : (Required when `sysctl_tuned_options = true`) Multi-line config with node/pod selection criteria. Set of supported keys for each criteria: label, value & type.
  * `proxy` : (Optional) Map of below parameters for using a proxy server to setup OCP on a private network.
     * `server` : Proxy server hostname or IP.
     * `port` : Proxy port to use (default is 3128).
