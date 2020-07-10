@@ -10,4 +10,7 @@ storage_type: ${storage_type}
 log_level: ${log_level}
 release_image_override: '${release_image_override}'
 
-rhcos_kernel_options: [%{ for opt in rhcos_kernel_options ~}"${opt}"%{ endfor ~}]
+rhcos_kernel_options: [%{ for opt in rhcos_kernel_options ~}"${opt}",%{ endfor ~}]
+
+proxy_url: "${proxy_url}"
+no_proxy: "${no_proxy}"

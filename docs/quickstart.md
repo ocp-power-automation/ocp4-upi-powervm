@@ -67,7 +67,6 @@ Update the following variables specific to the nodes.
  * `private_key_file` : (Optional) Corresponding private key file. Default path is 'data/id_rsa'.
  * `private_key` : (Optional) The contents of an SSH key to use for the connection. Ignored if `public_key_file` is provided.
  * `public_key` : (Optional) The contents of corresponding key to use for the connection. Ignored if `public_key_file` is provided.
- * `rhcos_kernel_options` : (Optional) List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes eg: ["slub_max_order=0","loglevel=7"]. Note that this will be applied after the cluster is installed, hence wait till all the nodes are in `Ready` status before you start using the cluster. Check nodes status using the command `oc get nodes`.
 
 ### Setup OpenShift Variables
 
@@ -78,6 +77,9 @@ Update the following variables specific to OCP.
  * `cluster_domain` : (Required) Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name.
  * `cluster_id_prefix` : (Required) Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique.
  * `release_image_override` : (Optional) This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ignition files.
+
+### Setup Additonal OpenShift Variables
+
  * `installer_log_level` : (Optional) Log level for OpenShift install (e.g. "debug | info | warn | error") (default "info")
  * `ansible_extra_options` : (Optional) Ansible options to append to the ansible-playbook commands. Default is set to "-v".
  * `helpernode_tag` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) ansible playbook version to checkout.
@@ -85,6 +87,12 @@ Update the following variables specific to OCP.
  * `pull_secret_file` : (Optional) Location of the OCP pull-secret file to be used. Default path is 'data/pull-secret.txt'.
  * `dns_forwarders` : (Optional) External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
  * `mount_etcd_ramdisk` : (Optional) Flag for mounting etcd directory in the ramdisk. Note that the data will not be persistent.
+ * `rhcos_kernel_options` : (Optional) List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes eg: ["slub_max_order=0","loglevel=7"]. Note that this will be applied after the cluster is installed, hence wait till all the nodes are in `Ready` status before you start using the cluster. Check nodes status using the command `oc get nodes`.
+ * `proxy` : (Optional) Map of below parameters for using a proxy server to setup OCP on a private network.
+    * `server` : Proxy server hostname or IP.
+    * `port` : Proxy port to use (default is 3128).
+    * `user` : Proxy server user for authentication.
+    * `password` : Proxy server password for authentication.
 
 ### Setup Storage Variables
 

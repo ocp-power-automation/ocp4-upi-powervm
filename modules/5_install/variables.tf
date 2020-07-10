@@ -61,7 +61,8 @@ variable "log_level" {}
 variable "ansible_extra_options" {}
 variable "rhcos_kernel_options" {}
 
+variable proxy {}
+
 variable "upgrade_image" {}
 variable "upgrade_pause_time" {}
 variable "upgrade_delay_time" {}
-
