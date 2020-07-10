@@ -76,7 +76,7 @@ Update the following variables specific to OCP.
  * `openshift_client_tarball` : (Required) HTTP URL for OpenShift client (`oc`) tarball.
  * `cluster_domain` : (Required) Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name.
  * `cluster_id_prefix` : (Required) Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique.
- * `release_image_override` : (Optional) This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ignition files.
+ * `release_image_override` : (Optional) This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ignition files. Not applicable when using local registry setup.
 
 ### Setup Additonal OpenShift Variables
 
@@ -104,6 +104,14 @@ Update the following variables specific to OCP storage. Note that currently only
  * `storage_type` : (Optional) Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
  * `volume_size` : (Optional) If storage_type is nfs, a volume will be created with given size (default 300) in GB and attached to bastion node. Eg: 1000 for 1TB disk.
  * `volume_storage_template` : (Optional) Storage template name or ID for creating the volume. Empty value will use default template.
+ 
+### Setup Local Registry Variables
+
+Update the following variables specific to OCP local registry. Note that this is required only for restricted network install.
+
+ * `enable_local_registry` : (Optional) Set to true to enable usage of local registry for restricted network install.
+ * `local_registry_image` : (Optional) This is the name of the image used for creating the local registry container.
+ * `ocp_release_tag` : (Optional) The version of OpenShift you want to sync. Determine the tag by referring the [Repository Tags](https://quay.io/repository/openshift-release-dev/ocp-release?tab=tags) page.
 
 ### Setup OCP Upgrade Variables
 
