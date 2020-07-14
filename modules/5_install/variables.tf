@@ -52,6 +52,10 @@ variable "public_key" {}
 variable "pull_secret" {}
 variable "release_image_override" {}
 
+variable "enable_local_registry" {}
+variable "local_registry_image" {}
+variable "ocp_release_tag" {}
+
 variable helpernode_tag { default = "master" }
 variable install_playbook_tag { default = "master" }
 

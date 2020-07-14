@@ -186,13 +186,13 @@ variable "installer_log_level" {
 variable "helpernode_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
     # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-    default = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
+    default = "5eab3db53976bb16be582f2edc2de02f7510050d"
 }
 
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "47b1fc6caa69f3705419889a9ea47717ec3d8c2e"
+    default = "374a19ab0e4ba279cbb5f9406bf63ea1e88a5c3e"
 }
 
 variable "ansible_extra_options" {
@@ -288,3 +288,21 @@ variable "upgrade_delay_time" {
     default = "600"
 }
 
+################################################################
+# Local registry variables ( used only in disconnected install )
+################################################################
+variable "enable_local_registry" {
+  description = "Set to true to enable usage of local registry for restricted network install."
+  type = bool
+  default = false
+}
+
+variable "local_registry_image" {
+    description = "Name of the image used for creating the local registry container."
+    default = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
+}
+
+variable "ocp_release_tag" {
+    description = "The version of OpenShift you want to sync."
+    default = "4.4.9-ppc64le"
+}

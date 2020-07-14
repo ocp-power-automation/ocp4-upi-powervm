@@ -35,6 +35,12 @@ pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"
 cluster_id_prefix = "test"
 
+### Local registry variables
+enable_local_registry = false  #Set to true to enable usage of the local registry for restricted network install.
+
+#local_registry_image = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
+#ocp_release_tag      = "4.4.9-ppc64le"
+
 dns_forwarders      = "8.8.8.8; 8.8.4.4"
 mount_etcd_ramdisk  = false
 installer_log_level = "info"
@@ -51,8 +57,8 @@ sysctl_tuned_options  = false
 #  value: ssd
 #EOF
 
-#helpernode_tag = "fddbbc651153ef2966e5cb4d4167990b31c01ceb"
-#install_playbook_tag = "47b1fc6caa69f3705419889a9ea47717ec3d8c2e"
+#helpernode_tag = "5eab3db53976bb16be582f2edc2de02f7510050d"
+#install_playbook_tag = "374a19ab0e4ba279cbb5f9406bf63ea1e88a5c3e"
 
 ## Uncomment any one of the below formats to use proxy. Default 'port' will be 3128 if not specified. Not authenticated if 'user' is not specified.
 #proxy = {}
