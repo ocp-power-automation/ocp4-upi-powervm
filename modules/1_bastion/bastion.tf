@@ -118,6 +118,13 @@ resource "null_resource" "bastion_init" {
         ]
     }
 
+    # We don't need that many threads on the bastion node
+    provisioner "remote-exec" {
+        inline = [
+            "sudo ppc64_cpu --smt=2"
+        ]
+    }
+
     # Setup proxy
     provisioner "remote-exec" {
         inline = [<<EOF
@@ -162,9 +169,12 @@ EOF
             "sudo yum install -y wget jq git net-tools vim python3 tar"
         ]
     }
+
+# On RHEL 8 don't install ansible using pip but from the ansible repo
     provisioner "remote-exec" {
         inline = [
-            "pip3 install ansible -q"
+            "sudo subscription-manager repos --enable ${var.ansible_repo}",
+            "sudo yum install -y ansible"
         ]
     }
     provisioner "remote-exec" {

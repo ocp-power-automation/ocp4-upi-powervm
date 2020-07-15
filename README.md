@@ -38,7 +38,8 @@ in the following [doc](./docs/coreos-image-creation.md).
 Following are the recommended LPAR configs for OpenShift nodes that will be deployed with RHCOS image.
 - Bootstrap, Master - 2 vCPUs, 16GB RAM, 120 GB Disk.
 
-  PowerVM LPARs by default uses SMT=8. So with 2vCPUs, the number of logical CPUs as seen by the Operating System will be **16** (`2 vCPUs x 8 SMT`)
+  PowerVM LPARs by default uses SMT=8. So with 2vCPUs, the number of logical CPUs as seen by the Operating System will be **16** (`2 vCPUs x 8 SMT`)<br>
+  Do not oversize the master with CPUs. Most likely you will get OOMKilled pods during install and some deployments will fail.
 
    **_This config is suitable for majority of the scenarios_**
 - Worker - 2 vCPUs, 16GB RAM, 120 GB Disk

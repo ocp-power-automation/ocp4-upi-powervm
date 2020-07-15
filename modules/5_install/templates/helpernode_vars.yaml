@@ -1,5 +1,5 @@
 ---
-disk: vda
+disk: sda
 helper:
   name: "helper"
   ipaddr: "${bastion_ip}"
@@ -34,6 +34,7 @@ workers:
 
 ppc64le: true
 ssh_gen_key: false
+force_ocp_download: true
 
 %{ if local_registry.enable_local_registry }
 setup_registry:
@@ -48,3 +49,6 @@ setup_registry:
 
 ocp_client: "${client_tarball}"
 ocp_installer: "${install_tarball}"
+ocp_bios: "${raw_image}"
+ocp_install_kernel: "${kernel_image}"
+ocp_initramfs: "${initramfs_image}"

@@ -131,6 +131,10 @@ id_rsa  id_rsa.pub  pull-secret.txt
 ```
  * `id_rsa` & `id_rsa.pub` : The key pair used for accessing the hosts. These files are not required if you provide `public_key_file` and `private_key_file`.
  * `pull-secret.txt` : File containing keys required to pull images on the cluster. You can download it from RH portal after login https://cloud.redhat.com/openshift/install/pull-secret.
+* `htpasswd` : create and htpasswd file for the user `admin`:  
+```
+htpasswd -B -b -c data/htpasswd admin password
+```
 
 
 ## Start Install

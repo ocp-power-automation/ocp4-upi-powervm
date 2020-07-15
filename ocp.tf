@@ -49,6 +49,7 @@ module "bastion" {
     ssh_agent                       = var.ssh_agent
     rhel_subscription_username      = var.rhel_subscription_username
     rhel_subscription_password      = var.rhel_subscription_password
+    ansible_repo                    = var.ansible_repo
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
@@ -106,12 +107,17 @@ module "install" {
     pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
     openshift_install_tarball       = var.openshift_install_tarball
     openshift_client_tarball        = var.openshift_client_tarball
+    raw_image                       = var.raw_image
+    kernel_image                    = var.kernel_image
+    initramfs_image                 = var.initramfs_image
     storage_type                    = var.storage_type
     release_image_override          = var.release_image_override
     enable_local_registry           = var.enable_local_registry
     local_registry_image            = var.local_registry_image
     ocp_release_tag                 = var.ocp_release_tag
+    helpernode_repo                 = var.helpernode_repo
     helpernode_tag                  = var.helpernode_tag
+    install_playbook_repo           = var.install_playbook_repo
     install_playbook_tag            = var.install_playbook_tag
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
@@ -123,4 +129,5 @@ module "install" {
     upgrade_image                   = var.upgrade_image
     upgrade_pause_time              = var.upgrade_pause_time
     upgrade_delay_time              = var.upgrade_delay_time
+    service_network                 = var.service_network
 }

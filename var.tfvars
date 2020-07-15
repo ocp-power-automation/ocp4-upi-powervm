@@ -2,7 +2,7 @@
 auth_url                    = "https://<HOSTNAME>:5000/v3/"
 user_name                   = ""
 password                    = ""
-tenant_name                 = "tenant_name"
+tenant_name                 = "ibm-default"
 domain_name                 = "Default"
 openstack_availability_zone = ""
 
@@ -18,22 +18,27 @@ private_key                 = ""
 public_key                  = ""
 rhel_subscription_username  = ""
 rhel_subscription_password  = ""
+ansible_repo                = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 
 bastion                     = {instance_type    = "medium", image_id     = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"}
 bootstrap                   = {instance_type    = "medium", image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 1}
-master                      = {instance_type    = "medium",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 3}
+master                      = {instance_type    = "medium", image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 3}
 worker                      = {instance_type    = "large",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 2}
 
 
 ### OpenShift variables
-openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-install-linux.tar.gz"
-openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-client-linux.tar.gz"
+openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.3/openshift-install-linux.tar.gz"
+openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.3/openshift-client-linux.tar.gz"
+raw_image                   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.3/4.3.18/rhcos-4.3.18-metal.ppc64le.raw.gz"
+kernel_image                = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.3/4.3.18/rhcos-4.3.18-installer-kernel-ppc64le"
+initramfs_image             = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.3/4.3.18/rhcos-4.3.18-installer-initramfs.ppc64le.img"
 
-#release_image_override = ""
+release_image_override = ""
 
 pull_secret_file = "data/pull-secret.txt"
 cluster_domain = "example.com"
 cluster_id_prefix = "test"
+service_network = "172.20.0.0/16"
 
 ### Local registry variables
 enable_local_registry = false  #Set to true to enable usage of the local registry for restricted network install.
@@ -41,7 +46,7 @@ enable_local_registry = false  #Set to true to enable usage of the local registr
 #local_registry_image = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
 #ocp_release_tag      = "4.4.9-ppc64le"
 
-dns_forwarders      = "8.8.8.8; 8.8.4.4"
+dns_forwarders      = "8.8.8.8"
 mount_etcd_ramdisk  = false
 installer_log_level = "info"
 ansible_extra_options = "-v"
@@ -57,8 +62,11 @@ sysctl_tuned_options  = false
 #  value: ssd
 #EOF
 
-#helpernode_tag = "5eab3db53976bb16be582f2edc2de02f7510050d"
-#install_playbook_tag = "374a19ab0e4ba279cbb5f9406bf63ea1e88a5c3e"
+# If you forked/branched one of these repos change it here
+#helpernode_repo = "https://github.com/RedHatOfficial/ocp4-helpernode"
+#helpernode_tag = "master"
+#install_playbook_repo = "https://github.com/ocp-power-automation/ocp4-playbooks"
+#install_playbook_tag = "master"
 
 ## Uncomment any one of the below formats to use proxy. Default 'port' will be 3128 if not specified. Not authenticated if 'user' is not specified.
 #proxy = {}

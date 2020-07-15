@@ -57,9 +57,12 @@ locals {
             }
         ]
 
-        local_registry           = local.local_registry
-        client_tarball           = var.openshift_client_tarball
-        install_tarball          = var.openshift_install_tarball
+        local_registry   = local.local_registry
+        client_tarball   = var.openshift_client_tarball
+        install_tarball  = var.openshift_install_tarball
+        raw_image        = var.raw_image
+        kernel_image     = var.kernel_image
+        initramfs_image  = var.initramfs_image
     }
 
     inventory = {
@@ -80,6 +83,7 @@ locals {
     install_vars = {
         cluster_id              = var.cluster_id
         cluster_domain          = var.cluster_domain
+        service_network         = var.service_network
         pull_secret             = var.pull_secret
         public_ssh_key          = var.public_key
         storage_type            = var.storage_type
@@ -116,7 +120,7 @@ resource "null_resource" "config" {
             "rm -rf .openshift",
             "rm -rf ocp4-helpernode",
             "echo 'Cloning into ocp4-helpernode...'",
-            "git clone https://github.com/RedHatOfficial/ocp4-helpernode --quiet",
+            "git clone ${var.helpernode_repo} --quiet",
             "cd ocp4-helpernode && git checkout ${var.helpernode_tag}"
         ]
     }
@@ -152,7 +156,7 @@ resource "null_resource" "install" {
         inline = [
             "rm -rf ocp4-playbooks",
             "echo 'Cloning into ocp4-playbooks...'",
-            "git clone https://github.com/ocp-power-automation/ocp4-playbooks --quiet",
+            "git clone ${var.install_playbook_repo} --quiet",
             "cd ocp4-playbooks && git checkout ${var.install_playbook_tag}"
         ]
     }
@@ -163,6 +167,10 @@ resource "null_resource" "install" {
     provisioner "file" {
         content     = templatefile("${path.module}/templates/install_vars.yaml", local.install_vars)
         destination = "~/ocp4-playbooks/install_vars.yaml"
+    }
+    provisioner "file" {
+        content     = "data/htpasswd"
+        destination = "~/openstack-upi/htpasswd"
     }
     provisioner "remote-exec" {
         inline = [
