@@ -113,7 +113,7 @@ resource "null_resource" "config" {
 
     provisioner "remote-exec" {
         inline = [
-            "rm -rf .openshift",
+            "mkdir -p .openshift",
             "rm -rf ocp4-helpernode",
             "echo 'Cloning into ocp4-helpernode...'",
             "git clone https://github.com/RedHatOfficial/ocp4-helpernode --quiet",
