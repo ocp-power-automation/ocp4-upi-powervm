@@ -118,6 +118,8 @@ module "install" {
     rhcos_kernel_options            = var.rhcos_kernel_options
     sysctl_tuned_options            = var.sysctl_tuned_options
     sysctl_options                  = var.sysctl_options
+    chrony_config                   = var.chrony_config
+    chrony_config_servers           = var.chrony_config_servers
     match_array                     = var.match_array
     proxy                           = var.proxy
     upgrade_image                   = var.upgrade_image

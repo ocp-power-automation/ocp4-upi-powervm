@@ -56,6 +56,8 @@ sysctl_tuned_options  = false
 #- label: disk
 #  value: ssd
 #EOF
+chrony_config = false
+#chrony_config_servers = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
 
 #helpernode_tag = "5eab3db53976bb16be582f2edc2de02f7510050d"
 #install_playbook_tag = "374a19ab0e4ba279cbb5f9406bf63ea1e88a5c3e"

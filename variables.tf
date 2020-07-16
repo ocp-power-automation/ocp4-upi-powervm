@@ -170,6 +170,25 @@ variable "match_array" {
 EOF
 }
 
+variable "chrony_config" {
+    description = "Set to true to setup time synchronization and setup chrony. Default: false"
+    default     = false
+}
+
+variable "chrony_config_servers" {
+    description = "List of ntp servers and options to apply"
+    default     = [
+        {
+            server = "0.centos.pool.ntp.org",
+            options = "iburst"
+        }, 
+        {
+            server = "1.centos.pool.ntp.org", 
+            options = "iburst"
+        } 
+    ]
+}
+
 ################################################################
 ### Instrumentation
 ################################################################
