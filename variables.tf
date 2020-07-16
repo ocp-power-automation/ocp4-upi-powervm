@@ -149,7 +149,9 @@ variable "rhel_subscription_username" {}
 
 variable "rhel_subscription_password" {}
 
-variable "ansible_repo" {}
+variable "ansible_repo" {
+    default = "ansible-2.9-for-rhel-8-ppc64le-rpms"
+}
 
 variable "rhcos_kernel_options" {
     description = "List of kernel arguments for the cluster nodes"
@@ -187,6 +189,7 @@ variable "installer_log_level" {
 
 variable "helpernode_repo" {
     description = "Set the ocp4-helpernode url"
+    # Default repository for setting up the dns, dhcp, haproxy etc on the bastion node
     default = "https://github.com/RedHatOfficial/ocp4-helpernode"
 }
 
@@ -198,6 +201,7 @@ variable "helpernode_tag" {
 
 variable "install_playbook_repo" {
     description = "Set ocp4-playbooks url"
+    # Default repository for running the ocp installation and configuration steps
     default = "https://github.com/ocp-power-automation/ocp4-playbooks"
 }
 

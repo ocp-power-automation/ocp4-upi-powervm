@@ -62,6 +62,7 @@ Update the following variables specific to the nodes.
  * `rhel_subscription_username` : (Required) The username required for RHEL subscription on bastion host.
  * `rhel_subscription_password` : (Required) The password required for RHEL subscription on bastion host.
  * `rhel_username` : (Optional) The user that we should use for the connection to the bastion host. The default value is set as "root user.
+ * `ansible_repo` : Red Hat repository to pull the Ansible version from.
  * `keypair_name` : (Optional) Value for keypair used. Default is <cluster_id>-keypair.
  * `public_key_file` : (Optional) A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.
  * `private_key_file` : (Optional) Corresponding private key file. Default path is 'data/id_rsa'.
@@ -77,13 +78,16 @@ Update the following variables specific to OCP.
  * `cluster_domain` : (Required) Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name.
  * `cluster_id_prefix` : (Required) Cluster identifier. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique.
  * `release_image_override` : (Optional) This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ignition files. Not applicable when using local registry setup.
+ * `service_network` : (Optional) The default service network for OpenShift is `172.30.0.0/16`. If this overlaps with your current network change it here.
 
 ### Setup Additonal OpenShift Variables
 
  * `installer_log_level` : (Optional) Log level for OpenShift install (e.g. "debug | info | warn | error") (default "info")
  * `ansible_extra_options` : (Optional) Ansible options to append to the ansible-playbook commands. Default is set to "-v".
- * `helpernode_tag` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) ansible playbook version to checkout.
- * `install_playbook_tag` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout.
+ * `helpernode_repo`: (Optional) URL of a fork of the original [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) repo on github.
+ * `helpernode_tag` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) ansible playbook version to checkout. Default is `master`.
+  * `install_playbook_repo`: (Optional) URL of a fork of the original [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) repo on github.
+ * `install_playbook_tag` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout. Default is `master`.
  * `pull_secret_file` : (Optional) Location of the OCP pull-secret file to be used. Default path is 'data/pull-secret.txt'.
  * `dns_forwarders` : (Optional) External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
  * `mount_etcd_ramdisk` : (Optional) Flag for mounting etcd directory in the ramdisk. Note that the data will not be persistent.
