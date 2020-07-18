@@ -145,9 +145,13 @@ variable "public_key" {
     default     = ""
 }
 
-variable "rhel_subscription_username" {}
+variable "rhel_subscription_username" {
+    default = ""
+}
 
-variable "rhel_subscription_password" {}
+variable "rhel_subscription_password" {
+    default = ""
+}
 
 variable "rhcos_kernel_options" {
     description = "List of kernel arguments for the cluster nodes"
