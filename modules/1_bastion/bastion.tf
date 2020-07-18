@@ -82,6 +82,7 @@ locals {
         user        = lookup(var.proxy, "user", ""),
         password    = lookup(var.proxy, "password", "")
         user_pass   = lookup(var.proxy, "user", "") == "" ? "" : "${lookup(var.proxy, "user", "")}:${lookup(var.proxy, "password", "")}@"
+        no_proxy    = "127.0.0.1,localhost,.${var.cluster_id}.${var.cluster_domain}"
     }
 }
 
@@ -128,10 +129,10 @@ if [ "${local.proxy.server}" != "" ]; then
     # System
     set http_proxy="http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
     set https_proxy="http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
-    set no_proxy="127.0.0.1,localhost,${var.cluster_domain}"
+    set no_proxy="${local.proxy.no_proxy}"
     echo "export http_proxy=\"http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}\"" | sudo tee /etc/profile.d/http_proxy.sh > /dev/null
     echo "export https_proxy=\"http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}\"" | sudo tee -a /etc/profile.d/http_proxy.sh > /dev/null
-    echo "export no_proxy=\"127.0.0.1,localhost,${var.cluster_domain}\"" | sudo tee -a /etc/profile.d/http_proxy.sh > /dev/null
+    echo "export no_proxy=\"${local.proxy.no_proxy}\"" | sudo tee -a /etc/profile.d/http_proxy.sh > /dev/null
 
     # RHSM
     sudo sed -i -e 's/^proxy_hostname =.*/proxy_hostname = ${local.proxy.server}/' /etc/rhsm/rhsm.conf
