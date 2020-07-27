@@ -19,7 +19,7 @@
 ################################################################
 
 output "cluster_id" {
-    value = random_id.label.hex
+    value = local.cluster_id
 }
 
 output "bastion_ip" {
@@ -45,16 +45,16 @@ output "worker_ips" {
 output "etc_hosts_entries" {
     value = <<-EOF
 
-${module.bastion.bastion_ip} api.${random_id.label.hex}.${var.cluster_domain} console-openshift-console.apps.${random_id.label.hex}.${var.cluster_domain} integrated-oauth-server-openshift-authentication.apps.${random_id.label.hex}.${var.cluster_domain} oauth-openshift.apps.${random_id.label.hex}.${var.cluster_domain} prometheus-k8s-openshift-monitoring.apps.${random_id.label.hex}.${var.cluster_domain} grafana-openshift-monitoring.apps.${random_id.label.hex}.${var.cluster_domain} example.apps.${random_id.label.hex}.${var.cluster_domain}
+${module.bastion.bastion_ip} api.${local.cluster_id}.${var.cluster_domain} console-openshift-console.apps.${local.cluster_id}.${var.cluster_domain} integrated-oauth-server-openshift-authentication.apps.${local.cluster_id}.${var.cluster_domain} oauth-openshift.apps.${local.cluster_id}.${var.cluster_domain} prometheus-k8s-openshift-monitoring.apps.${local.cluster_id}.${var.cluster_domain} grafana-openshift-monitoring.apps.${local.cluster_id}.${var.cluster_domain} example.apps.${local.cluster_id}.${var.cluster_domain}
 EOF
 }
 
 output "oc_server_url" {
-    value = "https://api.${random_id.label.hex}.${var.cluster_domain}:6443/"
+    value = "https://api.${local.cluster_id}.${var.cluster_domain}:6443/"
 }
 
 output "web_console_url" {
-    value = "https://console-openshift-console.apps.${random_id.label.hex}.${var.cluster_domain}"
+    value = "https://console-openshift-console.apps.${local.cluster_id}.${var.cluster_domain}"
 }
 
 output "storageclass_name" {
