@@ -94,7 +94,6 @@ locals {
         match_array             = indent(2,var.match_array)
         proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
         no_proxy                = var.cidr
-        
     }
 
     upgrade_vars = {
