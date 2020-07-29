@@ -28,15 +28,21 @@ provider "openstack" {
 }
 
 resource "random_id" "label" {
+    count = var.cluster_id == "" ? 1 : 0
     byte_length = "2" # Since we use the hex, the word lenght would double
     prefix = "${var.cluster_id_prefix}-"
+}
+
+locals {
+    # Generates cluster_id as combination of cluster_id_prefix + (random_id or user-defined cluster_id)
+    cluster_id  = var.cluster_id == "" ? random_id.label[0].hex : "${var.cluster_id_prefix}-${var.cluster_id}"
 }
 
 module "bastion" {
     source                          = "./modules/1_bastion"
 
     cluster_domain                  = var.cluster_domain
-    cluster_id                      = "${random_id.label.hex}"
+    cluster_id                      = local.cluster_id
     bastion                         = var.bastion
     network_name                    = var.network_name
     scg_id                          = var.scg_id
@@ -45,7 +51,7 @@ module "bastion" {
     private_key                     = local.private_key
     public_key                      = local.public_key
     create_keypair                  = local.create_keypair
-    keypair_name                    = "${random_id.label.hex}-keypair"
+    keypair_name                    = "${local.cluster_id}-keypair"
     ssh_agent                       = var.ssh_agent
     rhel_subscription_username      = var.rhel_subscription_username
     rhel_subscription_password      = var.rhel_subscription_password
@@ -59,7 +65,7 @@ module "network" {
     source                          = "./modules/3_network"
 
     cluster_domain                  = var.cluster_domain
-    cluster_id                      = "${random_id.label.hex}"
+    cluster_id                      = local.cluster_id
     network_name                    = var.network_name
     master_count                    = var.master["count"]
     worker_count                    = var.worker["count"]
@@ -71,7 +77,7 @@ module "nodes" {
 
     bastion_ip                      = module.bastion.bastion_ip
     cluster_domain                  = var.cluster_domain
-    cluster_id                      = "${random_id.label.hex}"
+    cluster_id                      = local.cluster_id
     bootstrap                       = var.bootstrap
     master                          = var.master
     worker                          = var.worker
@@ -87,7 +93,7 @@ module "install" {
     source                          = "./modules/5_install"
 
     cluster_domain                  = var.cluster_domain
-    cluster_id                      = "${random_id.label.hex}"
+    cluster_id                      = local.cluster_id
     dns_forwarders                  = var.dns_forwarders
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
