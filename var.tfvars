@@ -18,6 +18,8 @@ private_key                 = ""
 public_key                  = ""
 rhel_subscription_username  = ""
 rhel_subscription_password  = ""
+connection_timeout          = 45
+jump_host                   = ""
 
 bastion                     = {instance_type    = "medium", image_id     = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"}
 bootstrap                   = {instance_type    = "medium", image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 1}

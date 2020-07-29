@@ -53,6 +53,8 @@ module "bastion" {
     create_keypair                  = local.create_keypair
     keypair_name                    = "${local.cluster_id}-keypair"
     ssh_agent                       = var.ssh_agent
+    connection_timeout              = var.connection_timeout
+    jump_host                       = var.jump_host
     rhel_subscription_username      = var.rhel_subscription_username
     rhel_subscription_password      = var.rhel_subscription_password
     storage_type                    = var.storage_type
@@ -102,6 +104,8 @@ module "install" {
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
+    connection_timeout              = var.connection_timeout
+    jump_host                       = var.jump_host
     bootstrap_ip                    = module.nodes.bootstrap_ip
     master_ips                      = module.nodes.master_ips
     worker_ips                      = module.nodes.worker_ips

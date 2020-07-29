@@ -67,6 +67,8 @@ Update the following variables specific to the nodes.
  * `private_key_file` : (Optional) Corresponding private key file. Default path is 'data/id_rsa'.
  * `private_key` : (Optional) The contents of an SSH key to use for the connection. Ignored if `public_key_file` is provided.
  * `public_key` : (Optional) The contents of corresponding key to use for the connection. Ignored if `public_key_file` is provided.
+ * `connection_timeout` : (Optional) Timeout in minutes for SSH connections. Default is 45 minutes.
+ * `jump_host` : (Optional) Jump server hostname/IP to be used for SSH connections. Setup password-less SSH access to the jump_host from the Terraform terminal.
 
 ### Setup OpenShift Variables
 
