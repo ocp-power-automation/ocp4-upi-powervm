@@ -59,8 +59,8 @@ Update the following variables specific to your cluster requirement. All the var
 
 Update the following variables specific to the nodes.
 
- * `rhel_subscription_username` : (Required) The username required for RHEL subscription on bastion host.
- * `rhel_subscription_password` : (Required) The password required for RHEL subscription on bastion host.
+ * `rhel_subscription_username` : (Optional) The username required for RHEL subscription on bastion host. Leave empty if repos are already setup in the RHEL image and subscription is not needed.
+ * `rhel_subscription_password` : (Optional) The password required for RHEL subscription on bastion host.
  * `rhel_username` : (Optional) The user that we should use for the connection to the bastion host. The default value is set as "root user.
  * `keypair_name` : (Optional) Value for keypair used. Default is <cluster_id>-keypair.
  * `public_key_file` : (Optional) A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.
