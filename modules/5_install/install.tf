@@ -40,20 +40,20 @@ locals {
         bootstrap_info  = {
             ip = var.bootstrap_ip,
             mac = var.bootstrap_mac,
-            name = "bootstrap.${var.cluster_id}.${var.cluster_domain}"
+            name = "bootstrap"
         }
         master_info     = [ for ix in range(length(var.master_ips)) :
             {
                 ip = var.master_ips[ix],
                 mac = var.master_macs[ix],
-                name = "master-${ix}.${var.cluster_id}.${var.cluster_domain}"
+                name = "master-${ix}"
             }
         ]
         worker_info     = [ for ix in range(length(var.worker_ips)) :
             {
                 ip = var.worker_ips[ix],
                 mac = var.worker_macs[ix],
-                name = "worker-${ix}.${var.cluster_id}.${var.cluster_domain}"
+                name = "worker-${ix}"
             }
         ]
 
