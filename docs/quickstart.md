@@ -97,6 +97,10 @@ Update the following variables specific to OCP.
     * `port` : Proxy port to use (default is 3128).
     * `user` : Proxy server user for authentication.
     * `password` : Proxy server password for authentication.
+* `chrony_config` : (Optional) Set to true to configure chrony (NTP) client on the CoreOS node.
+* `chrony_config_servers` : (Required when `chrony_config = true`) List of ntp server and options.
+    * `server` : NTP server hostname or ip to sync with
+    * `options`: chrony options to use for sync (ex: `iburst`)
 
 ### Setup Storage Variables
 

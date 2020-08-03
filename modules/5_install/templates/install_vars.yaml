@@ -23,5 +23,15 @@ match_array:
   ${match_array}
 %{endif ~}
 
+%{ if chrony_config ~}
+chronyconfig:
+  enabled: true
+  content:
+%{ for item in chrony_config_servers ~}
+    - server: ${item.server}
+      options: ${item.options}
+%{ endfor ~}
+%{endif ~}
+
 proxy_url: "${proxy_url}"
 no_proxy: "${no_proxy}"
