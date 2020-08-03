@@ -201,6 +201,16 @@ variable "ssh_agent" {
     default     = false
 }
 
+variable "connection_timeout" {
+    description = "Timeout in minutes for SSH connections"
+    default     = 45
+}
+
+variable "jump_host" {
+    description = "Jump server hostname/IP to be used for SSH connections"
+    default     = ""
+}
+
 variable "installer_log_level" {
     description = "Set the log level required for openshift-install commands"
     default = "info"

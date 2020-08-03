@@ -41,6 +41,8 @@ variable "public_key" {}
 variable "create_keypair" {}
 variable "keypair_name" {}
 variable "ssh_agent" {}
+variable "connection_timeout" {}
+variable "jump_host" {}
 
 variable "rhel_subscription_username" {}
 variable "rhel_subscription_password" {}

@@ -86,6 +86,7 @@ locals {
         log_level               = var.log_level
         release_image_override  = var.enable_local_registry ? "${local.local_registry_ocp_image}" : var.release_image_override
         enable_local_registry   = var.enable_local_registry
+        node_connection_timeout = "${60 * var.connection_timeout}"
         rhcos_kernel_options    = var.rhcos_kernel_options
         sysctl_tuned_options    = var.sysctl_tuned_options
         sysctl_options          = var.sysctl_options
@@ -110,7 +111,8 @@ resource "null_resource" "config" {
         host        = var.bastion_ip
         private_key = var.private_key
         agent       = var.ssh_agent
-        timeout     = "15m"
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
     }
 
     provisioner "remote-exec" {
@@ -147,7 +149,8 @@ resource "null_resource" "install" {
         host        = var.bastion_ip
         private_key = var.private_key
         agent       = var.ssh_agent
-        timeout     = "15m"
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
     }
 
     provisioner "remote-exec" {
@@ -184,7 +187,8 @@ resource "null_resource" "upgrade" {
         host        = var.bastion_ip
         private_key = var.private_key
         agent       = var.ssh_agent
-        timeout     = "15m"
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
     }
 
     provisioner "file" {
