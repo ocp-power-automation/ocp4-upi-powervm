@@ -73,7 +73,8 @@ variable "chrony_config" { default = false }
 variable "chrony_config_servers" {}
 variable "match_array" {}
 
-variable proxy {}
+variable "setup_squid_proxy" {}
+variable "proxy" {}
 
 variable "upgrade_image" {}
 variable "upgrade_pause_time" {}

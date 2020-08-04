@@ -65,7 +65,11 @@ chrony_config = false
 #helpernode_tag = "5eab3db53976bb16be582f2edc2de02f7510050d"
 #install_playbook_tag = "374a19ab0e4ba279cbb5f9406bf63ea1e88a5c3e"
 
-## Uncomment any one of the below formats to use proxy. Default 'port' will be 3128 if not specified. Not authenticated if 'user' is not specified.
+## Set up a squid proxy server on the bastion node.
+setup_squid_proxy       = false
+
+## N/A when `setup_squid_proxy = true`, set `setup_squid_proxy = false` when using external proxy.
+## Uncomment any one of the below formats to use external proxy. Default 'port' will be 3128 if not specified. Not authenticated if 'user' is not specified.
 #proxy = {}
 #proxy = {server = "hostname_or_ip"}
 #proxy = {server = "hostname_or_ip", port = "3128", user = "pxuser", password = "pxpassword"}

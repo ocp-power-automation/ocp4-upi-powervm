@@ -60,6 +60,7 @@ module "bastion" {
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
+    setup_squid_proxy               = var.setup_squid_proxy
     proxy                           = var.proxy
 }
 
@@ -131,6 +132,7 @@ module "install" {
     chrony_config                   = var.chrony_config
     chrony_config_servers           = var.chrony_config_servers
     match_array                     = var.match_array
+    setup_squid_proxy               = var.setup_squid_proxy
     proxy                           = var.proxy
     upgrade_image                   = var.upgrade_image
     upgrade_pause_time              = var.upgrade_pause_time

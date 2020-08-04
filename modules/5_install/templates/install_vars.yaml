@@ -35,5 +35,9 @@ chronyconfig:
 %{ endfor ~}
 %{endif ~}
 
+setup_squid_proxy : ${setup_squid_proxy}
+squid_acl_localnet:
+  - acl localnet src ${squid_source_range}
+
 proxy_url: "${proxy_url}"
 no_proxy: "${no_proxy}"

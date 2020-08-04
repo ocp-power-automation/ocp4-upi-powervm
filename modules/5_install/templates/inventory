@@ -1,5 +1,5 @@
 [bastion]
-localhost ansible_connection=local
+${bastion_ip} ansible_connection=local
 
 [bootstrap]
 ${bootstrap_ip} ansible_connection=ssh ansible_user=core

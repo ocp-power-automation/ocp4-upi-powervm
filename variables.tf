@@ -284,8 +284,14 @@ variable "mount_etcd_ramdisk" {
     default     = false
 }
 
+variable "setup_squid_proxy" {
+    description = "Flag to install and configure squid proxy server on bastion node"
+    default     = false
+}
+
+# Applicable only when `setup_squid_proxy = false`
 variable proxy {
-    description = "Proxy server details in a map of server, port(default=3128), user & password"
+    description = "External proxy server details in a map of server, port(default=3128), user & password"
     default = {}
 #    default = {
 #        server = "10.10.1.166",
