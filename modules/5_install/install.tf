@@ -93,6 +93,8 @@ locals {
         chrony_config           = var.chrony_config
         chrony_config_servers   = var.chrony_config_servers
         match_array             = indent(2,var.match_array)
+        setup_squid_proxy       = var.setup_squid_proxy
+        squid_source_range      = var.cidr
         proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
         no_proxy                = var.cidr
     }

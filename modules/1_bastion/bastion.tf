@@ -123,8 +123,8 @@ resource "null_resource" "bastion_init" {
 }
 
 resource "null_resource" "setup_proxy_info" {
-    depends_on = [null_resource.bastion_init]
-    count       = local.proxy.server != "" ? 1 : 0
+    depends_on  = [null_resource.bastion_init]
+    count       = !var.setup_squid_proxy && local.proxy.server != "" ? 1 : 0
     connection {
         type        = "ssh"
         user        = var.rhel_username

@@ -94,13 +94,14 @@ Update the following variables specific to OCP.
  * `sysctl_tuned_options` : (Optional) Set to true to apply sysctl options via tuned operator. For more information check [Using the Node Tuning Operator](https://docs.openshift.com/container-platform/4.3/scalability_and_performance/using-node-tuning-operator.html) & [Using the Red Hat OpenShift Node Tuning Operator to set kernel parameters](https://www.ibm.com/support/producthub/icpdata/docs/content/SSQNUZ_current/cpd/svc/dbs/db2wh-nodetuningop.html)
  * `sysctl_options` : (Required when `sysctl_tuned_options = true`) List of sysctl options to apply.
  * `match_array` : (Required when `sysctl_tuned_options = true`) Multi-line config with node/pod selection criteria. Set of supported keys for each criteria: label, value & type.
- * `proxy` : (Optional) Map of below parameters for using a proxy server to setup OCP on a private network.
+ * `setup_squid_proxy` : (Optional) Flag to setup Squid proxy server on bastion node. Default value is false.
+ * `proxy` : (Optional) Map of below parameters for using external proxy server to setup OCP on a private network. Ensure `setup_squid_proxy = false` when you want to use this.
     * `server` : Proxy server hostname or IP.
     * `port` : Proxy port to use (default is 3128).
     * `user` : Proxy server user for authentication.
     * `password` : Proxy server password for authentication.
-* `chrony_config` : (Optional) Set to true to configure chrony (NTP) client on the CoreOS node.
-* `chrony_config_servers` : (Required when `chrony_config = true`) List of ntp server and options.
+ * `chrony_config` : (Optional) Set to true to configure chrony (NTP) client on the CoreOS node.
+ * `chrony_config_servers` : (Required when `chrony_config = true`) List of ntp server and options.
     * `server` : NTP server hostname or ip to sync with
     * `options`: chrony options to use for sync (ex: `iburst`)
 
