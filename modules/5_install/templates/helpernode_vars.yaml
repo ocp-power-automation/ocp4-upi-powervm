@@ -46,5 +46,16 @@ setup_registry:
   release_tag: "${local_registry.ocp_release_tag}"
 %{ endif }
 
+%{ if chrony_config ~}
+chronyconfig:
+  enabled: true
+  content:
+%{ for item in chrony_config_servers ~}
+    - server: ${item.server}
+      options: ${item.options}
+%{ endfor ~}
+    - server: "${bastion_ip}"
+      options: iburst
+%{endif ~}
 ocp_client: "${client_tarball}"
 ocp_installer: "${install_tarball}"

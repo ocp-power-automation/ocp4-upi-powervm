@@ -38,6 +38,8 @@ locals {
         broadcast       = cidrhost(var.cidr,-1)
         ipid            = cidrhost(var.cidr, 0)
         pool            = var.allocation_pools[0]
+        chrony_config           = var.chrony_config
+        chrony_config_servers   = var.chrony_config_servers
 
         bootstrap_info  = {
             ip = var.bootstrap_ip,
@@ -92,13 +94,14 @@ locals {
         rhcos_kernel_options    = var.rhcos_kernel_options
         sysctl_tuned_options    = var.sysctl_tuned_options
         sysctl_options          = var.sysctl_options
-        chrony_config           = var.chrony_config
-        chrony_config_servers   = var.chrony_config_servers
         match_array             = indent(2,var.match_array)
         setup_squid_proxy       = var.setup_squid_proxy
         squid_source_range      = var.cidr
         proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
         no_proxy                = var.cidr
+        chrony_config           = var.chrony_config
+        chrony_config_servers   = var.chrony_config_servers
+        chrony_allow_range      = var.cidr
     }
 
     upgrade_vars = {

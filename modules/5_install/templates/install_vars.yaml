@@ -28,12 +28,16 @@ match_array:
 %{ if chrony_config ~}
 chronyconfig:
   enabled: true
+  allow:
+    - ${chrony_allow_range}
+%{ if chrony_config_servers != [] ~}
   content:
+%{ endif ~}
 %{ for item in chrony_config_servers ~}
     - server: ${item.server}
       options: ${item.options}
 %{ endfor ~}
-%{endif ~}
+%{ endif ~}
 
 setup_squid_proxy : ${setup_squid_proxy}
 squid_acl_localnet:

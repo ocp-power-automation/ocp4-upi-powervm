@@ -176,21 +176,13 @@ EOF
 
 variable "chrony_config" {
     description = "Set to true to setup time synchronization and setup chrony. Default: false"
-    default     = false
+    default     = true
 }
 
 variable "chrony_config_servers" {
     description = "List of ntp servers and options to apply"
-    default     = [
-        {
-            server = "0.centos.pool.ntp.org",
-            options = "iburst"
-        }, 
-        {
-            server = "1.centos.pool.ntp.org", 
-            options = "iburst"
-        } 
-    ]
+    default     = []
+    # example: chrony_config_servers = [ {server = "10.3.21.254", options = "iburst"}, {server = "10.5.21.254", options = "iburst"} ]
 }
 
 ################################################################
@@ -225,7 +217,7 @@ variable "helpernode_tag" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "d9ed1937b4f8db0d5f2088088ee15ff244796248"
+    default = "54a781e4f50dab41f9256cfc3b3c45f2f928f9c4"
 }
 
 variable "ansible_extra_options" {
