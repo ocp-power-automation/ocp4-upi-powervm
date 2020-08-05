@@ -76,7 +76,7 @@ Update the following variables specific to OCP.
 
  * `openshift_install_tarball` : (Required) HTTP URL for OpenShift install tarball.
  * `openshift_client_tarball` : (Required) HTTP URL for OpenShift client (`oc`) tarball.
- * `cluster_domain` : (Required) Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name.
+ * `cluster_domain` : (Required) Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name. Can also provide one of the online wildcard DNS domains: nip.io, xip.io & sslip.io.
  * `cluster_id_prefix` : (Required) Cluster identifier prefix. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique.
  * `cluster_id` : (Optional) Cluster identifier, when not set random value will be used. Length cannot exceed 14 characters when combined with cluster_id_prefix.
  * `release_image_override` : (Optional) This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ignition files. Not applicable when using local registry setup.
@@ -166,7 +166,11 @@ Once the deployment is completed successfully, you can safely delete the bootstr
 
 
 ### Create API and Ingress DNS Records
-You will also need to add the following records to your DNS server:
+
+Please skip this section if your `domain_name` is one of the online wildcard DNS domains: nip.io, xip.io & sslip.io.
+
+Add the following records to your DNS server:
+
 ```
 api.<cluster name>.<cluster domain>.  IN  A  <Bastion IP>
 *.apps.<cluster name>.<cluster domain>.  IN  A  <Bastion IP>
