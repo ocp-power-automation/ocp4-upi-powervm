@@ -19,6 +19,8 @@
 ################################################################
 
 locals {
+    cluster_domain  = var.cluster_domain == "nip.io" || var.cluster_domain == "xip.io" || var.cluster_domain == "sslip.io" ? "${var.bastion_ip}.${var.cluster_domain}" : var.cluster_domain
+
     local_registry  = {
         enable_local_registry   = var.enable_local_registry
         registry_image          = var.local_registry_image
@@ -27,7 +29,7 @@ locals {
     }
 
     helpernode_vars = {
-        cluster_domain  = var.cluster_domain
+        cluster_domain  = local.cluster_domain
         cluster_id      = var.cluster_id
         bastion_ip      = var.bastion_ip
         forwarders      = var.dns_forwarders
@@ -75,11 +77,11 @@ locals {
         user_pass   = lookup(var.proxy, "user", "") == "" ? "" : "${lookup(var.proxy, "user", "")}:${lookup(var.proxy, "password", "")}@"
     }
 
-    local_registry_ocp_image = "registry.${var.cluster_id}.${var.cluster_domain}:5000/${local.local_registry.ocp_release_repo}:${var.ocp_release_tag}"
+    local_registry_ocp_image = "registry.${var.cluster_id}.${local.cluster_domain}:5000/${local.local_registry.ocp_release_repo}:${var.ocp_release_tag}"
 
     install_vars = {
         cluster_id              = var.cluster_id
-        cluster_domain          = var.cluster_domain
+        cluster_domain          = local.cluster_domain
         pull_secret             = var.pull_secret
         public_ssh_key          = var.public_key
         storage_type            = var.storage_type
