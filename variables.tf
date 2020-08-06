@@ -217,7 +217,7 @@ variable "helpernode_tag" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "54a781e4f50dab41f9256cfc3b3c45f2f928f9c4"
+    default = "ac466c93cb02d086fd04531de3ddb713e7b5551a"
 }
 
 variable "ansible_extra_options" {
@@ -238,11 +238,11 @@ locals {
 ### OpenShift variables
 ################################################################
 variable "openshift_install_tarball" {
-    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-install-linux.tar.gz"
+    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.5.4/openshift-install-linux.tar.gz"
 }
 
 variable "openshift_client_tarball" {
-     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-client-linux.tar.gz"
+     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.5.4/openshift-client-linux.tar.gz"
 }
 
 variable "release_image_override" {

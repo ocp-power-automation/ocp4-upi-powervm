@@ -23,13 +23,13 @@ jump_host                   = ""
 
 bastion                     = {instance_type    = "medium", image_id     = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"}
 bootstrap                   = {instance_type    = "medium", image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 1}
-master                      = {instance_type    = "medium",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 3}
+master                      = {instance_type    = "medium",  image_id    = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 3}
 worker                      = {instance_type    = "large",  image_id     = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 2}
 
 
 ### OpenShift variables
-openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-install-linux.tar.gz"
-openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.4/openshift-client-linux.tar.gz"
+#openshift_install_tarball   = ""
+#openshift_client_tarball    = ""
 
 #release_image_override = ""
 
@@ -62,8 +62,8 @@ sysctl_tuned_options  = false
 chrony_config = true
 #chrony_config_servers = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
 
-#helpernode_tag = "5eab3db53976bb16be582f2edc2de02f7510050d"
-#install_playbook_tag = "54a781e4f50dab41f9256cfc3b3c45f2f928f9c4"
+#helpernode_tag = ""
+#install_playbook_tag = ""
 
 ## Set up a squid proxy server on the bastion node.
 setup_squid_proxy       = false
