@@ -59,11 +59,11 @@ sysctl_tuned_options  = false
 #- label: disk
 #  value: ssd
 #EOF
-chrony_config = false
+chrony_config = true
 #chrony_config_servers = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
 
 #helpernode_tag = "5eab3db53976bb16be582f2edc2de02f7510050d"
-#install_playbook_tag = "d9ed1937b4f8db0d5f2088088ee15ff244796248"
+#install_playbook_tag = "54a781e4f50dab41f9256cfc3b3c45f2f928f9c4"
 
 ## Set up a squid proxy server on the bastion node.
 setup_squid_proxy       = false

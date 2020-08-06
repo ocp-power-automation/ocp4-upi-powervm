@@ -69,9 +69,9 @@ variable "rhcos_kernel_options" {}
 
 variable "sysctl_tuned_options" {}
 variable "sysctl_options" {}
-variable "chrony_config" { default = false }
-variable "chrony_config_servers" {}
 variable "match_array" {}
+variable "chrony_config" { default = true }
+variable "chrony_config_servers" {}
 
 variable "setup_squid_proxy" {}
 variable "proxy" {}

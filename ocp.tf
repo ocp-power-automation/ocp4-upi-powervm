@@ -129,12 +129,12 @@ module "install" {
     rhcos_kernel_options            = var.rhcos_kernel_options
     sysctl_tuned_options            = var.sysctl_tuned_options
     sysctl_options                  = var.sysctl_options
-    chrony_config                   = var.chrony_config
-    chrony_config_servers           = var.chrony_config_servers
     match_array                     = var.match_array
     setup_squid_proxy               = var.setup_squid_proxy
     proxy                           = var.proxy
     upgrade_image                   = var.upgrade_image
     upgrade_pause_time              = var.upgrade_pause_time
     upgrade_delay_time              = var.upgrade_delay_time
+    chrony_config                   = var.chrony_config
+    chrony_config_servers           = var.chrony_config_servers
 }
