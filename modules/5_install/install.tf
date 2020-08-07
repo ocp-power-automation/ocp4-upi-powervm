@@ -105,7 +105,8 @@ locals {
     }
 
     upgrade_vars = {
-        upgrade_image   = var.upgrade_image
+        upgrade_version = var.upgrade_version
+        upgrade_channel = var.upgrade_channel
         pause_time      = var.upgrade_pause_time
         delay_time      = var.upgrade_delay_time
     }
@@ -186,7 +187,7 @@ resource "null_resource" "install" {
 
 resource "null_resource" "upgrade" {
     depends_on = [null_resource.install]
-    count      = var.upgrade_image != "" ? 1 : 0
+    count      = var.upgrade_version != "" ? 1 : 0
 
     connection {
         type        = "ssh"

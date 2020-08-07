@@ -76,6 +76,7 @@ variable "chrony_config_servers" {}
 variable "setup_squid_proxy" {}
 variable "proxy" {}
 
-variable "upgrade_image" {}
+variable "upgrade_version" {}
+variable "upgrade_channel" {}
 variable "upgrade_pause_time" {}
 variable "upgrade_delay_time" {}
