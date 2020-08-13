@@ -85,7 +85,9 @@ Update the following variables specific to OCP.
 
  * `installer_log_level` : (Optional) Log level for OpenShift install (e.g. "debug | info | warn | error") (default "info")
  * `ansible_extra_options` : (Optional) Ansible options to append to the ansible-playbook commands. Default is set to "-v".
+ * `helpernode_repo` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) git repo URL.
  * `helpernode_tag` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) ansible playbook version to checkout.
+ * `install_playbook_repo` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) git repo URL.
  * `install_playbook_tag` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout.
  * `pull_secret_file` : (Optional) Location of the OCP pull-secret file to be used. Default path is 'data/pull-secret.txt'.
  * `dns_forwarders` : (Optional) External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
