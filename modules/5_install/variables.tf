@@ -58,7 +58,9 @@ variable "enable_local_registry" {}
 variable "local_registry_image" {}
 variable "ocp_release_tag" {}
 
+variable helpernode_repo { default = "https://github.com/RedHatOfficial/ocp4-helpernode" }
 variable helpernode_tag { default = "master" }
+variable install_playbook_repo { default = "https://github.com/ocp-power-automation/ocp4-playbooks" }
 variable install_playbook_tag { default = "master" }
 
 variable "storage_type" {}
