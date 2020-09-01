@@ -26,7 +26,7 @@ You need to identify a remote client machine for running the automation. This co
 
 - **Git**: Please refer to the [link](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) for instructions
 on installing the latest Git.
-- **Terraform**: Please refer to the [link](https://learn.hashicorp.com/terraform/getting-started/install.html) for instructions on installing Terraform. You'll need to use version `0.12.20` or later. For validating the version run `terraform version` command after install.
+- **Terraform >= 0.12.2, < 0.13**: Please refer to the [link](https://learn.hashicorp.com/terraform/getting-started/install.html) for instructions on installing Terraform. For validating the version run `terraform version` command after install.
 - Public internet connection for all the nodes to download the playbooks and images as part of the setup process.
 
 
