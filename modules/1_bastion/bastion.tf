@@ -55,25 +55,6 @@ resource "openstack_compute_instance_v2" "bastion" {
         name    = var.network_name
     }
     availability_zone = var.openstack_availability_zone
-
-    provisioner "remote-exec" {
-        connection {
-            type        = "ssh"
-            user        = var.rhel_username
-            host        = self.access_ip_v4
-            private_key = var.private_key
-            agent       = var.ssh_agent
-            timeout     = "${var.connection_timeout}m"
-            bastion_host = var.jump_host
-        }
-
-        when        = destroy
-        on_failure  = continue
-        inline = [
-            "sudo subscription-manager unregister",
-            "sudo subscription-manager remove --all",
-        ]
-    }
 }
 
 locals {
@@ -169,16 +150,24 @@ EOF
 }
 
 resource "null_resource" "bastion_register" {
+    triggers = {
+        bastion_ip      = openstack_compute_instance_v2.bastion.access_ip_v4
+        rhel_username   = var.rhel_username
+        private_key     = var.private_key
+        ssh_agent       = var.ssh_agent
+        jump_host       = var.jump_host
+        connection_timeout = var.connection_timeout
+    }
     depends_on  = [null_resource.bastion_init, null_resource.setup_proxy_info]
     count       = var.rhel_subscription_username != "" ? 1 : 0
     connection {
         type        = "ssh"
-        user        = var.rhel_username
-        host        = openstack_compute_instance_v2.bastion.access_ip_v4
-        private_key = var.private_key
-        agent       = var.ssh_agent
-        timeout     = "${var.connection_timeout}m"
-        bastion_host = var.jump_host
+        user        = self.triggers.rhel_username
+        host        = self.triggers.bastion_ip
+        private_key = self.triggers.private_key
+        agent       = self.triggers.ssh_agent
+        timeout     = "${self.triggers.connection_timeout}m"
+        bastion_host = self.triggers.jump_host
     }
     provisioner "remote-exec" {
         inline = [
@@ -195,6 +184,25 @@ resource "null_resource" "bastion_register" {
     provisioner "remote-exec" {
         inline = [
             "sudo rm -rf /tmp/terraform_*"
+        ]
+    }
+
+    provisioner "remote-exec" {
+        connection {
+            type        = "ssh"
+            user        = self.triggers.rhel_username
+            host        = self.triggers.bastion_ip
+            private_key = self.triggers.private_key
+            agent       = self.triggers.ssh_agent
+            timeout     = "${self.triggers.connection_timeout}m"
+            bastion_host = self.triggers.jump_host
+        }
+
+        when        = destroy
+        on_failure  = continue
+        inline = [
+            "sudo subscription-manager unregister",
+            "sudo subscription-manager remove --all",
         ]
     }
 }
