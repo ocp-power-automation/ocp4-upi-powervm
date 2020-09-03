@@ -17,6 +17,13 @@ git clone https://github.com/ocp-power-automation/ocp4-upi-powervm.git
 cd ocp4_upi_powervm
 ```
 
+**NOTE**: Please checkout a [release branch](https://github.com/ocp-power-automation/ocp4-upi-powervm/branches) eg. `release-4.5` for deploying a specific OCP release. The `master` branch will contain the latest changes which may not work with stable OCP releases but might work with pre-release OCP versions. You can also checkout stable [release tags](https://github.com/ocp-power-automation/ocp4-upi-powervm/releases) eg. `v4.5` for deploying a stable OCP releases.
+
+To checkout specific release branch or tag please run:
+```
+$ git checkout <branch|tag name>
+```
+
 ## Setup Variables.
 
 Update the var.tfvars with values explained in the following sections. You can also set the variables using other ways mentioned [here](https://www.terraform.io/docs/configuration/variables.html#assigning-values-to-root-module-variables) such as -var option or environment variables.
