@@ -18,16 +18,6 @@
 #
 ################################################################
 
-terraform {
-  required_version = "~> 0.12.2"
-  required_providers {
-    ignition = "~> 1.2"
-    null = "~> 2.1"
-    random = "~> 2.3"
-    openstack = "~> 1.31"
-  }
-}
-
 provider "openstack" {
     user_name   = var.user_name
     password    = var.password
