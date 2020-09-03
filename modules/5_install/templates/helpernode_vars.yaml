@@ -59,3 +59,8 @@ chronyconfig:
 %{endif ~}
 ocp_client: "${client_tarball}"
 ocp_installer: "${install_tarball}"
+
+# Pointing it to local files since it is not required atm
+ocp_bios: "file:///dev/null"
+ocp_initramfs: "file:///dev/null"
+ocp_install_kernel: "file:///dev/null"
