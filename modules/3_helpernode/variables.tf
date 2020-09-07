@@ -25,7 +25,13 @@ variable "cluster_id" {
   default   = "test-ocp"
 }
 
+variable "dns_forwarders" {
+    default   = "8.8.8.8; 9.9.9.9"
+}
+
+variable "gateway_ip" {}
 variable "cidr" {}
+variable "allocation_pools" {}
 
 variable "bastion_ip" {}
 variable "rhel_username" {}
@@ -34,37 +40,25 @@ variable "ssh_agent" {}
 variable "connection_timeout" {}
 variable "jump_host" {}
 
-variable "bootstrap_ip" {}
-variable "master_ips" {}
-variable "worker_ips" {}
+variable "bootstrap_port_ip" {}
+variable "master_port_ips" {}
+variable "worker_port_ips" {}
 
-variable "public_key" {}
-variable "pull_secret" {}
-variable "release_image_override" {}
+variable "bootstrap_mac" {}
+variable "master_macs" {}
+variable "worker_macs" {}
+
+variable "openshift_client_tarball" {}
+variable "openshift_install_tarball" {}
 
 variable "enable_local_registry" {}
 variable "local_registry_image" {}
 variable "ocp_release_tag" {}
 
-variable "install_playbook_repo" {}
-variable "install_playbook_tag" {}
-
-variable "storage_type" {}
-variable "log_level" {}
+variable "helpernode_repo" {}
+variable "helpernode_tag" {}
 
 variable "ansible_extra_options" {}
-variable "rhcos_kernel_options" {}
 
-variable "sysctl_tuned_options" {}
-variable "sysctl_options" {}
-variable "match_array" {}
 variable "chrony_config" { default = true }
 variable "chrony_config_servers" {}
-
-variable "setup_squid_proxy" {}
-variable "proxy" {}
-
-variable "upgrade_version" {}
-variable "upgrade_channel" {}
-variable "upgrade_pause_time" {}
-variable "upgrade_delay_time" {}

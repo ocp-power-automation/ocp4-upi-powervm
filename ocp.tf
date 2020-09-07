@@ -65,7 +65,7 @@ module "bastion" {
 }
 
 module "network" {
-    source                          = "./modules/3_network"
+    source                          = "./modules/2_network"
 
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
@@ -75,7 +75,42 @@ module "network" {
     network_type                    = var.network_type
 }
 
+module "helpernode" {
+    depends_on                      = [module.bastion]
+    source                          = "./modules/3_helpernode"
+
+    cluster_domain                  = var.cluster_domain
+    cluster_id                      = local.cluster_id
+    dns_forwarders                  = var.dns_forwarders
+    gateway_ip                      = module.network.gateway_ip
+    cidr                            = module.network.cidr
+    allocation_pools                = module.network.allocation_pools
+    bastion_ip                      = module.bastion.bastion_ip
+    rhel_username                   = var.rhel_username
+    private_key                     = local.private_key
+    ssh_agent                       = var.ssh_agent
+    connection_timeout              = var.connection_timeout
+    jump_host                       = var.jump_host
+    bootstrap_port_ip               = module.network.bootstrap_port_ip
+    master_port_ips                 = module.network.master_port_ips
+    worker_port_ips                 = module.network.worker_port_ips
+    bootstrap_mac                   = module.network.bootstrap_mac
+    master_macs                     = module.network.master_macs
+    worker_macs                     = module.network.worker_macs
+    openshift_install_tarball       = var.openshift_install_tarball
+    openshift_client_tarball        = var.openshift_client_tarball
+    enable_local_registry           = var.enable_local_registry
+    local_registry_image            = var.local_registry_image
+    ocp_release_tag                 = var.ocp_release_tag
+    helpernode_repo                 = var.helpernode_repo
+    helpernode_tag                  = var.helpernode_tag
+    ansible_extra_options           = var.ansible_extra_options
+    chrony_config                   = var.chrony_config
+    chrony_config_servers           = var.chrony_config_servers
+}
+
 module "nodes" {
+    depends_on                      = [module.helpernode]
     source                          = "./modules/4_nodes"
 
     bastion_ip                      = module.bastion.bastion_ip
@@ -97,10 +132,7 @@ module "install" {
 
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
-    dns_forwarders                  = var.dns_forwarders
-    gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
-    allocation_pools                = module.network.allocation_pools
     bastion_ip                      = module.bastion.bastion_ip
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
@@ -110,20 +142,13 @@ module "install" {
     bootstrap_ip                    = module.nodes.bootstrap_ip
     master_ips                      = module.nodes.master_ips
     worker_ips                      = module.nodes.worker_ips
-    bootstrap_mac                   = module.network.bootstrap_mac
-    master_macs                     = module.network.master_macs
-    worker_macs                     = module.network.worker_macs
     public_key                      = local.public_key
     pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
-    openshift_install_tarball       = var.openshift_install_tarball
-    openshift_client_tarball        = var.openshift_client_tarball
     storage_type                    = var.storage_type
     release_image_override          = var.release_image_override
     enable_local_registry           = var.enable_local_registry
     local_registry_image            = var.local_registry_image
     ocp_release_tag                 = var.ocp_release_tag
-    helpernode_repo                 = var.helpernode_repo
-    helpernode_tag                  = var.helpernode_tag
     install_playbook_repo           = var.install_playbook_repo
     install_playbook_tag            = var.install_playbook_tag
     log_level                       = var.installer_log_level

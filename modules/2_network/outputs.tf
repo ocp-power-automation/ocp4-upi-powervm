@@ -42,6 +42,18 @@ output worker_macs {
     value = openstack_networking_port_v2.worker_port.*.mac_address
 }
 
+output "bootstrap_port_ip" {
+    value = join("",openstack_networking_port_v2.bootstrap_port.all_fixed_ips)
+}
+
+output "master_port_ips" {
+    value = flatten(openstack_networking_port_v2.master_port.*.all_fixed_ips)
+}
+
+output "worker_port_ips" {
+    value = flatten(openstack_networking_port_v2.worker_port.*.all_fixed_ips)
+}
+
 output gateway_ip {
     value = data.openstack_networking_subnet_v2.subnet.gateway_ip
 }
