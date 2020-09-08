@@ -30,9 +30,12 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
     name = "${var.cluster_id}-bootstrap-port"
     network_id  = data.openstack_networking_network_v2.network.id
     admin_state_up = "true"
-    binding {
-       vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
-       profile   = var.network_type == "SRIOV" ?  local.sriov : null
+    dynamic "binding" {
+        for_each = local.bindings
+        content {
+            vnic_type = setting.value["vnic_type"]
+            profile   = setting.value["profile"]
+        }
     }
 }
 
@@ -41,9 +44,12 @@ resource "openstack_networking_port_v2" "master_port" {
     name            = "${var.cluster_id}-master-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
     admin_state_up  = "true"
-    binding {
-       vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
-       profile   = var.network_type == "SRIOV" ?  local.sriov : null
+    dynamic "binding" {
+        for_each = local.bindings
+        content {
+            vnic_type = setting.value["vnic_type"]
+            profile   = setting.value["profile"]
+        }
     }
 }
 
@@ -52,9 +58,12 @@ resource "openstack_networking_port_v2" "worker_port" {
     name            = "${var.cluster_id}-worker-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
     admin_state_up  = "true"
-    binding {
-       vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
-       profile   = var.network_type == "SRIOV" ?  local.sriov : null
+    dynamic "binding" {
+        for_each = local.bindings
+        content {
+            vnic_type = setting.value["vnic_type"]
+            profile   = setting.value["profile"]
+        }
     }
 }
 
@@ -67,4 +76,5 @@ locals {
        "vlan_type": "allowed"
    }
    EOF
+   bindings = var.network_type == "SRIOV" ? [{vnic_type = "direct", profile = local.sriov }] : []
 }
