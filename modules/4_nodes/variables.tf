@@ -19,7 +19,6 @@
 ################################################################
 
 variable "bastion_ip" {}
-variable "cluster_domain" {}
 variable "cluster_id" {}
 
 variable "bootstrap" {

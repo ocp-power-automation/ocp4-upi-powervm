@@ -18,10 +18,7 @@
 #
 ################################################################
 
-variable "cluster_id" {}
-
-variable "network_name" {}
-variable "master_count" {}
-variable "worker_count" {}
-
-variable "network_type" {}
+output "helpernode_status" {
+    depends_on = [null_resource.config]
+    value = "COMPLETED"
+}
