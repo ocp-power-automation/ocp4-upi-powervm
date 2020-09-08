@@ -33,10 +33,6 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
     binding {
        vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
        profile   = var.network_type == "SRIOV" ?  local.sriov : null
-     }
-    extra_dhcp_option {
-        name  = "domain-search"
-        value = var.cluster_domain
     }
 }
 
@@ -48,10 +44,6 @@ resource "openstack_networking_port_v2" "master_port" {
     binding {
        vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
        profile   = var.network_type == "SRIOV" ?  local.sriov : null
-     }
-    extra_dhcp_option {
-        name        = "domain-search"
-        value       = var.cluster_domain
     }
 }
 
@@ -63,10 +55,6 @@ resource "openstack_networking_port_v2" "worker_port" {
     binding {
        vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
        profile   = var.network_type == "SRIOV" ?  local.sriov : null
-     }
-    extra_dhcp_option {
-        name  = "domain-search"
-        value = var.cluster_domain
     }
 }
 

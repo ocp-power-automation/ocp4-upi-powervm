@@ -36,6 +36,7 @@ data "ignition_file" "b_hostname" {
     mode        = "420" // 0644
     path        = "/etc/hostname"
     content {
+        mime    = "text/plain"
         content = <<EOF
 bootstrap
 EOF
@@ -87,7 +88,7 @@ data "ignition_config" "master" {
     merge {
         source  = "http://${var.bastion_ip}:8080/ignition/master.ign"
     }
-    files       = [data.ignition_file.m_hostname.*.rendered[count.index]]
+    files       = [data.ignition_file.m_hostname[count.index].rendered]
     systemd     = data.ignition_systemd_unit.ramdisk.*.rendered
 }
 
@@ -97,7 +98,8 @@ data "ignition_file" "m_hostname" {
     mode        = "420" // 0644
     path        = "/etc/hostname"
     content {
-    content     = <<EOF
+        mime    = "text/plain"
+        content = <<EOF
 master-${count.index}
 EOF
     }
@@ -127,10 +129,7 @@ resource "openstack_compute_instance_v2" "master" {
     image_id    = var.master["image_id"]
     availability_zone   = var.openstack_availability_zone
 
-    user_data   = element(
-        data.ignition_config.master.*.rendered,
-        count.index,
-    )
+    user_data   = data.ignition_config.master[count.index].rendered
 
     network {
         port    = var.master_port_ids[count.index]
@@ -144,7 +143,7 @@ data "ignition_config" "worker" {
     merge {
         source  = "http://${var.bastion_ip}:8080/ignition/worker.ign"
     }
-    files       = [data.ignition_file.w_hostname.*.rendered[count.index]]
+    files       = [data.ignition_file.w_hostname[count.index].rendered]
 }
 
 data "ignition_file" "w_hostname" {
@@ -154,7 +153,8 @@ data "ignition_file" "w_hostname" {
     path        = "/etc/hostname"
 
     content {
-    content     = <<EOF
+        mime    = "text/plain"
+        content = <<EOF
 worker-${count.index}
 EOF
     }
@@ -184,10 +184,7 @@ resource "openstack_compute_instance_v2" "worker" {
     image_id    = var.worker["image_id"]
     availability_zone   = var.openstack_availability_zone
 
-    user_data = element(
-        data.ignition_config.worker.*.rendered,
-        count.index,
-    )
+    user_data = data.ignition_config.worker[count.index].rendered
 
     network {
         port = var.worker_port_ids[count.index]

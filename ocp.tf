@@ -67,7 +67,6 @@ module "bastion" {
 module "network" {
     source                          = "./modules/2_network"
 
-    cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
     master_count                    = var.master["count"]
@@ -114,7 +113,6 @@ module "nodes" {
     source                          = "./modules/4_nodes"
 
     bastion_ip                      = module.bastion.bastion_ip
-    cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     bootstrap                       = var.bootstrap
     master                          = var.master
@@ -128,6 +126,7 @@ module "nodes" {
 }
 
 module "install" {
+    depends_on                      = [module.nodes]
     source                          = "./modules/5_install"
 
     cluster_domain                  = var.cluster_domain
