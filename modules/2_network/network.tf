@@ -33,8 +33,8 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
     dynamic "binding" {
         for_each = local.bindings
         content {
-            vnic_type = setting.value["vnic_type"]
-            profile   = setting.value["profile"]
+            vnic_type = binding.value["vnic_type"]
+            profile   = binding.value["profile"]
         }
     }
 }
@@ -47,8 +47,8 @@ resource "openstack_networking_port_v2" "master_port" {
     dynamic "binding" {
         for_each = local.bindings
         content {
-            vnic_type = setting.value["vnic_type"]
-            profile   = setting.value["profile"]
+            vnic_type = binding.value["vnic_type"]
+            profile   = binding.value["profile"]
         }
     }
 }
@@ -61,8 +61,8 @@ resource "openstack_networking_port_v2" "worker_port" {
     dynamic "binding" {
         for_each = local.bindings
         content {
-            vnic_type = setting.value["vnic_type"]
-            profile   = setting.value["profile"]
+            vnic_type = binding.value["vnic_type"]
+            profile   = binding.value["profile"]
         }
     }
 }
