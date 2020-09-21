@@ -69,7 +69,7 @@ resource "openstack_compute_instance_v2" "bootstrap" {
     image_id    = var.bootstrap["image_id"]
     availability_zone   = var.openstack_availability_zone
 
-    user_data   = data.ignition_config.bootstrap.rendered
+    user_data   = replace(data.ignition_config.bootstrap.rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
 
     network {
         port    = var.bootstrap_port_id
@@ -131,10 +131,7 @@ resource "openstack_compute_instance_v2" "master" {
     image_id    = var.master["image_id"]
     availability_zone   = var.openstack_availability_zone
 
-    user_data   = element(
-        data.ignition_config.master.*.rendered,
-        count.index,
-    )
+    user_data   = replace(data.ignition_config.master[count.index].rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
 
     network {
         port    = var.master_port_ids[count.index]
@@ -190,10 +187,7 @@ resource "openstack_compute_instance_v2" "worker" {
     image_id    = var.worker["image_id"]
     availability_zone   = var.openstack_availability_zone
 
-    user_data = element(
-        data.ignition_config.worker.*.rendered,
-        count.index,
-    )
+    user_data   = replace(data.ignition_config.worker[count.index].rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
 
     network {
         port = var.worker_port_ids[count.index]
