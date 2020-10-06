@@ -21,8 +21,8 @@
 terraform {
   required_providers {
     ignition = {
-      source = "terraform-providers/ignition"
-      version = "~> 2.1"
+      source = "community-terraform-providers/ignition"
+      version = "~> 2.1.0"
     }
     openstack = {
       source = "terraform-provider-openstack/openstack"
