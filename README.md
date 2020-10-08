@@ -39,32 +39,6 @@ on installing the latest Git.
 - **Terraform >= 0.13.0**: Please refer to the [link](https://learn.hashicorp.com/terraform/getting-started/install.html) for instructions on installing Terraform. For validating the version run `terraform version` command after install.
 - Public internet connection for all the nodes to download the playbooks and images as part of the setup process.
 
-### Terraform Providers
-
-At present Terraform registry does not support below plugins. Third-party providers can be manually installed using [local filesystem as a mirror](https://www.terraform.io/docs/commands/cli-config.html#filesystem_mirror). This is in additon to the provider plugins that are downloaded by Terraform during `terraform init`.
-
-**Ignition provider v2.1.0**
-
-1. Download the zip archive from [community-terraform-provider releases page](https://github.com/community-terraform-providers/terraform-provider-ignition/releases/tag/v2.1.0) .
-
-2. Depending on your Operating System, create the Terraform plugins directory on your local filesystem if does not exist already.
-
-> Linux: ~/.local/share/terraform/plugins OR /usr/local/share/terraform/plugins, OR /usr/share/terraform/plugins.
-
-> Mac OSX: ~/Library/Application Support/io.terraform/plugins OR /Library/Application Support/io.terraform/plugins
-
-> Windows: %APPDATA%/HashiCorp/Terraform/plugins
-
-3. Under the path created in Step 2 please create the Igniton provider directory: `registry.terraform.io/terraform-providers/ignition/`
-4. Place the downloaded zip file in Step 1 to `registry.terraform.io/terraform-providers/ignition/`
-
-This is how the directory look for `linux_amd64`:
-```
-$ ls ~/.local/share/terraform/plugins/registry.terraform.io/terraform-providers/ignition/
-terraform-provider-ignition_2.1.0_linux_amd64.zip
-$
-```
-
 
 # Image and LPAR requirements
 
