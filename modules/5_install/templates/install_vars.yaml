@@ -45,3 +45,6 @@ squid_acl_localnet:
 
 proxy_url: "${proxy_url}"
 no_proxy: "${no_proxy}"
+
+# This flag when true/yes will allow sharing same network for multiple dhcp servers
+dhcp_shared_network: true
