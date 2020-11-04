@@ -25,12 +25,14 @@ masters:
     ipaddr: "${m.ip}"
     macaddr: "${m.mac}"
 %{ endfor ~}
+%{ if length(worker_info) > 0 }
 workers:
 %{ for w in worker_info ~}
   - name: "${w.name}"
     ipaddr: "${w.ip}"
     macaddr: "${w.mac}"
 %{ endfor ~}
+%{ endif }
 
 ppc64le: true
 ssh_gen_key: false
@@ -56,7 +58,7 @@ chronyconfig:
 %{ endfor ~}
     - server: "${bastion_ip}"
       options: iburst
-%{endif ~}
+%{ endif ~}
 ocp_client: "${client_tarball}"
 ocp_installer: "${install_tarball}"
 
@@ -64,3 +66,6 @@ ocp_installer: "${install_tarball}"
 ocp_bios: "file:///dev/null"
 ocp_initramfs: "file:///dev/null"
 ocp_install_kernel: "file:///dev/null"
+
+# This is required for latest helpernode. TODO: Remove when https://github.com/RedHatOfficial/ocp4-helpernode/pull/140 is merged
+helm_source: "https://get.helm.sh/helm-v3.4.0-linux-ppc64le.tar.gz"
