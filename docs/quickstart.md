@@ -57,7 +57,7 @@ Update the following variables specific to your cluster requirement. All the var
     * `instance_type` : The name of the desired flavor.
     * `image_id` : The image ID of the desired RHCOS image.
     * `count` : Number of master nodes.
- * `worker` : Map of below parameters for worker hosts. (Atleaset 2 Workers are required for running router pods in HA mode)
+ * `worker` : Map of below parameters for worker hosts.
     * `instance_type` : The name of the desired flavor.
     * `image_id` : The image ID of the desired RHCOS image.
     * `count` : Number of worker nodes.
