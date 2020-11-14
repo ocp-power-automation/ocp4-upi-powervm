@@ -1,217 +1,258 @@
 # Installation Quickstart
 
-- [Setup Repository](#setup-repository)
-- [Setup Variables](#setup-variables)
-- [Setup Data Files](#setup-data-files)
-- [Start Install](#start-install)
-- [Post Install](#post-install)
-- [Cluster Access](#cluster-access)
-- [Clean up](#clean-up)
+- [Installation Quickstart](#installation-quickstart)
+  - [Download the Automation Code](#download-the-automation-code)
+  - [Setup Terraform Variables](#setup-terraform-variables)
+  - [Start Install](#start-install)
+  - [Post Install](#post-install)
+      - [Delete Bootstrap Node](#delete-bootstrap-node)
+      - [Create API and Ingress DNS Records](#create-api-and-ingress-dns-records)
+  - [Cluster Access](#cluster-access)
+    - [Using CLI](#using-cli)
+    - [Using Web UI](#using-web-ui)
+  - [Clean up](#clean-up)
 
 
-## Setup Repository
+## Download the Automation Code
 
-Clone this git repository on the client machine:
+You'll need to use git to clone the deployment code when working off the master branch
+
+
 ```
-git clone https://github.com/ocp-power-automation/ocp4-upi-powervm.git
-cd ocp4_upi_powervm
+$ git clone https://github.com/ocp-power-automation/ocp4-upi-powervm.git
+$ cd ocp4_upi_powervm
 ```
 
-**NOTE**: Please checkout a [release branch](https://github.com/ocp-power-automation/ocp4-upi-powervm/branches) eg. `release-4.5` for deploying a specific OCP release. The `master` branch will contain the latest changes which may not work with stable OCP releases but might work with pre-release OCP versions. You can also checkout stable [release tags](https://github.com/ocp-power-automation/ocp4-upi-powervm/releases) eg. `v4.5` for deploying a stable OCP releases.
+All further instructions assumes you are in the code directory eg. `ocp4-upi-powervm`
 
-To checkout specific release branch or tag please run:
+## Setup Terraform Variables
+
+Update the [var.tfvars](../var.tfvars) based on your environment. Description of the variables are available in the following [link](./var.tfvars-doc.md).
+You can use environment variables for sensitive data that should not be saved to disk.
+
 ```
-$ git checkout <branch|tag name>
+$ set +o history
+$ export POWERVC_USERNAME=xxxxxxxxxxxxxxx
+$ export POWERVC_PASSWORD=xxxxxxxxxxxxxxx
+$ export RHEL_SUBS_USERNAME=xxxxxxxxxxxxxxx
+$ export RHEL_SUBS_PASSWORD=xxxxxxxxxxxxxxx
+$ set -o history
 ```
-
-## Setup Variables.
-
-Update the var.tfvars with values explained in the following sections. You can also set the variables using other ways mentioned [here](https://www.terraform.io/docs/configuration/variables.html#assigning-values-to-root-module-variables) such as -var option or environment variables.
-
-### Setup PowerVC Environment Variables
-
-Update the following variables specific to your environment.
-
- * `auth_url` : (Required) Endpoint URL used to connect to PowerVC.
- * `user_name` : (Required) PowerVC login username.
- * `password` : (Required) PowerVC login password.
- * `tenant_name` : (Required) The Name of the Tenant (Identity v2) or Project (Identity v3) to login with.
- * `network_name` : (Required) Name of the network to use for deploying all the hosts.
- * `domain_name` : (Optional) The Name of the Domain to scope to. If not specified the value is set to "Default".
- * `openstack_availability_zone` : (Optional) The availability zone in which to create the servers. Keep blank for the default availability zone.
- * `network_type`   : (Optional) Type of the network adapter for cluster hosts. You can set the value as "SRIOV", any other value will use "SEA". More info [here](https://www.ibm.com/support/knowledgecenter/SSXK2N_1.4.0/com.ibm.powervc.standard.help.doc/powervc_sriov_overview.html).
- * `scg_id`         : (Optional) ID of the PowerVC [Storage Connectivity Group](https://www.ibm.com/support/knowledgecenter/SSVSPA_1.4.4/com.ibm.powervc.cloud.help.doc/powervc_storage_connectivity_groups_cloud.html) (SCG) to use for all nodes. An empty value will use the default SCG. Deployments might fail if you don't provide this value when having more than one default SCG configured on PowerVC.
-
-### Setup Nodes Variables
-
-Update the following variables specific to your cluster requirement. All the variables are required to be specified.
-
- * `bastion` : Map of below parameters for bastion host.
-    * `instance_type` : The name of the desired flavor.
-    * `image_id` : The image ID of the RHEL 8.1 image.
- * `bootstrap` : Map of below parameters for bootstrap host.
-    * `instance_type` : The name of the desired flavor.
-    * `image_id` : The image ID of the RHCOS image.
-    * `count` : Always set the value to 1 before starting the deployment. When the deployment is completed successfully set to 0 to delete the bootstrap node.
- * `master` : Map of below parameters for master hosts.
-    * `instance_type` : The name of the desired flavor.
-    * `image_id` : The image ID of the desired RHCOS image.
-    * `count` : Number of master nodes.
- * `worker` : Map of below parameters for worker hosts.
-    * `instance_type` : The name of the desired flavor.
-    * `image_id` : The image ID of the desired RHCOS image.
-    * `count` : Number of worker nodes.
-
-### Setup Intrumentation Variables
-
-Update the following variables specific to the nodes.
-
- * `rhel_subscription_username` : (Optional) The username required for RHEL subscription on bastion host. Leave empty if repos are already setup in the RHEL image and subscription is not needed.
- * `rhel_subscription_password` : (Optional) The password required for RHEL subscription on bastion host.
- * `rhel_username` : (Optional) The user that we should use for the connection to the bastion host. The default value is set as "root user.
- * `keypair_name` : (Optional) Value for keypair used. Default is <cluster_id>-keypair.
- * `public_key_file` : (Optional) A pregenerated OpenSSH-formatted public key file. Default path is 'data/id_rsa.pub'.
- * `private_key_file` : (Optional) Corresponding private key file. Default path is 'data/id_rsa'.
- * `private_key` : (Optional) The contents of an SSH key to use for the connection. Ignored if `public_key_file` is provided.
- * `public_key` : (Optional) The contents of corresponding key to use for the connection. Ignored if `public_key_file` is provided.
- * `connection_timeout` : (Optional) Timeout in minutes for SSH connections. Default is 45 minutes.
- * `jump_host` : (Optional) Jump server hostname/IP to be used for SSH connections. Setup password-less SSH access to the jump_host from the Terraform terminal.
-
-### Setup OpenShift Variables
-
-Update the following variables specific to OCP.
-
- * `openshift_install_tarball` : (Required) HTTP URL for OpenShift install tarball.
- * `openshift_client_tarball` : (Required) HTTP URL for OpenShift client (`oc`) tarball.
- * `cluster_domain` : (Required) Cluster domain name. `<cluster_id>.<cluster_domain>` forms the fully qualified domain name. Can also provide one of the online wildcard DNS domains: nip.io, xip.io & sslip.io.
- * `cluster_id_prefix` : (Required) Cluster identifier prefix. Should not be more than 8 characters. Nodes are pre-fixed with this value, please keep it unique.
- * `cluster_id` : (Optional) Cluster identifier, when not set random value will be used. Length cannot exceed 14 characters when combined with cluster_id_prefix.
- * `release_image_override` : (Optional) This is set to OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE while creating ignition files. Not applicable when using local registry setup.
-
-### Setup Additonal OpenShift Variables
-
- * `installer_log_level` : (Optional) Log level for OpenShift install (e.g. "debug | info | warn | error") (default "info")
- * `ansible_extra_options` : (Optional) Ansible options to append to the ansible-playbook commands. Default is set to "-v".
- * `helpernode_repo` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) git repo URL.
- * `helpernode_tag` : (Optional) [ocp4-helpernode](https://github.com/RedHatOfficial/ocp4-helpernode) ansible playbook version to checkout.
- * `install_playbook_repo` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) git repo URL.
- * `install_playbook_tag` : (Optional) [ocp4-playbooks](https://github.com/ocp-power-automation/ocp4-playbooks) ansible playbooks version to checkout.
- * `pull_secret_file` : (Optional) Location of the OCP pull-secret file to be used. Default path is 'data/pull-secret.txt'.
- * `dns_forwarders` : (Optional) External DNS servers to forward DNS queries that cannot resolve locally. Eg: `"8.8.8.8; 9.9.9.9"`.
- * `mount_etcd_ramdisk` : (Optional) Flag for mounting etcd directory in the ramdisk. Note that the data will not be persistent.
- * `rhcos_kernel_options` : (Optional) List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes eg: ["slub_max_order=0","loglevel=7"]. Note that this will be applied after the cluster is installed, hence wait till all the nodes are in `Ready` status before you start using the cluster. Check nodes status using the command `oc get nodes`.
- * `sysctl_tuned_options` : (Optional) Set to true to apply sysctl options via tuned operator. For more information check [Using the Node Tuning Operator](https://docs.openshift.com/container-platform/4.3/scalability_and_performance/using-node-tuning-operator.html) & [Using the Red Hat OpenShift Node Tuning Operator to set kernel parameters](https://www.ibm.com/support/producthub/icpdata/docs/content/SSQNUZ_current/cpd/svc/dbs/db2wh-nodetuningop.html)
- * `sysctl_options` : (Required when `sysctl_tuned_options = true`) List of sysctl options to apply.
- * `match_array` : (Required when `sysctl_tuned_options = true`) Multi-line config with node/pod selection criteria. Set of supported keys for each criteria: label, value & type.
- * `setup_squid_proxy` : (Optional) Flag to setup Squid proxy server on bastion node. Default value is false.
- * `proxy` : (Optional) Map of below parameters for using external proxy server to setup OCP on a private network. Ensure `setup_squid_proxy = false` when you want to use this.
-    * `server` : Proxy server hostname or IP.
-    * `port` : Proxy port to use (default is 3128).
-    * `user` : Proxy server user for authentication.
-    * `password` : Proxy server password for authentication.
- * `chrony_config` : (Optional) Set to true to configure chrony (NTP) client on the CoreOS node.
- * `chrony_config_servers` : (Required when `chrony_config = true`) List of ntp server and options.
-    * `server` : NTP server hostname or ip to sync with
-    * `options`: chrony options to use for sync (ex: `iburst`)
-
-### Setup Storage Variables
-
-Update the following variables specific to OCP storage. Note that currently only NFS storage provisioner is supported.
-
- * `storage_type` : (Optional) Storage provisioner to configure. Supported values: nfs (For now only nfs provisioner is supported, any other value won't setup a storageclass)
- * `volume_size` : (Optional) If storage_type is nfs, a volume will be created with given size (default 300) in GB and attached to bastion node. Eg: 1000 for 1TB disk.
- * `volume_storage_template` : (Optional) Storage template name or ID for creating the volume. Empty value will use default template.
- 
-### Setup Local Registry Variables
-
-Update the following variables specific to OCP local registry. Note that this is required only for restricted network install.
-
- * `enable_local_registry` : (Optional) Set to true to enable usage of local registry for restricted network install.
- * `local_registry_image` : (Optional) This is the name of the image used for creating the local registry container.
- * `ocp_release_tag` : (Optional) The version of OpenShift you want to sync. Determine the tag by referring the [Repository Tags](https://quay.io/repository/openshift-release-dev/ocp-release?tab=tags) page.
-
-### Setup OCP Upgrade Variables
-
-Update the following variables specific to OCP upgrade. The upgrade will be performed after a successful install of OCP.
-
- * `upgrade_version` : (Optional) OpenShift higher and supported version. If set, OCP cluster will be upgraded to this version. (e.g. `"4.5.4"`)
- * `upgrade_channel` : (Optional) OpenShift channel having required upgrade version available for cluster upgrade. By default it is automatically set to stable channel of installed cluster (eg: stable-4.5). See [Understanding Upgrade Channels](https://docs.openshift.com/container-platform/4.5/updating/updating-cluster-between-minor.html#understanding-upgrade-channels_updating-cluster-between-minor) for more information on setting the upgrade channel.
- * `upgrade_pause_time` : (Optional) Minutes to pause the playbook execution before starting to check the upgrade status once the upgrade command is executed.
- * `upgrade_delay_time` : (Optional) Seconds to wait before re-checking the upgrade status once the playbook execution resumes.
-
-
-## Setup Data Files
-
-You need to have the following files in data/ directory before running the Terraform templates.
-```
-$ ls data/
-id_rsa  id_rsa.pub  pull-secret.txt
-```
- * `id_rsa` & `id_rsa.pub` : The key pair used for accessing the hosts. These files are not required if you provide `public_key_file` and `private_key_file`.
- * `pull-secret.txt` : File containing keys required to pull images on the cluster. You can download it from RH portal after login https://cloud.redhat.com/openshift/install/pull-secret.
-
 
 ## Start Install
 
-Run the following commands from where you have cloned this repository:
+Run the following commands from within the directory.
 
 ```
-terraform init
-terraform apply -var-file var.tfvars
+$ terraform init
+$ terraform apply -var-file var.tfvars
 ```
+If using environment variables for sensitive data, then do the following, instead.
+```
+$ terraform init
+$ terraform apply -var-file var.tfvars -var user_name="$POWERVC_USERNAME" -var password="$POWERVC_PASSWORD" -var rhel_subscription_username="$RHEL_SUBS_USERNAME" -var rhel_subscription_password="$RHEL_SUBS_PASSWORD"
 
+```
 Now wait for the installation to complete. It may take around 40 mins to complete provisioning.
 
-**IMPORTANT**: When using NFS storage, the OpenShift image registry will be using NFS PV claim. Otherwise the image registry uses ephemeral PV.
+On successful install cluster details will be printed as shown below.
+```
+bastion_private_ip = 192.168.25.171
+bastion_public_ip = 16.20.34.5
+bastion_ssh_command = ssh -i data/id_rsa root@16.20.34.5
+bootstrap_ip = 192.168.25.182
+cluster_authentication_details = Cluster authentication details are available in 16.20.34.5 under ~/openstack-upi/auth
+cluster_id = test-cluster-9a4f
+etc_hosts_entries =
+16.20.34.5 api.test-cluster-9a4f.mydomain.com console-openshift-console.apps.test-cluster-9a4f.mydomain.com integrated-oauth-server-openshift-authentication.apps.test-cluster-9a4f.mydomain.com oauth-openshift.apps.test-cluster-9a4f.mydomain.com prometheus-k8s-openshift-monitoring.apps.test-cluster-9a4f.mydomain.com grafana-openshift-monitoring.apps.test-cluster-9a4f.mydomain.com example.apps.test-cluster-9a4f.mydomain.com
 
+install_status = COMPLETED
+master_ips = [
+  "192.168.25.147",
+  "192.168.25.176",
+]
+oc_server_url = https://test-cluster-9a4f.mydomain.com:6443
+storageclass_name = nfs-storage-provisioner
+web_console_url = https://console-openshift-console.apps.test-cluster-9a4f.mydomain.com
+worker_ips = [
+  "192.168.25.220",
+  "192.168.25.134",
+]
+
+```
+
+When using wildcard domain like nip.io or xip.io then `etc_host_entries` is empty
+
+```
+bastion_private_ip = 192.168.25.171
+bastion_public_ip = 16.20.34.5
+bastion_ssh_command = ssh -i data/id_rsa root@16.20.34.5
+bootstrap_ip = 192.168.25.182
+cluster_authentication_details = Cluster authentication details are available in 16.20.34.5 under ~/openstack-upi/auth
+cluster_id = test-cluster-9a4f
+etc_hosts_entries =
+install_status = COMPLETED
+master_ips = [
+  "192.168.25.147",
+  "192.168.25.176",
+]
+oc_server_url = https://test-cluster-9a4f.16.20.34.5.nip.io:6443
+storageclass_name = nfs-storage-provisioner
+web_console_url = https://console-openshift-console.apps.test-cluster-9a4f.16.20.34.5.nip.io
+worker_ips = [
+  "192.168.25.220",
+  "192.168.25.134",
+]
+
+```
+These details can be retrieved anytime by running the following command from the root folder of the code
+```
+$ terraform output
+```
+
+In case of any errors, you'll have to re-apply. Please refer to [known issues](./known_issues.md) to get more details on potential issues and workarounds.
 
 ## Post Install
 
-### Delete Bootstrap Node
 
-Once the deployment is completed successfully, you can safely delete the bootstrap node. This step is optional but recommended to free up the used during install.
+#### Delete Bootstrap Node
 
-1. Change the `count` value to 0 in `bootstrap` map variable and re-run the apply command. Eg: `bootstrap = {instance_type = "medium", image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4", "count" = 0}`
+Once the deployment is completed successfully, you can safely delete the bootstrap node. This step is optional but recommended so as to free up the resources used.
+
+1. Change the `count` value to 0 in `bootstrap` map variable and re-run the apply command. Eg: `bootstrap = {instance_type  = "medium", image_id    = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4",  "count"   = 0}`
+
 2. Run command `terraform apply -var-file var.tfvars`
 
 
-### Create API and Ingress DNS Records
+#### Create API and Ingress DNS Records
 
-Please skip this section if your `domain_name` is one of the online wildcard DNS domains: nip.io, xip.io & sslip.io.
+Please skip this section if your `cluster_domain` is one of the online wildcard DNS domains: nip.io, xip.io and sslip.io.
 
-Add the following records to your DNS server:
+For all other domains, you can use one of the following options.
 
-```
-api.<cluster name>.<cluster domain>.  IN  A  <Bastion IP>
-*.apps.<cluster name>.<cluster domain>.  IN  A  <Bastion IP>
-```
+1. **Add entries to your DNS server**
 
-If you're unable to create and publish these DNS records, you can add them to your `hosts` file. For Linux and Mac `hosts` file is located at /etc/hosts and for Windows it can be found at c:\Windows\System32\Drivers\etc\hosts.
-```
-<Bastion IP> api.<cluster name>.<cluster domain>
-<Bastion IP> console-openshift-console.apps.<cluster name>.<cluster domain>
-<Bastion IP> integrated-oauth-server-openshift-authentication.apps.<cluster name>.<cluster domain>
-<Bastion IP> oauth-openshift.apps.<cluster name>.<cluster domain>
-<Bastion IP> prometheus-k8s-openshift-monitoring.apps.<cluster name>.<cluster domain>
-<Bastion IP> grafana-openshift-monitoring.apps.<cluster name>.<cluster domain>
-<Bastion IP> <app name>.apps.<cluster name>.<cluster domain>
-```
+    The general format is shown below:
+    ```
+    api.<cluster_id>.  IN  A  <bastion_public_ip>
+    *.apps.<cluster_id>.  IN  A  <bastion_public_ip>
+    ```
+    You'll need `bastion_public_ip` and `cluster_id`. This is printed at the end of a successful install. Or you can retrieve it anytime by running `terraform output` from the install directory.
+    For example, if `bastion_public_ip = 16.20.34.5` and `cluster_id = test-cluster-9a4f` then the following DNS records will need to be added.
+    ```
+    api.test-cluster-9a4f.  IN  A  16.20.34.5
+    *.apps.test-cluster-9a4f.  IN  A  16.20.34.5
+    ```
 
-**Note**: For convenience, entries specific to your cluster will be printed at the end of a successful run. Just copy and paste value of output variable `etc_hosts_entries` to your hosts file.
+2. **Add entries to your client system `hosts` file**
 
+    For Linux and Mac `hosts` file is located at `/etc/hosts` and for Windows it's located at `c:\Windows\System32\Drivers\etc\hosts`.
+
+    The general format is shown below:
+    ```
+    <bastion_public_ip> api.<cluster_id>
+    <bastion_public_ip> console-openshift-console.apps.<cluster_id>
+    <bastion_public_ip> integrated-oauth-server-openshift-authentication.apps.<cluster_id>
+    <bastion_public_ip> oauth-openshift.apps.<cluster_id>
+    <bastion_public_ip> prometheus-k8s-openshift-monitoring.apps.<cluster_id>
+    <bastion_public_ip> grafana-openshift-monitoring.apps.<cluster_id>
+    <bastion_public_ip> <app name>.apps.<cluster_id>
+    ```
+
+    You'll need `etc_host_entries`. This is printed at the end of a successful install.
+    Alternatively you can retrieve it anytime by running `terraform output` from the install directory.
+
+    As an example, for the following `etc_hosts_entries`
+    ```
+    etc_hosts_entries =
+    16.20.34.5 api.test-cluster-9a4f.mydomain.com console-openshift-console.apps.test-cluster-9a4f.mydomain.com integrated-oauth-server-openshift-authentication.apps.test-cluster-9a4f.mydomain.com oauth-openshift.apps.test-cluster-9a4f.mydomain.com prometheus-k8s-openshift-monitoring.apps.test-cluster-9a4f.mydomain.com grafana-openshift-monitoring.apps.test-cluster-9a4f.mydomain.com example.apps.test-cluster-9a4f.mydomain.com
+    ```
+    just add the following entry to the `hosts` file
+    ```
+    [existing entries in hosts file]
+
+    16.20.34.5 api.test-cluster-9a4f.mydomain.com console-openshift-console.apps.test-cluster-9a4f.mydomain.com integrated-oauth-server-openshift-authentication.apps.test-cluster-9a4f.mydomain.com oauth-openshift.apps.test-cluster-9a4f.mydomain.com prometheus-k8s-openshift-monitoring.apps.test-cluster-9a4f.mydomain.com grafana-openshift-monitoring.apps.test-cluster-9a4f.mydomain.com example.apps.test-cluster-9a4f.mydomain.com
+    ```
 
 ## Cluster Access
 
-The OCP login credentials are in bastion host. To retrieve the same follow these steps:
-1. `ssh -i data/id_rsa <rhel_username>@<bastion_ip>`
-2. `cd ~/openstack-upi/auth`
-3. `kubeconfig` can be used for CLI (`oc` or `kubectl`)
-4. `kubeadmin` user and content of `kubeadmin-password` as password for GUI
+OpenShift login credentials are in the bastion host and the location will be printed at the end of a successful install.
+Alternatively you can retrieve it anytime by running `terraform output` from the install directory.
+```
+[...]
+bastion_public_ip = 16.20.34.5
+bastion_ssh_command = ssh -i data/id_rsa root@16.20.34.5
+cluster_authentication_details = Cluster authentication details are available in 16.20.34.5 under ~/openstack-upi/auth
+[...]
+```
+There are two files under `~/openstack-upi/auth`
+- **kubeconfig**: can be used for CLI access
+- **kubeadmin-password**: Password for `kubeadmin` user which can be used for CLI, UI access
+
+>**Note**: Ensure you securely store the OpenShift cluster access credentials. If desired delete the access details from the bastion node after securely storing the same.
+
+You can copy the access details to your local system
+```
+$ scp -r -i data/id_rsa root@158.175.161.118:~/openstack-upi/auth/\* .
+```
+
+### Using CLI
+
+OpenShift CLI `oc` can be downloaded from the following links. Use the one specific to your client system architecture.
 
 
-The OpenShift web console URL will be printed with output variable `web_console_url` (eg. https://console-openshift-console.apps.test-ocp-090e.rhocp.com) on successful run. Open this URL on your browser and login with user `kubeadmin` and password as retrieved above.
+- [Mac OSX](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-mac.tar.gz)
+- [Linux (x86_64)](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz)
+- [Linux (ppc64le)](https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz)
+- [Windows](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-windows.zip)
 
-The OpenShift command-line client is already configured on the bastion node with kubeconfig placed at `~/.kube/config`. Just start using the oc client directly.
+
+Download the specific file, extract it and place the binary in a directory that is on your `PATH`
+For more details check the following [link](https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html)
+
+The CLI login URL `oc_server_url` will be printed at the end of successful install.
+Alternatively you can retrieve it anytime by running `terraform output` from the install directory.
+```
+[...]
+oc_server_url = https://test-cluster-9a4f.mydomain.com:6443
+[...]
+```
+In order to login the cluster you can use the `oc login <oc_server_url> -u kubeadmin -p <kubeadmin-password>`
+Example:
+```
+$ oc login https://test-cluster-9a4f.mydomain.com:6443 -u kubeadmin -p $(cat kubeadmin-password)
+```
+
+You can also use the `kubeconfig` file
+```
+$ export KUBECONFIG=$(pwd)/kubeconfig
+$ oc cluster-info
+Kubernetes master is running at https://test-cluster-9a4f.mydomain.com:6443
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'
+
+$ oc get nodes
+NAME       STATUS   ROLES    AGE   VERSION
+master-0   Ready    master   13h   v1.18.3+b74c5ed
+master-1   Ready    master   13h   v1.18.3+b74c5ed
+master-2   Ready    master   13h   v1.18.3+b74c5ed
+worker-0   Ready    worker   13h   v1.18.3+b74c5ed
+worker-1   Ready    worker   13h   v1.18.3+b74c5ed
+```
+
+>**Note:** The OpenShift command-line client `oc` is already configured on the bastion node with kubeconfig placed at `~/.kube/config`.
+
+### Using Web UI
+
+The web console URL will be printed at the end of a successful install.
+Alternatively you can retrieve it anytime by running `terraform output` from the install directory.
+```
+[...]
+web_console_url = https://console-openshift-console.apps.test-cluster-9a4f.mydomain.com
+[...]
+```
+
+Open this URL in your browser and login with user `kubeadmin` and password mentioned in the `kubeadmin-password` file.
 
 
 ## Clean up
