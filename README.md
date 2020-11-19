@@ -1,14 +1,15 @@
 # **Table of Contents**
 
+- [**Table of Contents**](#table-of-contents)
 - [Introduction](#introduction)
-- [Pre-requisites](#pre-requisites)
-- [Image and LPAR requirements](#image-and-lpar-requirements)
-- [OCP Install](#ocp-install)
-- [Contributing](#contributing)
+  - [Automation Host Prerequisites](#automation-host-prerequisites)
+  - [PowerVC Prerequisites](#powervc-prerequisites)
+  - [OCP Install](#ocp-install)
+  - [Contributing](#contributing)
 
 
 # Introduction
-This repo contains Terraform templates to help deployment of OpenShift Container Platform (OCP) 4.x on PowerVM LPARs.
+This repo contains Terraform templates to help deployment of OpenShift Container Platform (OCP) 4.6.x on PowerVM LPARs.
 This assumes PowerVC is used as the IaaS layer for managing the PowerVM LPARs.
 
 If you are using standalone PowerVM please take a look at the [following quickstart guide](https://github.com/RedHatOfficial/ocp4-helpernode/blob/devel/docs/quickstart-powervm.md)
@@ -16,52 +17,28 @@ which uses the [ansible playbook](https://github.com/RedHatOfficial/ocp4-helpern
 
 This project also leverages the same ansible playbook internally for OCP deployment on PowerVM LPARs managed via PowerVC.
 
-Run this code from either Mac or Linux (Intel) system.
 
-:heavy_exclamation_mark: *This automation is intended for test/development purposes only and there is no formal support. For bugs/enhancement requests etc. please open a GitHub issue*
+:heavy_exclamation_mark: *For bugs/enhancement requests etc. please open a GitHub issue*
 
-# Pre-requisites
+:information_source: **This (release-4.6) branch must be used with OCP 4.6.x versions only.**
 
-You need to identify a remote client machine for running the automation. This could be your laptop or a VM.
+## Automation Host Prerequisites
 
-### Operating Systems
+The automation needs to run from a system with internet access. This could be your laptop or a VM with public internet connectivity. This automation code have been tested on the following 64-bit Operating Systems:
+- Mac OSX (Darwin)
+- Linux (x86_64)
 
-This code has been tested on the following x86-64 based Operating Systems:
- - Linux
- - Mac OSX (Darwin)
-
-### Packages
-
-Install the below required packages on the client machine.
-
-- **Git**: Please refer to the [link](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) for instructions
-on installing the latest Git.
-- **Terraform >= 0.13.0**: Please refer to the [link](https://learn.hashicorp.com/terraform/getting-started/install.html) for instructions on installing Terraform. For validating the version run `terraform version` command after install.
-- Public internet connection for all the nodes to download the playbooks and images as part of the setup process.
+Follow the [guide](docs/automation_host_prereqs.md) to complete the prerequisites.
 
 
-# Image and LPAR requirements
+## PowerVC Prerequisites
 
-You'll need to create RedHat CoreOS (RHCOS) and RHEL 8.0 (or later) image in PowerVC. For RHCOS image creation, follow the steps mentioned
-in the following [doc](./docs/coreos-image-creation.md).
+Follow the [guide](docs/ocp_prereqs_powervc.md) to complete the PowerVC prerequisites.
 
-Following are the recommended LPAR configs for OpenShift nodes that will be deployed with RHCOS image.
-- Bootstrap, Master - 2 vCPUs, 16GB RAM, 120 GB Disk.
+## OCP Install
 
-  PowerVM LPARs by default uses SMT=8. So with 2vCPUs, the number of logical CPUs as seen by the Operating System will be **16** (`2 vCPUs x 8 SMT`)
+Follow the [quickstart](docs/quickstart.md) guide for OCP installation on PowerVM LPARs managed via PowerVC
 
-   **_This config is suitable for majority of the scenarios_**
-- Worker - 2 vCPUs, 16GB RAM, 120 GB Disk
-
-   **_Increase worker vCPUs, RAM and Disk based on application requirements_**
-
-Following is the recommended LPAR config for the helper node that will be deployed with RHEL 8.0 (or later) image.
-- Helper node (bastion) - 2vCPUs, 16GB RAM, 200 GB Disk
-
-# OCP Install
-
-Follow these [quickstart](docs/quickstart.md) steps to kickstart OCP installation on PowerVM LPARs managed via PowerVC
-
-# Contributing
+## Contributing
 Please see the [contributing doc](https://github.com/ocp-power-automation/ocp4-upi-powervm/blob/master/CONTRIBUTING.md) for more details.
 PRs are most welcome !!
