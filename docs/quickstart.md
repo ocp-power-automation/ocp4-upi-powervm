@@ -125,10 +125,11 @@ Update the following variables specific to OCP local registry. Note that this is
 
 ### Setup OCP Upgrade Variables
 
-Update the following variables specific to OCP upgrade. The upgrade will be performed after a successful install of OCP.
+Update the following variables specific to OCP upgrade. The upgrade will be performed after a successful install of OCP. If both upgrade_version and upgrade_image are specified then upgrade_image value gets preference.
 
  * `upgrade_version` : (Optional) OpenShift higher and supported version. If set, OCP cluster will be upgraded to this version. (e.g. `"4.5.4"`)
  * `upgrade_channel` : (Optional) OpenShift channel having required upgrade version available for cluster upgrade. By default it is automatically set to stable channel of installed cluster (eg: stable-4.5). See [Understanding Upgrade Channels](https://docs.openshift.com/container-platform/4.5/updating/updating-cluster-between-minor.html#understanding-upgrade-channels_updating-cluster-between-minor) for more information on setting the upgrade channel.
+ * `upgrade_image` : (Optional) OpenShift supported upgrade image. If set, OCP cluster will be upgraded to this image. (e.g. `quay.io/openshift-release-dev/ocp-release@sha256:12345..`)
  * `upgrade_pause_time` : (Optional) Minutes to pause the playbook execution before starting to check the upgrade status once the upgrade command is executed.
  * `upgrade_delay_time` : (Optional) Seconds to wait before re-checking the upgrade status once the playbook execution resumes.
 
