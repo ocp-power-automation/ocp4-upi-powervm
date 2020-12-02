@@ -17,10 +17,12 @@ which uses the [ansible playbook](https://github.com/RedHatOfficial/ocp4-helpern
 
 This project also leverages the same ansible playbook internally for OCP deployment on PowerVM LPARs managed via PowerVC.
 
-:heavy_exclamation_mark: *For bugs/enhancement requests etc. please open a GitHub [issue](https://github.com/ocp-power-automation/ocp4-upi-powervm/issues)*
+!!! Note
+        For bugs/enhancement requests etc. please open a GitHub [issue](https://github.com/ocp-power-automation/ocp4-upi-powervm/issues)
 
-:information_source: **This (release-4.6) branch must be used with OCP 4.6.x versions only.**
+!!! Warning
 
+        **This (release-4.6) branch must be used with OCP 4.6.x versions only.**
 
 ## Automation Host Prerequisites
 
@@ -40,5 +42,5 @@ Follow the [guide](docs/ocp_prereqs_powervc.md) to complete the PowerVC prerequi
 Follow the [quickstart](docs/quickstart.md) guide for OCP installation on PowerVM LPARs managed via PowerVC
 
 ## Contributing
-Please see the [contributing doc](https://github.com/ocp-power-automation/ocp4-upi-powervm/blob/master/CONTRIBUTING.md) for more details.
+Please see the [contributing doc](CONTRIBUTING.md) for more details.
 PRs are most welcome !!
