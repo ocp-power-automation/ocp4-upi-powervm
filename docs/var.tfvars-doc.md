@@ -199,6 +199,7 @@ The following variables are specific to upgrading an existing installation.
 ```
 upgrade_version            = ""
 upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.5
+upgrade_image              = ""  #(e.g. `"quay.io/openshift-release-dev/ocp-release-nightly@sha256:xxxxx"`)
 upgrade_pause_time         = "90"
 upgrade_delay_time         = "600"
 ```

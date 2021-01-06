@@ -160,6 +160,7 @@ module "install" {
     proxy                           = var.proxy
     upgrade_version                 = var.upgrade_version
     upgrade_channel                 = var.upgrade_channel
+    upgrade_image                   = var.upgrade_image
     upgrade_pause_time              = var.upgrade_pause_time
     upgrade_delay_time              = var.upgrade_delay_time
     chrony_config                   = var.chrony_config
