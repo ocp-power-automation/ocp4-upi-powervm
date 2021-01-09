@@ -66,5 +66,6 @@ variable "proxy" {}
 
 variable "upgrade_version" {}
 variable "upgrade_channel" {}
+variable "upgrade_image" {}
 variable "upgrade_pause_time" {}
 variable "upgrade_delay_time" {}
