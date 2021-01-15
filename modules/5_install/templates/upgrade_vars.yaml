@@ -1,6 +1,7 @@
 ---
 upgrade_version: "${upgrade_version}"
 upgrade_channel: "${upgrade_channel}"
+upgrade_image: "${upgrade_image}"
 pause_time: ${pause_time}
 delay_time: ${delay_time}
 
