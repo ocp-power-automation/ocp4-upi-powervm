@@ -15,7 +15,7 @@ These additional ports are required for the ocp cli (`oc`) post-install:
 
 ## Automation Host Setup
 
-Install the following packages on the automation host. Select the appropriate install binaries based on your automation host platform - Mac/Linux.
+Install the following packages on the automation host. Select the appropriate install binaries based on your automation host platform - Mac/Linux/Windows.
 
 ### Terraform
 
