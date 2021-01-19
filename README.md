@@ -29,6 +29,7 @@ This project also leverages the same ansible playbook internally for OCP deploym
 The automation needs to run from a system with internet access. This could be your laptop or a VM with public internet connectivity. This automation code has been tested on the following 64-bit Operating Systems:
 - Mac OSX (Darwin)
 - Linux (x86_64)
+- Windows 10
 
 Follow the [guide](docs/automation_host_prereqs.md) to complete the prerequisites.
 
