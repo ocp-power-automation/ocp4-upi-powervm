@@ -42,6 +42,7 @@ Update the following variables specific to your cluster requirement. All the var
  * `bastion` : Map of below parameters for bastion host.
     * `instance_type` : The name of the desired flavor.
     * `image_id` : The image ID of the RHEL 8.1 image.
+    * `fixed_ip_v4` : (Optional) The pre-defined IPv4 address.
  * `bootstrap` : Map of below parameters for bootstrap host.
     * `instance_type` : The name of the desired flavor.
     * `image_id` : The image ID of the RHCOS image.
