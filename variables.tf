@@ -65,6 +65,8 @@ variable "bastion" {
     default = {
         instance_type   = "m1.xlarge"
         image_id        = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"
+        # optional fixed IP address
+        # fixed_ip_v4   = "123.45.67.89"
     }
 }
 variable "bootstrap" {
