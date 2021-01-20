@@ -51,6 +51,12 @@ worker                      = {instance_type    = "<worker-compute-template>", i
 You can optionally set worker `count` value to 0 in which case all the cluster pods will be running on the master/supervisor nodes. 
 Ensure you use proper sizing for master/supervisor nodes to avoid resource starvation for containers.
 
+To set a pre-defined IPv4 address for the bastion node, make use of the optional `fixed_ip_v4` in bastion variable as shown below. Ensure this address is within the given network subnet range and not already in use.
+```
+bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>",  fixed_ip_v4 = "<IPv4 address>"}
+```
+
+
 These set of variables specify the username and the SSH key to be used for accessing the bastion node.
 ```
 rhel_username               = "root"
