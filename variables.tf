@@ -229,7 +229,7 @@ variable "install_playbook_repo" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "c6e6038dba0856e621697c876bd3a65927f46166"
+    default = "eeabfb1c83a4ecc8980dd09261a3a849cb4448fb"
 }
 
 variable "ansible_extra_options" {
