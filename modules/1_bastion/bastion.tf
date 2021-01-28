@@ -161,7 +161,7 @@ resource "null_resource" "bastion_register" {
         connection_timeout = var.connection_timeout
     }
     depends_on  = [null_resource.bastion_init, null_resource.setup_proxy_info]
-    count       = var.rhel_subscription_username != "" ? 1 : 0
+    count       = ( var.rhel_subscription_username == "" || var.rhel_subscription_username  == "<subscription-id>" ) && var.rhel_subscription_org == "" ? 0 : 1
     connection {
         type        = "ssh"
         user        = self.triggers.rhel_username
@@ -172,14 +172,23 @@ resource "null_resource" "bastion_register" {
         bastion_host = self.triggers.jump_host
     }
     provisioner "remote-exec" {
-        inline = [
-            # FIX for existing stale repos
-            "echo 'Moving all file from /etc/yum.repos.d/ to /etc/yum.repos.d.bak/'",
-            "mkdir /etc/yum.repos.d.bak/ && mv /etc/yum.repos.d/* /etc/yum.repos.d.bak/",
-            "sudo subscription-manager clean",
-            "sudo subscription-manager register --username=${var.rhel_subscription_username} --password=${var.rhel_subscription_password} --force",
-            "sudo subscription-manager refresh",
-            "sudo subscription-manager attach --auto"
+        inline = [<<EOF
+
+# FIX for existing stale repos
+echo 'Moving all file from /etc/yum.repos.d/ to /etc/yum.repos.d.bak/'
+mkdir /etc/yum.repos.d.bak/ && mv /etc/yum.repos.d/* /etc/yum.repos.d.bak/
+# Give some more time to subscription-manager
+sudo subscription-manager config --server.server_timeout=600
+sudo subscription-manager clean
+if [[ '${var.rhel_subscription_org}' == '' ]]; then 
+    sudo subscription-manager register --username='${var.rhel_subscription_username}' --password='${var.rhel_subscription_password}' --force
+else
+    sudo subscription-manager register --org='${var.rhel_subscription_org}' --activationkey='${var.rhel_subscription_activationkey}' --force
+fi
+sudo subscription-manager refresh
+sudo subscription-manager attach --auto
+
+EOF
         ]
     }
     # Delete Terraform files as contains sensitive data
