@@ -77,7 +77,6 @@ module "network" {
 }
 
 module "helpernode" {
-    depends_on                      = [module.bastion]
     source                          = "./modules/3_helpernode"
 
     cluster_domain                  = var.cluster_domain
@@ -111,7 +110,6 @@ module "helpernode" {
 }
 
 module "nodes" {
-    depends_on                      = [module.helpernode]
     source                          = "./modules/4_nodes"
 
     bastion_ip                      = module.bastion.bastion_ip
@@ -128,7 +126,7 @@ module "nodes" {
 }
 
 module "install" {
-    depends_on                      = [module.nodes]
+    depends_on                      = [module.helpernode, module.nodes]
     source                          = "./modules/5_install"
 
     cluster_domain                  = var.cluster_domain
