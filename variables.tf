@@ -239,6 +239,10 @@ variable "ansible_extra_options" {
     default     = "-v"
 }
 
+variable "ansible_repo_name" {
+    default = "ansible-2.9-for-rhel-8-ppc64le-rpms"
+}
+
 locals {
     private_key_file    = var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : var.private_key_file
     public_key_file     = var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : var.public_key_file

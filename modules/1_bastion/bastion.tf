@@ -201,8 +201,33 @@ resource "null_resource" "bastion_register" {
     }
 }
 
+resource "null_resource" "enable_repos" {
+    depends_on      = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register]
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+    }
+
+    provisioner "remote-exec" {
+        inline = [<<EOF
+# Additional repo for installing ansible package
+if [[ -z "${var.rhel_subscription_username}" ]] || [[ "${var.rhel_subscription_username}" == "<subscription-id>" ]]; then
+  sudo yum install -y epel-release
+else
+  sudo subscription-manager repos --enable ${var.ansible_repo_name}
+fi
+EOF
+        ]
+    }
+}
+
 resource "null_resource" "bastion_packages" {
-    depends_on = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register]
+    depends_on = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register, null_resource.enable_repos]
     connection {
         type        = "ssh"
         user        = var.rhel_username
@@ -220,7 +245,7 @@ resource "null_resource" "bastion_packages" {
     }
     provisioner "remote-exec" {
         inline = [
-            "pip3 install ansible -q"
+           "sudo yum install -y ansible"
         ]
     }
     provisioner "remote-exec" {

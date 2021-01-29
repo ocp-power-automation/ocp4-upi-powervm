@@ -67,6 +67,7 @@ module "bastion" {
     jump_host                       = var.jump_host
     rhel_subscription_username      = var.rhel_subscription_username
     rhel_subscription_password      = var.rhel_subscription_password
+    ansible_repo_name               = var.ansible_repo_name
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
