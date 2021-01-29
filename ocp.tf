@@ -59,6 +59,7 @@ module "bastion" {
     rhel_subscription_password      = var.rhel_subscription_password
     rhel_subscription_org           = var.rhel_subscription_org
     rhel_subscription_activationkey = var.rhel_subscription_activationkey
+    ansible_repo_name               = var.ansible_repo_name
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template

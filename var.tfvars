@@ -59,6 +59,7 @@ cluster_id                  = ""
 
 #installer_log_level        = "info"
 #ansible_extra_options      = "-v"
+#ansible_repo_name          = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 #dns_forwarders             = "1.1.1.1; 9.9.9.9"
 #rhcos_kernel_options       = []
 #chrony_config              = true
