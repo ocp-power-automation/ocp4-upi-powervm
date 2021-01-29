@@ -155,6 +155,13 @@ variable "rhel_subscription_password" {
     default = ""
 }
 
+variable "rhel_subscription_org" {
+    default = ""
+}
+
+variable "rhel_subscription_activationkey" {
+    default = ""
+}
 variable "rhcos_kernel_options" {
     description = "List of kernel arguments for the cluster nodes"
     default     = []
