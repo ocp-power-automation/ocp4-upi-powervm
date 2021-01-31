@@ -238,7 +238,7 @@ variable "install_playbook_repo" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "61820d5e5619ecad2792dc0b3cd35afc2cb8abe5"
+    default = "592e51671ff2762718955fb2a0541a5b19c862e9"
 }
 
 variable "ansible_extra_options" {
@@ -357,6 +357,11 @@ variable "upgrade_pause_time" {
 variable "upgrade_delay_time" {
     description = "Number of seconds to wait before re-checking the upgrade status once the playbook execution resumes."
     default = "600"
+}
+
+variable "cni_network_provider" {
+    description = "Set the default Container Network Interface (CNI) network provider"
+    default = "OpenshiftSDN"
 }
 
 ################################################################

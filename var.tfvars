@@ -83,3 +83,5 @@ cluster_id                  = ""
 #upgrade_image              = "" #quay.io/openshift-release-dev/ocp-release@sha256:xyz.."
 #upgrade_pause_time         = "90"
 #upgrade_delay_time         = "600"
+
+#cni_network_provider       = "OpenshiftSDN"
