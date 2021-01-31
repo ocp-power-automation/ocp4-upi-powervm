@@ -59,6 +59,7 @@ locals {
         chrony_config           = var.chrony_config
         chrony_config_servers   = var.chrony_config_servers
         chrony_allow_range      = var.cidr
+        cni_network_provider    = var.cni_network_provider
     }
 
     upgrade_vars = {

@@ -48,3 +48,5 @@ no_proxy: "${no_proxy}"
 
 # This flag when true/yes will allow sharing same network for multiple dhcp servers
 dhcp_shared_network: true
+
+cni_network_provider: "${cni_network_provider}"

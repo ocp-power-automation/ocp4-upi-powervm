@@ -209,3 +209,9 @@ upgrade_image              = ""  #(e.g. `"quay.io/openshift-release-dev/ocp-rele
 upgrade_pause_time         = "90"
 upgrade_delay_time         = "600"
 ```
+
+This variable is used to set the default Container Network Interface (CNI) network provider such as OpenShiftSDN or OVNKubernetes
+
+```
+cni_network_provider       = "OpenshiftSDN"
+```
