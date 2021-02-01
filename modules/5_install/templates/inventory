@@ -1,15 +1,15 @@
 [bastion]
-${bastion_ip} ansible_connection=local
+${bastion_host} ansible_connection=ssh ansible_user=root
 
 [bootstrap]
-${bootstrap_ip} ansible_connection=ssh ansible_user=core
+${bootstrap_host} ansible_connection=ssh ansible_user=core
 
 [masters]
-%{ for master in master_ips ~}
+%{ for master in master_hosts ~}
 ${master} ansible_connection=ssh ansible_user=core
 %{ endfor ~}
 
 [workers]
-%{ for worker in worker_ips ~}
+%{ for worker in worker_hosts ~}
 ${worker} ansible_connection=ssh ansible_user=core
 %{ endfor ~}

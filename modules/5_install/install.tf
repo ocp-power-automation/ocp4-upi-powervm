@@ -67,10 +67,10 @@ locals {
     }
 
     inventory = {
-        bastion_ip      = var.bastion_ip
-        bootstrap_ip    = var.bootstrap_ip
-        master_ips      = var.master_ips
-        worker_ips      = var.worker_ips
+        bastion_host    = "${var.cluster_id}-bastion"
+        bootstrap_host  = "bootstrap"
+        master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
+        worker_hosts    = [for ix in range(length(var.worker_ips)) : "worker-${ix}"]
     }
 
     proxy = {

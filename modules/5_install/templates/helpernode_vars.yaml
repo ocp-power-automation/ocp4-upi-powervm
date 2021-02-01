@@ -1,7 +1,7 @@
 ---
 disk: vda
 helper:
-  name: "helper"
+  name: "${cluster_id}-bastion"
   ipaddr: "${bastion_ip}"
 dns:
   domain: "${cluster_domain}"
