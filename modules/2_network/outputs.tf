@@ -19,7 +19,7 @@
 ################################################################
 
 output "bootstrap_port_id" {
-    value = openstack_networking_port_v2.bootstrap_port.id
+    value = join("", openstack_networking_port_v2.bootstrap_port.*.id)
 }
 
 output "master_port_ids" {
@@ -31,7 +31,7 @@ output "worker_port_ids" {
 }
 
 output bootstrap_mac {
-    value = openstack_networking_port_v2.bootstrap_port.mac_address
+    value = join("", openstack_networking_port_v2.bootstrap_port.*.mac_address)
 }
 
 output master_macs {
@@ -43,7 +43,7 @@ output worker_macs {
 }
 
 output "bootstrap_port_ip" {
-    value = join("",openstack_networking_port_v2.bootstrap_port.all_fixed_ips)
+    value = join("", flatten(openstack_networking_port_v2.bootstrap_port.*.all_fixed_ips))
 }
 
 output "master_port_ips" {

@@ -72,6 +72,7 @@ module "network" {
 
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
+    bootstrap_count                 = var.bootstrap["count"]
     master_count                    = var.master["count"]
     worker_count                    = var.worker["count"]
     network_type                    = var.network_type

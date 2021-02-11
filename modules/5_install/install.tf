@@ -25,7 +25,7 @@ locals {
 
     inventory = {
         bastion_host    = "${var.cluster_id}-bastion"
-        bootstrap_host  = "bootstrap"
+        bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
         master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
         worker_hosts    = [for ix in range(length(var.worker_ips)) : "worker-${ix}"]
     }
