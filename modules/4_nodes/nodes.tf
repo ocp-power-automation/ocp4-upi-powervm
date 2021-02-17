@@ -190,3 +190,36 @@ resource "openstack_compute_instance_v2" "worker" {
         port = var.worker_port_ids[count.index]
     }
 }
+
+resource "null_resource" "remove_worker" {
+    count       = var.worker["count"]
+    depends_on  = [openstack_compute_instance_v2.worker]
+    triggers = {
+        bastion_ip      = var.bastion_ip
+        rhel_username   = var.rhel_username
+        private_key     = var.private_key
+        ssh_agent       = var.ssh_agent
+        connection_timeout = var.connection_timeout
+        jump_host       = var.jump_host
+    }
+
+    provisioner "remote-exec" {
+        connection {
+            type        = "ssh"
+            user        = self.triggers.rhel_username
+            host        = self.triggers.bastion_ip
+            private_key = self.triggers.private_key
+            agent       = self.triggers.ssh_agent
+            timeout     = "${self.triggers.connection_timeout}m"
+            bastion_host = self.triggers.jump_host
+        }
+        when        = destroy
+        on_failure  = continue
+        inline = [<<EOF
+oc adm cordon worker-${count.index}
+oc adm drain worker-${count.index} --force --delete-local-data --ignore-daemonsets
+oc delete node worker-${count.index}
+EOF
+        ]
+    }
+}
