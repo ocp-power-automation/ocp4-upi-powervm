@@ -55,3 +55,9 @@ variable "master_port_ids" {}
 variable "worker_port_ids" {}
 
 variable "mount_etcd_ramdisk" {}
+
+variable "rhel_username" {}
+variable "private_key" {}
+variable "ssh_agent" {}
+variable "connection_timeout" {}
+variable "jump_host" {}
