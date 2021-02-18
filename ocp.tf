@@ -125,6 +125,11 @@ module "nodes" {
     master_port_ids                 = module.network.master_port_ids
     worker_port_ids                 = module.network.worker_port_ids
     mount_etcd_ramdisk              = var.mount_etcd_ramdisk
+    rhel_username                   = var.rhel_username
+    private_key                     = local.private_key
+    ssh_agent                       = var.ssh_agent
+    connection_timeout              = var.connection_timeout
+    jump_host                       = var.jump_host
 }
 
 module "install" {
