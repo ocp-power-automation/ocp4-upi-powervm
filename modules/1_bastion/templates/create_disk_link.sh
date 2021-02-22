@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Scan devices
 sudo rescan-scsi-bus.sh -a -m -r
 
