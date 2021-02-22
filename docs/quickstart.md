@@ -17,7 +17,6 @@
 
 You'll need to use git to clone the deployment code when working off the master branch
 
-
 ```
 $ git clone https://github.com/ocp-power-automation/ocp4-upi-powervm.git
 $ cd ocp4_upi_powervm
@@ -41,7 +40,7 @@ $ set -o history
 
 ## Start Install
 
-Run the following commands from within the directory.
+Run the following commands from within the directory. 
 
 ```
 $ terraform init
