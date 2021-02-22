@@ -155,6 +155,13 @@ variable "rhel_subscription_password" {
     default = ""
 }
 
+variable "rhel_subscription_org" {
+    default = ""
+}
+
+variable "rhel_subscription_activationkey" {
+    default = ""
+}
 variable "rhcos_kernel_options" {
     description = "List of kernel arguments for the cluster nodes"
     default     = []
@@ -219,7 +226,7 @@ variable "helpernode_repo" {
 variable "helpernode_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
     # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-    default = "dd8a0767c677fc862e45b6d70e5d04656ced5d28"
+    default = "1ac7f276b537cd734240eda9ed554a254ba80629"
 }
 
 variable "install_playbook_repo" {
@@ -231,7 +238,7 @@ variable "install_playbook_repo" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "61820d5e5619ecad2792dc0b3cd35afc2cb8abe5"
+    default = "592e51671ff2762718955fb2a0541a5b19c862e9"
 }
 
 variable "ansible_extra_options" {
@@ -239,12 +246,16 @@ variable "ansible_extra_options" {
     default     = "-v"
 }
 
+variable "ansible_repo_name" {
+    default = "ansible-2.9-for-rhel-8-ppc64le-rpms"
+}
+
 locals {
-    private_key_file    = "${var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : "${var.private_key_file}" }"
-    public_key_file     = "${var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : "${var.public_key_file}" }"
-    private_key         = "${var.private_key == "" ? file(coalesce(local.private_key_file, "/dev/null")) : "${var.private_key}" }"
-    public_key          = "${var.public_key == "" ? file(coalesce(local.public_key_file, "/dev/null")) : "${var.public_key}" }"
-    create_keypair      = "${var.keypair_name == "" ? "1": "0"}"
+    private_key_file    = var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : var.private_key_file
+    public_key_file     = var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : var.public_key_file
+    private_key         = var.private_key == "" ? file(coalesce(local.private_key_file, "/dev/null")) : var.private_key
+    public_key          = var.public_key == "" ? file(coalesce(local.public_key_file, "/dev/null")) : var.public_key
+    create_keypair      = var.keypair_name == "" ? "1": "0"
 }
 
 
@@ -346,6 +357,11 @@ variable "upgrade_pause_time" {
 variable "upgrade_delay_time" {
     description = "Number of seconds to wait before re-checking the upgrade status once the playbook execution resumes."
     default = "600"
+}
+
+variable "cni_network_provider" {
+    description = "Set the default Container Network Interface (CNI) network provider"
+    default = "OpenshiftSDN"
 }
 
 ################################################################

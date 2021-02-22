@@ -24,10 +24,10 @@ locals {
     ocp_release_repo    = "ocp4/openshift4"
 
     inventory = {
-        bastion_ip      = var.bastion_ip
-        bootstrap_ip    = var.bootstrap_ip
-        master_ips      = var.master_ips
-        worker_ips      = var.worker_ips
+        bastion_host    = "${var.cluster_id}-bastion"
+        bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
+        master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
+        worker_hosts    = [for ix in range(length(var.worker_ips)) : "worker-${ix}"]
     }
 
     proxy = {
@@ -45,9 +45,9 @@ locals {
         public_ssh_key          = var.public_key
         storage_type            = var.storage_type
         log_level               = var.log_level
-        release_image_override  = var.enable_local_registry ? "${local.local_registry_ocp_image}" : var.release_image_override
+        release_image_override  = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override
         enable_local_registry   = var.enable_local_registry
-        node_connection_timeout = "${60 * var.connection_timeout}"
+        node_connection_timeout = 60 * var.connection_timeout
         rhcos_kernel_options    = var.rhcos_kernel_options
         sysctl_tuned_options    = var.sysctl_tuned_options
         sysctl_options          = var.sysctl_options
@@ -59,6 +59,7 @@ locals {
         chrony_config           = var.chrony_config
         chrony_config_servers   = var.chrony_config_servers
         chrony_allow_range      = var.cidr
+        cni_network_provider    = var.cni_network_provider
     }
 
     upgrade_vars = {
@@ -71,6 +72,10 @@ locals {
 }
 
 resource "null_resource" "install" {
+    triggers = {
+        worker_count    = length(var.worker_ips)
+    }
+
     connection {
         type        = "ssh"
         user        = var.rhel_username

@@ -69,6 +69,12 @@ locals {
 }
 
 resource "null_resource" "config" {
+
+    triggers = {
+        bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
+        worker_count    = length(var.worker_port_ips)
+    }
+
     connection {
         type        = "ssh"
         user        = var.rhel_username

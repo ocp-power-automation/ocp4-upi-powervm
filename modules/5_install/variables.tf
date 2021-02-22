@@ -69,3 +69,5 @@ variable "upgrade_channel" {}
 variable "upgrade_image" {}
 variable "upgrade_pause_time" {}
 variable "upgrade_delay_time" {}
+
+variable "cni_network_provider" {}

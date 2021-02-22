@@ -20,8 +20,10 @@ worker                      = {instance_type    = "<worker-compute-template>",  
 rhel_username               = "root"
 public_key_file             = "data/id_rsa.pub"
 private_key_file            = "data/id_rsa"
-rhel_subscription_username  = "<subscription-id>"
-rhel_subscription_password  = "<subscription-password>"
+rhel_subscription_username  = "<subscription-id>"          #Leave this as-is if using CentOS as bastion image
+rhel_subscription_password  = "<subscription-password>"    #Leave this as-is if using CentOS as bastion image
+rhel_subscription_org           = ""                       # Define it only when using activationkey for RHEL subscription
+rhel_subscription_activationkey = ""                       # Define it only when using activationkey for RHEL subscription
 
 connection_timeout          = 45
 jump_host                   = ""
@@ -57,6 +59,7 @@ cluster_id                  = ""
 
 #installer_log_level        = "info"
 #ansible_extra_options      = "-v"
+#ansible_repo_name          = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 #dns_forwarders             = "1.1.1.1; 9.9.9.9"
 #rhcos_kernel_options       = []
 #chrony_config              = true
@@ -80,3 +83,5 @@ cluster_id                  = ""
 #upgrade_image              = "" #quay.io/openshift-release-dev/ocp-release@sha256:xyz.."
 #upgrade_pause_time         = "90"
 #upgrade_delay_time         = "600"
+
+#cni_network_provider       = "OpenshiftSDN"

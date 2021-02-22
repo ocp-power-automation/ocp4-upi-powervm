@@ -70,15 +70,19 @@ Please note that only OpenSSH formatted keys are supported. Refer to the followi
 
 Create the SSH key-pair and keep it under the `data` directory
 
-These set of variables specify the RHEL subscription details.
-This is sensitive data, and if you don't want to save it on disk, use environment variables `RHEL_SUBS_USERNAME` and `RHEL_SUBS_PASSWORD` and
+These set of variables specify the RHEL subscription details, RHEL subscription supports two methods: one is using username and password, the other is using activation key.
+This is sensitive data, and if you don't want to save it on disk, use environment variables `RHEL_SUBS_USERNAME` and `RHEL_SUBS_PASSWORD` and 
 pass them to `terraform apply` command as shown in the [Quickstart guide](./quickstart.md#setup-terraform-variables).
 
 ```
 rhel_subscription_username  = "user@test.com"
 rhel_subscription_password  = "mypassword"
 ```
-
+Or define following variables to use activation key for RHEL subscription:
+```
+rhel_subscription_org = "org-id"
+rhel_subscription_activationkey = "activation-key"
+```
 ### OpenShift Installation Details
 
 These variables specify the URL for the OpenShift installer and client binaries.
@@ -208,4 +212,10 @@ upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stab
 upgrade_image              = ""  #(e.g. `"quay.io/openshift-release-dev/ocp-release-nightly@sha256:xxxxx"`)
 upgrade_pause_time         = "90"
 upgrade_delay_time         = "600"
+```
+
+This variable is used to set the default Container Network Interface (CNI) network provider such as OpenShiftSDN or OVNKubernetes
+
+```
+cni_network_provider       = "OpenshiftSDN"
 ```
