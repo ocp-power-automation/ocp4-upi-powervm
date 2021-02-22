@@ -21,6 +21,27 @@ Install the following packages on the automation host. Select the appropriate in
 
 **Terraform >= 0.13.0**: Please refer to the [link](https://learn.hashicorp.com/terraform/getting-started/install.html) for instructions on installing Terraform. For validating the version run `terraform version` command after install.
 
+Install Terraform and providers for Power environment:
+1. Download the Terraform binary version 0.13.5 from https://www.power-devops.com/terraform and install it to /usr/local/bin.
+2. Download the required Terraform providers for Power into current directory:
+```
+$ mkdir -p ./providers
+$ curl -fsSL https://github.com/ocp-power-automation/terraform-providers-power/releases/download/v0.7/archive.zip -o archive.zip
+$ unzip -o "./archive.zip" -d ./providers
+$ rm -f "./archive.zip"
+```
+3. Create the `$HOME/.terraformrc`:
+```
+$ cat << EOF > $HOME/.terraformrc
+provider_installation {
+  filesystem_mirror {
+    path    = "${PWD}/providers"
+    include = ["*/*"]
+  }
+}
+EOF
+``` 
+
 ### Git
 
 **Git**:  Please refer to the [link](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) for instructions on installing Git.
