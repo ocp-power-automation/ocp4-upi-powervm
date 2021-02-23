@@ -117,6 +117,7 @@ resource "null_resource" "config" {
 
     triggers = {
         bootstrap_count = var.bootstrap_ip == "" ? 0 : 1
+        worker_count    = length(var.worker_ips)
     }
 
     connection {
@@ -156,6 +157,10 @@ resource "null_resource" "config" {
 
 resource "null_resource" "install" {
     depends_on = [null_resource.config]
+
+    triggers = {
+        worker_count    = length(var.worker_ips)
+    }
 
     connection {
         type        = "ssh"
