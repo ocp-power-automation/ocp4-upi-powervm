@@ -15,10 +15,12 @@ dhcp:
   netmaskid: "${netmask}"
   poolstart: "${pool.start}"
   poolend: "${pool.end}"
+%{ if bootstrap_info.ip != "" && bootstrap_info.mac != "" }
 bootstrap:
   name: "${bootstrap_info.name}"
   ipaddr: "${bootstrap_info.ip}"
   macaddr: "${bootstrap_info.mac}"
+%{ endif }
 masters:
 %{ for m in master_info ~}
   - name: "${m.name}"
