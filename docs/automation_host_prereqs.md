@@ -1,20 +1,21 @@
 # Automation Host Prerequisites
 - [Automation Host Prerequisites](#automation-host-prerequisites)
+  - [Configure Your Firewall](#configure-your-firewall)
   - [Automation Host Setup](#automation-host-setup)
-    - [Configure Your Firewall](#configure-your-firewall)
     - [Terraform](#terraform)
     - [Git](#git)
 
-## Automation Host Setup
 
-Install the following packages on the automation host. Select the appropriate install binaries based on your automation host platform - Mac/Linux.
-
-### Configure Your Firewall
+## Configure Your Firewall
 If your system is behind a firewall, you will need to ensure the following ports are open in order to use ssh, http, and https:
 - 22, 443, 80
 
 These additional ports are required for the ocp cli (`oc`) post-install:
 - 6443
+
+## Automation Host Setup
+
+Install the following packages on the automation host. Select the appropriate install binaries based on your automation host platform - Mac/Linux/Windows.
 
 ### Terraform
 
