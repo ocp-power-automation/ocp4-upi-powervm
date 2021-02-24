@@ -40,7 +40,7 @@ $ set -o history
 
 ## Start Install
 
-Run the following commands from within the directory. 
+Run the following commands from within the directory.
 
 ```
 $ terraform init
