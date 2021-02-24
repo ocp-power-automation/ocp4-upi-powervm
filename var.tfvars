@@ -49,6 +49,7 @@ dns_forwarders      = "8.8.8.8; 8.8.4.4"
 mount_etcd_ramdisk  = false
 installer_log_level = "info"
 ansible_extra_options = "-v"
+#ansible_repo_name          = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 rhcos_kernel_options  = []
 sysctl_tuned_options  = false
 #sysctl_options = ["kernel.shmmni = 16384", "net.ipv4.tcp_tw_reuse = 1"]

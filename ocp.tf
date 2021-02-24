@@ -67,6 +67,7 @@ module "bastion" {
     jump_host                       = var.jump_host
     rhel_subscription_username      = var.rhel_subscription_username
     rhel_subscription_password      = var.rhel_subscription_password
+    ansible_repo_name               = var.ansible_repo_name
     storage_type                    = var.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
@@ -80,6 +81,7 @@ module "network" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
+    bootstrap_count                 = var.bootstrap["count"]
     master_count                    = var.master["count"]
     worker_count                    = var.worker["count"]
     network_type                    = var.network_type
@@ -100,6 +102,11 @@ module "nodes" {
     master_port_ids                 = module.network.master_port_ids
     worker_port_ids                 = module.network.worker_port_ids
     mount_etcd_ramdisk              = var.mount_etcd_ramdisk
+    rhel_username                   = var.rhel_username
+    private_key                     = local.private_key
+    ssh_agent                       = var.ssh_agent
+    connection_timeout              = var.connection_timeout
+    jump_host                       = var.jump_host
 }
 
 module "install" {

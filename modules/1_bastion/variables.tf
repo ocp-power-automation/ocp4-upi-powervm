@@ -46,6 +46,7 @@ variable "jump_host" {}
 
 variable "rhel_subscription_username" {}
 variable "rhel_subscription_password" {}
+variable "ansible_repo_name" {}
 
 variable "storage_type" {}
 variable "volume_size" {}

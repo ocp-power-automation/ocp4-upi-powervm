@@ -27,9 +27,10 @@ data "openstack_networking_subnet_v2" "subnet" {
 }
 
 resource "openstack_networking_port_v2" "bootstrap_port" {
-    name = "${var.cluster_id}-bootstrap-port"
-    network_id  = data.openstack_networking_network_v2.network.id
-    admin_state_up = "true"
+    count           = var.bootstrap_count
+    name            = "${var.cluster_id}-bootstrap-port"
+    network_id      = data.openstack_networking_network_v2.network.id
+    admin_state_up  = "true"
     binding {
        vnic_type = var.network_type == "SRIOV" ?  "direct" : "normal"
        profile   = var.network_type == "SRIOV" ?  local.sriov : null
