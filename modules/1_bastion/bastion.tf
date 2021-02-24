@@ -219,7 +219,6 @@ EOF
 }
 
 resource "null_resource" "enable_repos" {
-    count       = ( var.rhel_subscription_username == "" || var.rhel_subscription_username  == "<subscription-id>" ) && var.rhel_subscription_org == "" ? 0 : 1
     depends_on      = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register]
 
     connection {
