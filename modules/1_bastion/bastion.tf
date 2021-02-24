@@ -174,9 +174,6 @@ resource "null_resource" "bastion_register" {
     provisioner "remote-exec" {
         inline = [<<EOF
 
-# FIX for existing stale repos
-echo 'Moving all file from /etc/yum.repos.d/ to /etc/yum.repos.d.bak/'
-mkdir /etc/yum.repos.d.bak/ && mv /etc/yum.repos.d/* /etc/yum.repos.d.bak/
 # Give some more time to subscription-manager
 sudo subscription-manager config --server.server_timeout=600
 sudo subscription-manager clean
