@@ -16,7 +16,6 @@
 ## Download the Automation Code
 
 You'll need to use git to clone the deployment code when working off the master branch
-
 ```
 $ git clone https://github.com/ocp-power-automation/ocp4-upi-powervm.git
 $ cd ocp4-upi-powervm
