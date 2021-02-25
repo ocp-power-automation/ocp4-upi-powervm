@@ -201,14 +201,14 @@ $ scp -r -i data/id_rsa root@158.175.161.118:~/openstack-upi/auth/\* .
 OpenShift CLI `oc` can be downloaded from the following links. Use the one specific to your client system architecture.
 
 
-- [Mac OSX](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-mac.tar.gz)
-- [Linux (x86_64)](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz)
-- [Linux (ppc64le)](https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz)
-- [Windows](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-windows.zip)
+- [Mac OSX](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.7/openshift-client-mac.tar.gz)
+- [Linux (x86_64)](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.7/openshift-client-linux.tar.gz)
+- [Linux (ppc64le)](https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.7/openshift-client-linux.tar.gz)
+- [Windows](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.7/openshift-client-windows.zip)
 
 
 Download the specific file, extract it and place the binary in a directory that is on your `PATH`
-For more details check the following [link](https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html)
+For more details check the following [link](https://docs.openshift.com/container-platform/4.7/cli_reference/openshift_cli/getting-started-cli.html)
 
 The CLI login URL `oc_server_url` will be printed at the end of successful install.
 Alternatively you can retrieve it anytime by running `terraform output` from the install directory.
@@ -233,11 +233,11 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'
 
 $ oc get nodes
 NAME       STATUS   ROLES    AGE   VERSION
-master-0   Ready    master   13h   v1.18.3+b74c5ed
-master-1   Ready    master   13h   v1.18.3+b74c5ed
-master-2   Ready    master   13h   v1.18.3+b74c5ed
-worker-0   Ready    worker   13h   v1.18.3+b74c5ed
-worker-1   Ready    worker   13h   v1.18.3+b74c5ed
+master-0   Ready    master   13h   v1.20.0+ba45583
+master-1   Ready    master   13h   v1.20.0+ba45583
+master-2   Ready    master   13h   v1.20.0+ba45583
+worker-0   Ready    worker   13h   v1.20.0+ba45583
+worker-1   Ready    worker   13h   v1.20.0+ba45583
 ```
 
 >**Note:** The OpenShift command-line client `oc` is already configured on the bastion node with kubeconfig placed at `~/.kube/config`.

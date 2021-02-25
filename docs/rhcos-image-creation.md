@@ -7,7 +7,7 @@ Depending on your environment you can follow one of the options to create RHCOS 
 
 ## Option-1
 
-1. Download the RHCOS image from the following [link](https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/pre-release/latest/rhcos-openstack.ppc64le.qcow2.gz) on a system with public internet access.
+1. Download the RHCOS image from the following [link](https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.7/latest/rhcos-openstack.ppc64le.qcow2.gz) on a system with public internet access.
 You'll need a way to transfer this image to a RHEL VM that you'll create in the next step.
 2. Login to PowerVC and create a RHEL 8.x VM having an additional empty volume with minimum size of 120G. **Please make a note of the new volume name**.
 3. Login to the VM and execute the following steps
@@ -47,7 +47,7 @@ You'll need a way to transfer this image to a RHEL VM that you'll create in the 
 
 Creating and importing RHCOS OVA image
 
-1. Download the RHCOS image from the following [link](https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/pre-release/latest/rhcos-openstack.ppc64le.qcow2.gz) on a system with public internet access.
+1. Download the RHCOS image from the following [link](https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.7/latest/rhcos-openstack.ppc64le.qcow2.gz) on a system with public internet access.
 You'll need a way to transfer this image to a RHEL VM that you'll create in the next step.
 2. Login to PowerVC and create a RHEL 8.x VM
 3. Use the script https://github.com/ocp-power-automation/infra/blob/master/scripts/images/convert_qcow2_ova.py and
