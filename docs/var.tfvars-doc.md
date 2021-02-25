@@ -86,11 +86,11 @@ rhel_subscription_activationkey = "activation-key"
 ### OpenShift Installation Details
 
 These variables specify the URL for the OpenShift installer and client binaries.
-Change the URL to the specific pre-release version that you want to install on PowerVS.
-Reference link - `https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview`
+Change the URL to the specific 4.7.x version that you want to install.
+Reference link - `https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/`
 ```
-openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-install-linux.tar.gz"
-openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-client-linux.tar.gz"
+openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.7/openshift-install-linux.tar.gz"
+openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.7/openshift-client-linux.tar.gz"
 ```
 
 This variable specifies the OpenShift pull secret. This is available from the following link -  https://cloud.redhat.com/openshift/install/power/user-provisioned
@@ -161,7 +161,7 @@ This variable specifies the external DNS servers to forward DNS queries that can
 dns_forwarders              = "1.1.1.1; 9.9.9.9"
 ```
 
-List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes.
+List of [kernel arguments](https://docs.openshift.com/container-platform/4.7/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes.
 Note that this will be applied after the cluster is installed and all the nodes are in `Ready` status.
 ```
 rhcos_kernel_options        = []

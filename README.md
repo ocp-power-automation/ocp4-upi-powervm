@@ -20,7 +20,7 @@ This project also leverages the same ansible playbook internally for OCP deploym
         For bugs/enhancement requests etc. please open a GitHub [issue](https://github.com/ocp-power-automation/ocp4-upi-powervm/issues)
 
 !!! Warning
-          **The [main](https://github.com/ocp-power-automation/ocp4-upi-powervm/tree/master) branch must be used with latest OCP pre-release versions only. For stable releases please checkout specific release branches -{[release-4.5](https://github.com/ocp-power-automation/ocp4-upi-powervm/tree/release-4.5), [release-4.6](https://github.com/ocp-power-automation/ocp4-upi-powervm/tree/release-4.6) ...} and follow the docs in the specific release branches.**
+        **This branch must be used with OCP 4.7.x versions only**
 
 ## Automation Host Prerequisites
 
