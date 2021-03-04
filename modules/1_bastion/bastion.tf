@@ -55,7 +55,7 @@ resource "openstack_compute_instance_v2" "bastion" {
         name        = var.network_name
         fixed_ip_v4 = local.fixed_ip_v4
     }
-    availability_zone = var.openstack_availability_zone
+    availability_zone = lookup(var.bastion, "availability_zone", var.openstack_availability_zone)
 }
 
 locals {
