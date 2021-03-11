@@ -62,3 +62,5 @@ variable "ansible_extra_options" {}
 
 variable "chrony_config" { default = true }
 variable "chrony_config_servers" {}
+
+variable "pull_secret" {}
