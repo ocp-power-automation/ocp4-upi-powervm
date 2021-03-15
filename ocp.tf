@@ -109,6 +109,7 @@ module "helpernode" {
     ansible_extra_options           = var.ansible_extra_options
     chrony_config                   = var.chrony_config
     chrony_config_servers           = var.chrony_config_servers
+    pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
 }
 
 module "nodes" {
