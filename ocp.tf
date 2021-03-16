@@ -70,6 +70,7 @@ module "bastion" {
 module "network" {
     source                          = "./modules/2_network"
 
+    bastion_ip                      = module.bastion.bastion_ip
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
     bootstrap_count                 = var.bootstrap["count"]
