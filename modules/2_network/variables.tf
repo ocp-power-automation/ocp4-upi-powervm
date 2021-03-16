@@ -22,6 +22,8 @@ variable "cluster_id" {}
 
 variable "network_name" {}
 
+variable "bastion_ip" {}
+
 variable "bootstrap_count" {}
 variable "master_count" {}
 variable "worker_count" {}
