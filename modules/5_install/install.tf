@@ -140,7 +140,7 @@ resource "null_resource" "config" {
         ]
     }
     provisioner "file" {
-        source      = "data/pull-secret.txt"
+        content     = var.pull_secret
         destination = "~/.openshift/pull-secret"
     }
     provisioner "file" {
