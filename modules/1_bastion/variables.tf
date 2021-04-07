@@ -25,8 +25,8 @@ variable "cluster_id" {
   default   = "test-ocp"
 }
 variable "bastion" {}
+variable "bastion_port_ids" {}
 
-variable "network_name" {}
 variable "scg_id" {}
 variable "openstack_availability_zone" {}
 

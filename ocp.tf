@@ -37,7 +37,7 @@ locals {
     # Generates cluster_id as combination of cluster_id_prefix + (random_id or user-defined cluster_id)
     cluster_id      = var.cluster_id == "" ? random_id.label[0].hex : (var.cluster_id_prefix == ""? var.cluster_id : "${var.cluster_id_prefix}-${var.cluster_id}")
     storage_type    = lookup(var.bastion, "count", 1) > 1 ? "none" : var.storage_type
-    bastion_ip      = module.bastion.bastion_ip[0]
+    bastion_ip      = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
 }
 
 module "bastion" {
@@ -46,7 +46,7 @@ module "bastion" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     bastion                         = var.bastion
-    network_name                    = var.network_name
+    bastion_port_ids                = module.network.bastion_port_ids
     scg_id                          = var.scg_id
     openstack_availability_zone     = var.openstack_availability_zone
     rhel_username                   = var.rhel_username
@@ -72,9 +72,10 @@ module "bastion" {
 module "network" {
     source                          = "./modules/2_network"
 
-    bastion_ip                      = local.bastion_ip
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
+    fixed_ip_v4                     = lookup(var.bastion, "fixed_ip_v4", "")
+    bastion_count                   = lookup(var.bastion, "count", 1)
     bootstrap_count                 = var.bootstrap["count"]
     master_count                    = var.master["count"]
     worker_count                    = var.worker["count"]

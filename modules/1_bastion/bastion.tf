@@ -58,14 +58,12 @@ resource "openstack_compute_instance_v2" "bastion" {
     flavor_id       = var.scg_id == "" ? data.openstack_compute_flavor_v2.bastion.id : openstack_compute_flavor_v2.bastion_scg[0].id
     key_pair        = openstack_compute_keypair_v2.key-pair.0.name
     network {
-        name        = var.network_name
-        fixed_ip_v4 = local.fixed_ip_v4
+        port    = var.bastion_port_ids[count.index]
     }
     availability_zone = lookup(var.bastion, "availability_zone", var.openstack_availability_zone)
 }
 
 locals {
-    fixed_ip_v4     = lookup(var.bastion, "fixed_ip_v4", null)
     proxy = {
         server      = lookup(var.proxy, "server", ""),
         port        = lookup(var.proxy, "port", "3128"),
