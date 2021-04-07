@@ -35,7 +35,9 @@ resource "random_id" "label" {
 
 locals {
     # Generates cluster_id as combination of cluster_id_prefix + (random_id or user-defined cluster_id)
-    cluster_id  = var.cluster_id == "" ? random_id.label[0].hex : (var.cluster_id_prefix == ""? var.cluster_id : "${var.cluster_id_prefix}-${var.cluster_id}")
+    cluster_id      = var.cluster_id == "" ? random_id.label[0].hex : (var.cluster_id_prefix == ""? var.cluster_id : "${var.cluster_id_prefix}-${var.cluster_id}")
+    storage_type    = lookup(var.bastion, "count", 1) > 1 ? "none" : var.storage_type
+    bastion_ip      = module.bastion.bastion_ip[0]
 }
 
 module "bastion" {
@@ -60,7 +62,7 @@ module "bastion" {
     rhel_subscription_org           = var.rhel_subscription_org
     rhel_subscription_activationkey = var.rhel_subscription_activationkey
     ansible_repo_name               = var.ansible_repo_name
-    storage_type                    = var.storage_type
+    storage_type                    = local.storage_type
     volume_size                     = var.volume_size
     volume_storage_template         = var.volume_storage_template
     setup_squid_proxy               = var.setup_squid_proxy
@@ -70,7 +72,7 @@ module "bastion" {
 module "network" {
     source                          = "./modules/2_network"
 
-    bastion_ip                      = module.bastion.bastion_ip
+    bastion_ip                      = local.bastion_ip
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
     bootstrap_count                 = var.bootstrap["count"]
@@ -88,7 +90,7 @@ module "helpernode" {
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
     allocation_pools                = module.network.allocation_pools
-    bastion_ip                      = module.bastion.bastion_ip
+    bastion_ip                      = local.bastion_ip
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
@@ -116,7 +118,7 @@ module "helpernode" {
 module "nodes" {
     source                          = "./modules/4_nodes"
 
-    bastion_ip                      = module.bastion.bastion_ip
+    bastion_ip                      = local.bastion_ip
     cluster_id                      = local.cluster_id
     bootstrap                       = var.bootstrap
     master                          = var.master
@@ -141,7 +143,7 @@ module "install" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     cidr                            = module.network.cidr
-    bastion_ip                      = module.bastion.bastion_ip
+    bastion_ip                      = local.bastion_ip
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
@@ -152,7 +154,7 @@ module "install" {
     worker_ips                      = module.nodes.worker_ips
     public_key                      = local.public_key
     pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
-    storage_type                    = var.storage_type
+    storage_type                    = local.storage_type
     release_image_override          = var.release_image_override
     enable_local_registry           = var.enable_local_registry
     local_registry_image            = var.local_registry_image

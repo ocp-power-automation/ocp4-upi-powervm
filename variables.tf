@@ -61,8 +61,8 @@ variable "openstack_availability_zone" {
 ################################################################
 
 variable "bastion" {
-    # only one node is supported
     default = {
+        count           = 1
         instance_type   = "m1.xlarge"
         image_id        = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"
         # optional availability_zone

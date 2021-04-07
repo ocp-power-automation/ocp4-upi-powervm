@@ -18,6 +18,10 @@
 #
 ################################################################
 
+locals {
+    bastion_count   = lookup(var.bastion, "count", 1)
+}
+
 resource "openstack_compute_keypair_v2" "key-pair" {
     count       = var.create_keypair
     name        = var.keypair_name
@@ -47,7 +51,9 @@ data "openstack_compute_flavor_v2" "bastion" {
 }
 
 resource "openstack_compute_instance_v2" "bastion" {
-    name            = "${var.cluster_id}-bastion"
+    count           = local.bastion_count
+
+    name            = "${var.cluster_id}-bastion-${count.index}"
     image_id        = var.bastion["image_id"]
     flavor_id       = var.scg_id == "" ? data.openstack_compute_flavor_v2.bastion.id : openstack_compute_flavor_v2.bastion_scg[0].id
     key_pair        = openstack_compute_keypair_v2.key-pair.0.name
@@ -71,10 +77,12 @@ locals {
 }
 
 resource "null_resource" "bastion_init" {
+    count           = local.bastion_count
+
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
@@ -97,8 +105,8 @@ resource "null_resource" "bastion_init" {
         inline = [
             "sudo chmod 600 $HOME/.ssh/id_rsa*",
             "sudo sed -i.bak -e 's/^ - set_hostname/# - set_hostname/' -e 's/^ - update_hostname/# - update_hostname/' /etc/cloud/cloud.cfg",
-            "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion.${var.cluster_domain}",
-            "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
+            "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion-${count.index}.${var.cluster_domain}",
+            "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion-${count.index}.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
             "sudo hostname -F /etc/hostname",
             "echo 'vm.max_map_count = 262144' | sudo tee --append /etc/sysctl.conf > /dev/null",
         ]
@@ -107,11 +115,11 @@ resource "null_resource" "bastion_init" {
 
 resource "null_resource" "setup_proxy_info" {
     depends_on  = [null_resource.bastion_init]
-    count       = !var.setup_squid_proxy && local.proxy.server != "" ? 1 : 0
+    count       = !var.setup_squid_proxy && local.proxy.server != "" ? local.bastion_count : 0
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
@@ -153,7 +161,7 @@ EOF
 
 resource "null_resource" "bastion_register" {
     triggers = {
-        bastion_ip      = openstack_compute_instance_v2.bastion.access_ip_v4
+        bastion_ip      = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         rhel_username   = var.rhel_username
         private_key     = var.private_key
         ssh_agent       = var.ssh_agent
@@ -161,7 +169,7 @@ resource "null_resource" "bastion_register" {
         connection_timeout = var.connection_timeout
     }
     depends_on  = [null_resource.bastion_init, null_resource.setup_proxy_info]
-    count       = ( var.rhel_subscription_username == "" || var.rhel_subscription_username  == "<subscription-id>" ) && var.rhel_subscription_org == "" ? 0 : 1
+    count       = ( var.rhel_subscription_username == "" || var.rhel_subscription_username  == "<subscription-id>" ) && var.rhel_subscription_org == "" ? 0 : local.bastion_count
     connection {
         type        = "ssh"
         user        = self.triggers.rhel_username
@@ -216,12 +224,13 @@ EOF
 }
 
 resource "null_resource" "enable_repos" {
+    count           = local.bastion_count
     depends_on      = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register]
 
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
@@ -241,11 +250,13 @@ EOF
 }
 
 resource "null_resource" "bastion_packages" {
-    depends_on = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register, null_resource.enable_repos]
+    count           = local.bastion_count
+    depends_on      = [null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register, null_resource.enable_repos]
+
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
@@ -275,6 +286,7 @@ resource "null_resource" "bastion_packages" {
 
 resource "openstack_blockstorage_volume_v2" "storage_volume" {
     count       = var.storage_type == "nfs" ? 1 : 0
+
     name        = "${var.cluster_id}-${var.storage_type}-storage-vol"
     size        = var.volume_size
     volume_type = var.volume_storage_template
@@ -282,8 +294,9 @@ resource "openstack_blockstorage_volume_v2" "storage_volume" {
 
 resource "openstack_compute_volume_attach_v2" "storage_v_attach" {
     count       = var.storage_type == "nfs" ? 1 : 0
+
     volume_id   = openstack_blockstorage_volume_v2.storage_volume[count.index].id
-    instance_id = openstack_compute_instance_v2.bastion.id
+    instance_id = openstack_compute_instance_v2.bastion[count.index].id
 }
 
 locals {
@@ -295,12 +308,13 @@ locals {
 }
 
 resource "null_resource" "setup_nfs_disk" {
-    depends_on  = [openstack_compute_volume_attach_v2.storage_v_attach, null_resource.bastion_packages]
     count       = var.storage_type == "nfs" ? 1 : 0
+    depends_on  = [openstack_compute_volume_attach_v2.storage_v_attach, null_resource.bastion_packages]
+
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = openstack_compute_instance_v2.bastion.access_ip_v4
+        host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
