@@ -66,6 +66,9 @@ locals {
         client_tarball           = var.openshift_client_tarball
         install_tarball          = var.openshift_install_tarball
     }
+    helpernode_inventory = {
+        bastion_ip  = var.bastion_ip
+    }
 }
 
 resource "null_resource" "config" {
@@ -95,6 +98,10 @@ resource "null_resource" "config" {
         ]
     }
     provisioner "file" {
+        content     = templatefile("${path.module}/templates/helpernode_inventory", local.helpernode_inventory)
+        destination = "$HOME/ocp4-helpernode/inventory"
+    }
+    provisioner "file" {
         content     = var.pull_secret
         destination = "$HOME/.openshift/pull-secret"
     }
@@ -105,7 +112,7 @@ resource "null_resource" "config" {
     provisioner "remote-exec" {
         inline = [
             "echo 'Running ocp4-helpernode playbook...'",
-            "cd ocp4-helpernode && ansible-playbook -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
+            "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
         ]
     }
 }

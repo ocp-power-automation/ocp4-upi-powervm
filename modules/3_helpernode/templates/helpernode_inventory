@@ -1,0 +1,2 @@
+[vmhost]
+${bastion_ip} ansible_connection=ssh ansible_user=root
