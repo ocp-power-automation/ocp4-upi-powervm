@@ -19,8 +19,8 @@
 ################################################################
 
 locals {
-
-    cluster_domain  = var.cluster_domain == "nip.io" || var.cluster_domain == "xip.io" || var.cluster_domain == "sslip.io" ? "${var.bastion_ip}.${var.cluster_domain}" : var.cluster_domain
+    wildcard_dns = ["nip.io", "xip.io", "sslip.io"]
+    cluster_domain = contains(local.wildcard_dns, var.cluster_domain) ? "${var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]}.${var.cluster_domain}" : var.cluster_domain
 
     local_registry  = {
         enable_local_registry   = var.enable_local_registry
@@ -32,7 +32,7 @@ locals {
     helpernode_vars = {
         cluster_domain  = local.cluster_domain
         cluster_id      = var.cluster_id
-        bastion_ip      = var.bastion_ip
+        bastion_ip      = var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]
         forwarders      = var.dns_forwarders
         gateway_ip      = var.gateway_ip
         netmask         = cidrnetmask(var.cidr)
@@ -81,7 +81,7 @@ resource "null_resource" "config" {
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = var.bastion_ip
+        host        = var.bastion_ip[0]
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"

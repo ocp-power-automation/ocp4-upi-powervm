@@ -33,6 +33,7 @@ variable "gateway_ip" {}
 variable "cidr" {}
 variable "allocation_pools" {}
 
+variable "bastion_vip" {}
 variable "bastion_ip" {}
 variable "rhel_username" {}
 variable "private_key" {}

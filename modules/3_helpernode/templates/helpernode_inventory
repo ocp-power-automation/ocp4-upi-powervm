@@ -1,2 +1,4 @@
 [vmhost]
-${bastion_ip} ansible_connection=ssh ansible_user=root
+%{ for ip in bastion_ip ~}
+${ip} ansible_connection=ssh ansible_user=root
+%{ endfor ~}

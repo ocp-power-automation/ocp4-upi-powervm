@@ -37,7 +37,6 @@ locals {
     # Generates cluster_id as combination of cluster_id_prefix + (random_id or user-defined cluster_id)
     cluster_id      = var.cluster_id == "" ? random_id.label[0].hex : (var.cluster_id_prefix == ""? var.cluster_id : "${var.cluster_id_prefix}-${var.cluster_id}")
     storage_type    = lookup(var.bastion, "count", 1) > 1 ? "none" : var.storage_type
-    bastion_ip      = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
 }
 
 module "bastion" {
@@ -91,7 +90,8 @@ module "helpernode" {
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
     allocation_pools                = module.network.allocation_pools
-    bastion_ip                      = local.bastion_ip
+    bastion_vip                     = module.network.bastion_vip
+    bastion_ip                      = module.bastion.bastion_ip
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent
@@ -119,7 +119,7 @@ module "helpernode" {
 module "nodes" {
     source                          = "./modules/4_nodes"
 
-    bastion_ip                      = local.bastion_ip
+    bastion_ip                      = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
     cluster_id                      = local.cluster_id
     bootstrap                       = var.bootstrap
     master                          = var.master
@@ -144,7 +144,8 @@ module "install" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     cidr                            = module.network.cidr
-    bastion_ip                      = local.bastion_ip
+    bastion_vip                     = module.network.bastion_vip
+    bastion_ip                      = module.bastion.bastion_ip
     rhel_username                   = var.rhel_username
     private_key                     = local.private_key
     ssh_agent                       = var.ssh_agent

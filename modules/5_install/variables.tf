@@ -1,4 +1,4 @@
-################################################################
+##################v##############################################
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ variable "cluster_id" {
 
 variable "cidr" {}
 
+variable "bastion_vip" {}
 variable "bastion_ip" {}
 variable "rhel_username" {}
 variable "private_key" {}
