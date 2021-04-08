@@ -158,6 +158,8 @@ EOF
 }
 
 resource "null_resource" "bastion_register" {
+    count       = ( var.rhel_subscription_username == "" || var.rhel_subscription_username  == "<subscription-id>" ) && var.rhel_subscription_org == "" ? 0 : local.bastion_count
+    depends_on  = [null_resource.bastion_init, null_resource.setup_proxy_info]
     triggers = {
         bastion_ip      = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
         rhel_username   = var.rhel_username
@@ -166,8 +168,7 @@ resource "null_resource" "bastion_register" {
         jump_host       = var.jump_host
         connection_timeout = var.connection_timeout
     }
-    depends_on  = [null_resource.bastion_init, null_resource.setup_proxy_info]
-    count       = ( var.rhel_subscription_username == "" || var.rhel_subscription_username  == "<subscription-id>" ) && var.rhel_subscription_org == "" ? 0 : local.bastion_count
+
     connection {
         type        = "ssh"
         user        = self.triggers.rhel_username
@@ -177,6 +178,7 @@ resource "null_resource" "bastion_register" {
         timeout     = "${self.triggers.connection_timeout}m"
         bastion_host = self.triggers.jump_host
     }
+
     provisioner "remote-exec" {
         inline = [<<EOF
 

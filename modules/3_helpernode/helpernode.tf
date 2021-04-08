@@ -33,6 +33,10 @@ locals {
         cluster_domain  = local.cluster_domain
         cluster_id      = var.cluster_id
         bastion_ip      = var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]
+        bastion_name    = var.bastion_vip != "" ? "${var.cluster_id}-bastion" : "${var.cluster_id}-bastion-0"
+        isHA            = var.bastion_vip != ""
+        bastion_master_ip   = var.bastion_ip[0]
+        bastion_backup_ip   = length(var.bastion_ip) > 1 ? slice(var.bastion_ip, 1, length(var.bastion_ip)) : []
         forwarders      = var.dns_forwarders
         gateway_ip      = var.gateway_ip
         netmask         = cidrnetmask(var.cidr)
@@ -111,6 +115,7 @@ resource "null_resource" "config" {
     }
     provisioner "remote-exec" {
         inline = [
+            "sed -i \"/^helper:.*/a \\ \\ networkifacename: $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}')\" ocp4-helpernode/helpernode_vars.yaml",
             "echo 'Running ocp4-helpernode playbook...'",
             "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
         ]

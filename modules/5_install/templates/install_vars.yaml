@@ -30,7 +30,7 @@ chronyconfig:
   enabled: true
   allow:
     - ${chrony_allow_range}
-%{ if chrony_config_servers != [] ~}
+%{ if length(chrony_config_servers) > 0 ~}
   content:
 %{ endif ~}
 %{ for item in chrony_config_servers ~}
@@ -48,5 +48,9 @@ no_proxy: "${no_proxy}"
 
 # This flag when true/yes will allow sharing same network for multiple dhcp servers
 dhcp_shared_network: true
+
+%{ if bastion_vip != "" }
+bastion_vip: "${bastion_vip}"
+%{ endif ~}
 
 cni_network_provider: "${cni_network_provider}"

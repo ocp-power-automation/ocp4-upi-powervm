@@ -1,8 +1,22 @@
 ---
 disk: vda
 helper:
-  name: "${cluster_id}-bastion"
+  name: "${bastion_name}"
   ipaddr: "${bastion_ip}"
+%{ if isHA }
+high_availability:
+  helpernodes:
+    - name: "${cluster_id}-bastion-0"
+      ipaddr: "${bastion_master_ip}"
+      state: MASTER
+      priority: 100
+%{ for idx,b in bastion_backup_ip ~}
+    - name: "${cluster_id}-bastion-${idx + 1}"
+      ipaddr: "${b}"
+      state: BACKUP
+      priority: 90
+%{ endfor ~}
+%{ endif }
 dns:
   domain: "${cluster_domain}"
   clusterid: "${cluster_id}"

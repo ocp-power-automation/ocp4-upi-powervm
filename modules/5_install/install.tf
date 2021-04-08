@@ -24,7 +24,7 @@ locals {
 
     ocp_release_repo    = "ocp4/openshift4"
 
-    inventory = {
+    install_inventory = {
         bastion_hosts   = [for ix in range(length(var.bastion_ip)) : "${var.cluster_id}-bastion-${ix}"]
         bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
         master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
@@ -40,6 +40,7 @@ locals {
     local_registry_ocp_image = "registry.${var.cluster_id}.${local.cluster_domain}:5000/${local.ocp_release_repo}:${var.ocp_release_tag}"
 
     install_vars = {
+        bastion_vip             = var.bastion_vip
         cluster_id              = var.cluster_id
         cluster_domain          = local.cluster_domain
         pull_secret             = var.pull_secret
@@ -96,7 +97,7 @@ resource "null_resource" "install" {
         ]
     }
     provisioner "file" {
-        content     = templatefile("${path.module}/templates/inventory", local.inventory)
+        content     = templatefile("${path.module}/templates/install_inventory", local.install_inventory)
         destination = "$HOME/ocp4-playbooks/inventory"
     }
     provisioner "file" {
