@@ -27,6 +27,7 @@ data "openstack_networking_subnet_v2" "subnet" {
 }
 
 resource "openstack_networking_port_v2" "bootstrap_port" {
+    depends_on      = [var.bastion_ip]
     count           = var.bootstrap_count
     name            = "${var.cluster_id}-bootstrap-port"
     network_id      = data.openstack_networking_network_v2.network.id
@@ -41,6 +42,7 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
 }
 
 resource "openstack_networking_port_v2" "master_port" {
+    depends_on      = [var.bastion_ip]
     count           = var.master_count
     name            = "${var.cluster_id}-master-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
@@ -55,6 +57,7 @@ resource "openstack_networking_port_v2" "master_port" {
 }
 
 resource "openstack_networking_port_v2" "worker_port" {
+    depends_on      = [var.bastion_ip]
     count           = var.worker_count
     name            = "${var.cluster_id}-worker-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
