@@ -17,16 +17,18 @@ You'll need to create [compute templates](https://www.ibm.com/support/knowledgec
 
 Following are the recommended LPAR configs that you can use when creating the compute templates for different type of nodes
 
-- Bootstrap, Master - 2 vCPUs, 16GB RAM, 120 GB Disk.
+- Bootstrap - 2 vCPUs, 16GB RAM, 120 GB Disk.
+
+- Master - 2 vCPUs, 32GB RAM, 120 GB Disk.
 
   PowerVM LPARs by default uses SMT=8. So with 2vCPUs, the number of logical CPUs as seen by the Operating System will be **16** (`2 vCPUs x 8 SMT`)
 
    **_This config is suitable for majority of the scenarios_**
 
-- Worker - 2 vCPUs, 16GB RAM, 120 GB Disk
+- Worker - 2 vCPUs, 32GB RAM, 120 GB Disk
 
    **_Increase worker vCPUs, RAM and Disk based on application requirements_**
 
 - Bastion - 2vCPUs, 16GB RAM, 200 GB Disk
 
-   **_Increase worker vCPUs, RAM and Disk based on application requirements_**
+   **_Increase bastion vCPUs, RAM and Disk based on application requirements_**
