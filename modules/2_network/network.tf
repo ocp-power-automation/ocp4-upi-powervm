@@ -26,8 +26,47 @@ data "openstack_networking_subnet_v2" "subnet" {
     network_id  = data.openstack_networking_network_v2.network.id
 }
 
+resource "openstack_networking_port_v2" "bastion_vip" {
+    count           = var.bastion_count > 1 ? 1 : 0
+
+    name            = "${var.cluster_id}-bastion-vip"
+    network_id      = data.openstack_networking_network_v2.network.id
+    admin_state_up  = "true"
+    fixed_ip {
+        subnet_id   = data.openstack_networking_subnet_v2.subnet.id
+        ip_address  = var.fixed_ip_v4
+    }
+    dynamic "binding" {
+        for_each = local.bindings
+        content {
+            vnic_type = binding.value["vnic_type"]
+            profile   = binding.value["profile"]
+        }
+    }
+}
+
+resource "openstack_networking_port_v2" "bastion_port" {
+    count           = var.bastion_count
+    depends_on      = [openstack_networking_port_v2.bastion_vip]
+
+    name            = "${var.cluster_id}-bastion-port-${count.index}"
+    network_id      = data.openstack_networking_network_v2.network.id
+    admin_state_up  = "true"
+    fixed_ip {
+        subnet_id   = data.openstack_networking_subnet_v2.subnet.id
+        ip_address  = var.bastion_count == 1 ? var.fixed_ip_v4 : ""
+    }
+    dynamic "binding" {
+        for_each = local.bindings
+        content {
+            vnic_type = binding.value["vnic_type"]
+            profile   = binding.value["profile"]
+        }
+    }
+}
+
 resource "openstack_networking_port_v2" "bootstrap_port" {
-    depends_on      = [var.bastion_ip]
+    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip]
     count           = var.bootstrap_count
     name            = "${var.cluster_id}-bootstrap-port"
     network_id      = data.openstack_networking_network_v2.network.id
@@ -42,7 +81,7 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
 }
 
 resource "openstack_networking_port_v2" "master_port" {
-    depends_on      = [var.bastion_ip]
+    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip]
     count           = var.master_count
     name            = "${var.cluster_id}-master-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
@@ -57,7 +96,7 @@ resource "openstack_networking_port_v2" "master_port" {
 }
 
 resource "openstack_networking_port_v2" "worker_port" {
-    depends_on      = [var.bastion_ip]
+    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip]
     count           = var.worker_count
     name            = "${var.cluster_id}-worker-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id

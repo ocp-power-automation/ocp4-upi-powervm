@@ -10,12 +10,12 @@ network_name                = "<network_name>"
 
 ### OpenShift Cluster Details
 
-bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>"}
+bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   "count"   = 1}
 bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 1}
 master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  "count"   = 3}
 worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  "count"   = 2}
 # With all optional attributes
-# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",  availability_zone = "<availability zone>", fixed_ip_v4 = "<IPv4 address>"}
+# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   availability_zone = "<availability zone>",  "count"   = 1, fixed_ip_v4 = "<IPv4 address>"}
 # bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 1}
 # master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 3}
 # worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2}

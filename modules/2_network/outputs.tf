@@ -18,6 +18,14 @@
 #
 ################################################################
 
+output "bastion_port_ids" {
+    value = openstack_networking_port_v2.bastion_port.*.id
+}
+
+output "bastion_vip" {
+    value = join("", flatten(openstack_networking_port_v2.bastion_vip.*.all_fixed_ips))
+}
+
 output "bootstrap_port_id" {
     value = join("", openstack_networking_port_v2.bootstrap_port.*.id)
 }

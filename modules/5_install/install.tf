@@ -19,12 +19,13 @@
 ################################################################
 
 locals {
-    cluster_domain  = var.cluster_domain == "nip.io" || var.cluster_domain == "xip.io" || var.cluster_domain == "sslip.io" ? "${var.bastion_ip}.${var.cluster_domain}" : var.cluster_domain
+    wildcard_dns = ["nip.io", "xip.io", "sslip.io"]
+    cluster_domain = contains(local.wildcard_dns, var.cluster_domain) ? "${var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]}.${var.cluster_domain}" : var.cluster_domain
 
     ocp_release_repo    = "ocp4/openshift4"
 
-    inventory = {
-        bastion_host    = "${var.cluster_id}-bastion"
+    install_inventory = {
+        bastion_hosts   = [for ix in range(length(var.bastion_ip)) : "${var.cluster_id}-bastion-${ix}"]
         bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
         master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
         worker_hosts    = [for ix in range(length(var.worker_ips)) : "worker-${ix}"]
@@ -39,6 +40,7 @@ locals {
     local_registry_ocp_image = "registry.${var.cluster_id}.${local.cluster_domain}:5000/${local.ocp_release_repo}:${var.ocp_release_tag}"
 
     install_vars = {
+        bastion_vip             = var.bastion_vip
         cluster_id              = var.cluster_id
         cluster_domain          = local.cluster_domain
         pull_secret             = var.pull_secret
@@ -79,7 +81,7 @@ resource "null_resource" "install" {
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = var.bastion_ip
+        host        = var.bastion_ip[0]
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
@@ -95,7 +97,7 @@ resource "null_resource" "install" {
         ]
     }
     provisioner "file" {
-        content     = templatefile("${path.module}/templates/inventory", local.inventory)
+        content     = templatefile("${path.module}/templates/install_inventory", local.install_inventory)
         destination = "$HOME/ocp4-playbooks/inventory"
     }
     provisioner "file" {
@@ -117,7 +119,7 @@ resource "null_resource" "upgrade" {
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = var.bastion_ip
+        host        = var.bastion_ip[0]
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"

@@ -1,5 +1,7 @@
 [bastion]
-${bastion_host} ansible_connection=ssh ansible_user=root
+%{ for bastion in bastion_hosts ~}
+${bastion} ansible_connection=ssh ansible_user=root
+%{ endfor ~}
 
 %{ if bootstrap_host != "" ~}
 [bootstrap]

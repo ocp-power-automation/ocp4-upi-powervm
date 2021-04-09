@@ -19,8 +19,8 @@
 ################################################################
 
 locals {
-
-    cluster_domain  = var.cluster_domain == "nip.io" || var.cluster_domain == "xip.io" || var.cluster_domain == "sslip.io" ? "${var.bastion_ip}.${var.cluster_domain}" : var.cluster_domain
+    wildcard_dns = ["nip.io", "xip.io", "sslip.io"]
+    cluster_domain = contains(local.wildcard_dns, var.cluster_domain) ? "${var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]}.${var.cluster_domain}" : var.cluster_domain
 
     local_registry  = {
         enable_local_registry   = var.enable_local_registry
@@ -32,7 +32,11 @@ locals {
     helpernode_vars = {
         cluster_domain  = local.cluster_domain
         cluster_id      = var.cluster_id
-        bastion_ip      = var.bastion_ip
+        bastion_ip      = var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]
+        bastion_name    = var.bastion_vip != "" ? "${var.cluster_id}-bastion" : "${var.cluster_id}-bastion-0"
+        isHA            = var.bastion_vip != ""
+        bastion_master_ip   = var.bastion_ip[0]
+        bastion_backup_ip   = length(var.bastion_ip) > 1 ? slice(var.bastion_ip, 1, length(var.bastion_ip)) : []
         forwarders      = var.dns_forwarders
         gateway_ip      = var.gateway_ip
         netmask         = cidrnetmask(var.cidr)
@@ -66,6 +70,9 @@ locals {
         client_tarball           = var.openshift_client_tarball
         install_tarball          = var.openshift_install_tarball
     }
+    helpernode_inventory = {
+        bastion_ip  = var.bastion_ip
+    }
 }
 
 resource "null_resource" "config" {
@@ -78,7 +85,7 @@ resource "null_resource" "config" {
     connection {
         type        = "ssh"
         user        = var.rhel_username
-        host        = var.bastion_ip
+        host        = var.bastion_ip[0]
         private_key = var.private_key
         agent       = var.ssh_agent
         timeout     = "${var.connection_timeout}m"
@@ -95,6 +102,10 @@ resource "null_resource" "config" {
         ]
     }
     provisioner "file" {
+        content     = templatefile("${path.module}/templates/helpernode_inventory", local.helpernode_inventory)
+        destination = "$HOME/ocp4-helpernode/inventory"
+    }
+    provisioner "file" {
         content     = var.pull_secret
         destination = "$HOME/.openshift/pull-secret"
     }
@@ -104,8 +115,9 @@ resource "null_resource" "config" {
     }
     provisioner "remote-exec" {
         inline = [
+            "sed -i \"/^helper:.*/a \\ \\ networkifacename: $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}')\" ocp4-helpernode/helpernode_vars.yaml",
             "echo 'Running ocp4-helpernode playbook...'",
-            "cd ocp4-helpernode && ansible-playbook -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
+            "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
         ]
     }
 }

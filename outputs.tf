@@ -23,11 +23,15 @@ output "cluster_id" {
 }
 
 output "bastion_ip" {
-    value = module.bastion.bastion_ip
+    value = join(", ", module.bastion.bastion_ip)
+}
+
+output "bastion_vip" {
+    value = module.network.bastion_vip == "" ? null : module.network.bastion_vip
 }
 
 output "bastion_ssh_command" {
-    value = "ssh ${var.rhel_username}@${module.bastion.bastion_ip}"
+    value = "ssh ${var.rhel_username}@${module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip}"
 }
 
 output "bootstrap_ip" {
@@ -45,7 +49,7 @@ output "worker_ips" {
 output "etc_hosts_entries" {
     value = var.cluster_domain == "nip.io" || var.cluster_domain == "xip.io" || var.cluster_domain == "sslip.io" ? "" : <<-EOF
 
-${module.bastion.bastion_ip} api.${local.cluster_id}.${var.cluster_domain} console-openshift-console.apps.${local.cluster_id}.${var.cluster_domain} integrated-oauth-server-openshift-authentication.apps.${local.cluster_id}.${var.cluster_domain} oauth-openshift.apps.${local.cluster_id}.${var.cluster_domain} prometheus-k8s-openshift-monitoring.apps.${local.cluster_id}.${var.cluster_domain} grafana-openshift-monitoring.apps.${local.cluster_id}.${var.cluster_domain} example.apps.${local.cluster_id}.${var.cluster_domain}
+${module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip} api.${local.cluster_id}.${var.cluster_domain} console-openshift-console.apps.${local.cluster_id}.${var.cluster_domain} integrated-oauth-server-openshift-authentication.apps.${local.cluster_id}.${var.cluster_domain} oauth-openshift.apps.${local.cluster_id}.${var.cluster_domain} prometheus-k8s-openshift-monitoring.apps.${local.cluster_id}.${var.cluster_domain} grafana-openshift-monitoring.apps.${local.cluster_id}.${var.cluster_domain} example.apps.${local.cluster_id}.${var.cluster_domain}
 EOF
 }
 
