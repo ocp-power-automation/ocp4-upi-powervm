@@ -80,6 +80,8 @@ variable "bootstrap" {
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
         # optional availability_zone
         # availability_zone = ""
+        # optional fixed IPs
+        # fixed_ips = []
     }
 }
 
@@ -91,6 +93,8 @@ variable "master" {
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
         # optional availability_zone
         # availability_zone = ""
+        # optional fixed IPs
+        # fixed_ips = []
     }
 }
 
@@ -102,6 +106,8 @@ variable "worker" {
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
         # optional availability_zone
         # availability_zone = ""
+        # optional fixed IPs
+        # fixed_ips = []
     }
 }
 
@@ -298,6 +304,16 @@ variable "cluster_id_prefix" {
 # Length cannot exceed 14 characters when combined with cluster_id_prefix
 variable "cluster_id" {
     default   = ""
+}
+
+variable "lb_ipaddr" {
+    description = "Define the preconfigured external Load Balancer"
+    default = ""    
+}
+
+variable "ext_dns" {
+    description = "Define the preconfigured external DNS and Load Balancer"
+    default = ""
 }
 
 variable "dns_forwarders" {

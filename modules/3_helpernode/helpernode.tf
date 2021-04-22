@@ -38,6 +38,8 @@ locals {
         bastion_master_ip   = var.bastion_ip[0]
         bastion_backup_ip   = length(var.bastion_ip) > 1 ? slice(var.bastion_ip, 1, length(var.bastion_ip)) : []
         forwarders      = var.dns_forwarders
+        lb_ipaddr       = var.lb_ipaddr
+        ext_dns         = var.ext_dns
         gateway_ip      = var.gateway_ip
         netmask         = cidrnetmask(var.cidr)
         broadcast       = cidrhost(var.cidr,-1)
