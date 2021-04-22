@@ -75,9 +75,9 @@ module "network" {
     network_name                    = var.network_name
     fixed_ip_v4                     = lookup(var.bastion, "fixed_ip_v4", "")
     bastion_count                   = lookup(var.bastion, "count", 1)
-    bootstrap_count                 = var.bootstrap["count"]
-    master_count                    = var.master["count"]
-    worker_count                    = var.worker["count"]
+    bootstrap                       = var.bootstrap
+    master                          = var.master
+    worker                          = var.worker
     network_type                    = var.network_type
 }
 
@@ -86,6 +86,8 @@ module "helpernode" {
 
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
+    lb_ipaddr                       = var.lb_ipaddr
+    ext_dns                         = var.ext_dns
     dns_forwarders                  = var.dns_forwarders
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr

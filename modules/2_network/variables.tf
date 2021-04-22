@@ -24,8 +24,8 @@ variable "network_name" {}
 
 variable "fixed_ip_v4" {}
 variable "bastion_count" {}
-variable "bootstrap_count" {}
-variable "master_count" {}
-variable "worker_count" {}
+variable "bootstrap" {}
+variable "master" {}
+variable "worker" {}
 
 variable "network_type" {}
