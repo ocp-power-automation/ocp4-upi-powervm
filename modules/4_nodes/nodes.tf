@@ -217,7 +217,7 @@ resource "null_resource" "remove_worker" {
         on_failure  = continue
         inline = [<<EOF
 oc adm cordon worker-${count.index}
-oc adm drain worker-${count.index} --force --delete-local-data --ignore-daemonsets
+oc adm drain worker-${count.index} --force --delete-local-data --ignore-daemonsets --timeout=180s
 oc delete node worker-${count.index}
 EOF
         ]
