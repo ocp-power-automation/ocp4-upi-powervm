@@ -65,6 +65,8 @@ variable "bastion" {
     default = {
         instance_type   = "m1.xlarge"
         image_id        = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"
+        # optional availability_zone
+        # availability_zone = ""
         # optional fixed IP address
         # fixed_ip_v4   = "123.45.67.89"
     }
@@ -76,6 +78,8 @@ variable "bootstrap" {
         instance_type = "m1.xlarge"
         # rhcos image id
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+        # optional availability_zone
+        # availability_zone = ""
     }
 }
 
@@ -85,6 +89,8 @@ variable "master" {
         instance_type = "m1.xlarge"
         # rhcos image id
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+        # optional availability_zone
+        # availability_zone = ""
     }
 }
 
@@ -94,6 +100,8 @@ variable "worker" {
         instance_type = "m1.xlarge"
         # rhcos image id
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+        # optional availability_zone
+        # availability_zone = ""
     }
 }
 

@@ -51,6 +51,15 @@ worker                      = {instance_type    = "<worker-compute-template>", i
 You can optionally set worker `count` value to 0 in which case all the cluster pods will be running on the master/supervisor nodes.
 Ensure you use proper sizing for master/supervisor nodes to avoid resource starvation for containers.
 
+`availability_zone` is an optional attribute for bastion, bootstrap, master and worker. If it is specified, the VM will be created in the specified `availability_zone`, otherwise value of `openstack_availability_zone` will be used. 
+```
+bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>"}
+bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>", availability_zone = "", "count"   = 1}
+master                      = {instance_type    = "<master-compute-template>", image_id    = "<image-uuid-rhcos>", availability_zone = "master-zone",  "count"   = 3}
+worker                      = {instance_type    = "<worker-compute-template>", image_id    = "<image-uuid-rhcos>", availability_zone = "worker-zone",  "count"   = 2}
+```
+Above will create the bastion in `openstack_availability_zone`, bootstrap in default availability zone, masters in `master-zone`, and workers in `worker-zone`.
+
 To set a pre-defined IPv4 address for the bastion node, make use of the optional `fixed_ip_v4` in bastion variable as shown below. Ensure this address is within the given network subnet range and not already in use.
 ```
 bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>",  fixed_ip_v4 = "<IPv4 address>"}
@@ -110,6 +119,7 @@ Set the `cluster_domain` to `nip.io`, `xip.io` or `sslip.io` if you prefer using
 Default is `ibm.com`.
 The `cluster_id_prefix` should not be more than 8 characters. Nodes are pre-fixed with this value.
 Default value is `test-ocp`
+If `cluster_if_prefix` is not set, the `cluster_id` will be used only without prefix.
 
 A random value will be used for `cluster_id` if not set.
 The total length of `cluster_id_prefix`.`cluster_id` should not exceed 14 characters.
