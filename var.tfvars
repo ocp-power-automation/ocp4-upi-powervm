@@ -11,10 +11,14 @@ network_name                = "<network_name>"
 ### OpenShift Cluster Details
 
 bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>"}
-# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",  fixed_ip_v4 = "<IPv4 address>"}
 bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 1}
 master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  "count"   = 3}
 worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  "count"   = 2}
+# With all optional attributes
+# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",  availability_zone = "<availability zone>", fixed_ip_v4 = "<IPv4 address>"}
+# bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 1}
+# master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 3}
+# worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2}
 
 
 rhel_username               = "root"
@@ -34,9 +38,9 @@ openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc
 openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.7/openshift-client-linux.tar.gz"
 pull_secret_file            = "data/pull-secret.txt"
 
-cluster_domain              = "ibm.com"  #Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
-cluster_id_prefix           = "test-ocp"
-cluster_id                  = ""
+cluster_domain              = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
+cluster_id_prefix           = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
+cluster_id                  = ""         # It will use random generated id with cluster_id_prefix if this is not set
 
 
 ### Misc Customizations

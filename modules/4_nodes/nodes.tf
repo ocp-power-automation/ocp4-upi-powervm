@@ -66,7 +66,7 @@ resource "openstack_compute_instance_v2" "bootstrap" {
     name        = "${var.cluster_id}-bootstrap"
     flavor_id   = var.scg_id == "" ? data.openstack_compute_flavor_v2.bootstrap.id : openstack_compute_flavor_v2.bootstrap_scg[0].id
     image_id    = var.bootstrap["image_id"]
-    availability_zone   = var.openstack_availability_zone
+    availability_zone   = lookup(var.bootstrap, "availability_zone", var.openstack_availability_zone)
 
     user_data   = replace(data.ignition_config.bootstrap.rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
 
@@ -127,7 +127,7 @@ resource "openstack_compute_instance_v2" "master" {
     count       = var.master["count"]
     flavor_id   = var.scg_id == "" ? data.openstack_compute_flavor_v2.master.id : openstack_compute_flavor_v2.master_scg[0].id
     image_id    = var.master["image_id"]
-    availability_zone   = var.openstack_availability_zone
+    availability_zone   = lookup(var.master, "availability_zone", var.openstack_availability_zone)
 
     user_data   = replace(data.ignition_config.master[count.index].rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
 
@@ -182,7 +182,7 @@ resource "openstack_compute_instance_v2" "worker" {
     count       = var.worker["count"]
     flavor_id   = var.scg_id == "" ? data.openstack_compute_flavor_v2.worker.id : openstack_compute_flavor_v2.worker_scg[0].id
     image_id    = var.worker["image_id"]
-    availability_zone   = var.openstack_availability_zone
+    availability_zone   = lookup(var.worker, "availability_zone", var.openstack_availability_zone)
 
     user_data = replace(data.ignition_config.worker[count.index].rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
 
