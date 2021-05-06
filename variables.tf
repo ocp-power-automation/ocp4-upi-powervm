@@ -306,16 +306,6 @@ variable "cluster_id" {
     default   = ""
 }
 
-variable "lb_ipaddr" {
-    description = "Define the preconfigured external Load Balancer"
-    default = ""    
-}
-
-variable "ext_dns" {
-    description = "Define the preconfigured external DNS and Load Balancer"
-    default = ""
-}
-
 variable "dns_forwarders" {
     default   = "8.8.8.8; 8.8.4.4"
 }

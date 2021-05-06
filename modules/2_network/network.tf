@@ -85,7 +85,7 @@ resource "openstack_networking_port_v2" "bootstrap_port" {
 }
 
 resource "openstack_networking_port_v2" "master_port" {
-    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip]
+    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip, openstack_networking_port_v2.bootstrap_port]
     count           = local.master_count
     name            = "${var.cluster_id}-master-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
@@ -104,7 +104,7 @@ resource "openstack_networking_port_v2" "master_port" {
 }
 
 resource "openstack_networking_port_v2" "worker_port" {
-    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip]
+    depends_on      = [openstack_networking_port_v2.bastion_port, openstack_networking_port_v2.bastion_vip, openstack_networking_port_v2.bootstrap_port, openstack_networking_port_v2.master_port]
     count           = local.worker_count
     name            = "${var.cluster_id}-worker-port-${count.index}"
     network_id      = data.openstack_networking_network_v2.network.id
