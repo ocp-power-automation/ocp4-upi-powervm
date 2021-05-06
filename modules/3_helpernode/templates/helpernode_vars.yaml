@@ -21,16 +21,10 @@ dns:
   domain: "${cluster_domain}"
   clusterid: "${cluster_id}"
   forwarder1: "${forwarders}"
-%{ if lb_ipaddr != "" }
-  lb_ipaddr: "${lb_ipaddr}"
-%{ endif }
 dhcp:
   router: "${gateway_ip}"
   bcast: "${broadcast}"
   netmask: "${netmask}"
-%{ if ext_dns != "" }
-  dns: "${ext_dns}"
-%{ endif }
   ipid: "${ipid}"
   netmaskid: "${netmask}"
   poolstart: "${pool.start}"
