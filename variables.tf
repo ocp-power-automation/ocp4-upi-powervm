@@ -80,6 +80,8 @@ variable "bootstrap" {
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
         # optional availability_zone
         # availability_zone = ""
+        # optional fixed IPs
+        # fixed_ips = []
     }
 }
 
@@ -91,6 +93,8 @@ variable "master" {
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
         # optional availability_zone
         # availability_zone = ""
+        # optional fixed IPs
+        # fixed_ips = []
     }
 }
 
@@ -102,6 +106,8 @@ variable "worker" {
         image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
         # optional availability_zone
         # availability_zone = ""
+        # optional fixed IPs
+        # fixed_ips = []
     }
 }
 
