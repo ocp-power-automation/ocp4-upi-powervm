@@ -73,8 +73,7 @@ module "network" {
 
     cluster_id                      = local.cluster_id
     network_name                    = var.network_name
-    fixed_ip_v4                     = lookup(var.bastion, "fixed_ip_v4", "")
-    bastion_count                   = lookup(var.bastion, "count", 1)
+    bastion                         = var.bastion
     bootstrap                       = var.bootstrap
     master                          = var.master
     worker                          = var.worker
