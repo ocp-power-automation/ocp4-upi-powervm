@@ -96,6 +96,9 @@ variable "master" {
         # availability_zone = ""
         # optional fixed IPs
         # fixed_ips = []
+        # optional data volumes to master nodes
+        # data_volume_size = 100 #Default volume size (in GB) to be attached to the master nodes.
+        # data_volume_count = 0 #Number of volumes to be attached to each master node.
     }
 }
 
@@ -109,6 +112,9 @@ variable "worker" {
         # availability_zone = ""
         # optional fixed IPs
         # fixed_ips = []
+        # optional data volumes to worker nodes
+        # data_volume_size = 100 #Default volume size (in GB) to be attached to the worker nodes.
+        # data_volume_count = 0 #Number of volumes to be attached to each worker node.
     }
 }
 

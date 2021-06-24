@@ -136,6 +136,24 @@ resource "openstack_compute_instance_v2" "master" {
     }
 }
 
+locals {
+    master = {
+        volume_count = lookup(var.master, "data_volume_count", 0),
+        volume_size  = lookup(var.master, "data_volume_size", 0)
+    }
+}
+
+resource "openstack_blockstorage_volume_v2" "master" {
+  count       = local.master.volume_count * var.master["count"]
+  name        = "${var.cluster_id}-master-${count.index}-volume"
+  size        = local.master.volume_size
+}
+
+resource "openstack_compute_volume_attach_v2" "master" {
+  count        = local.master.volume_count * var.master["count"]
+  instance_id  = openstack_compute_instance_v2.master.*.id[floor(count.index / local.master.volume_count)]
+  volume_id    = openstack_blockstorage_volume_v2.master.*.id[count.index]
+}
 
 #worker
 data "ignition_config" "worker" {
@@ -189,6 +207,25 @@ resource "openstack_compute_instance_v2" "worker" {
     network {
         port = var.worker_port_ids[count.index]
     }
+}
+
+locals {
+    worker = {
+        volume_count = lookup(var.worker, "data_volume_count", 0),
+        volume_size  = lookup(var.worker, "data_volume_size", 0)
+    }
+}
+
+resource "openstack_blockstorage_volume_v2" "worker" {
+  count       = local.worker.volume_count * var.worker["count"]
+  name        = "${var.cluster_id}-worker-${count.index}-volume"
+  size        = local.worker.volume_size
+}
+
+resource "openstack_compute_volume_attach_v2" "worker" {
+  count        = local.worker.volume_count * var.worker["count"]
+  instance_id  = openstack_compute_instance_v2.worker.*.id[floor(count.index / local.worker.volume_count)]
+  volume_id    = openstack_blockstorage_volume_v2.worker.*.id[count.index]
 }
 
 resource "null_resource" "remove_worker" {

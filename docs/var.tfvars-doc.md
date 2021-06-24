@@ -76,6 +76,11 @@ bootstrap                   = {instance_type    = "<bootstrap-compute-template>"
 master                      = {instance_type    = "<master-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 3, fixed_ips = ["<IPv4 address>", "<IPv4 address>", "<IPv4 address>"]}
 worker                      = {instance_type    = "<worker-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 2, fixed_ips = ["<IPv4 address>", "<IPv4 address>"]}
 ```
+To attach additional volumes to master or worker nodes, set the optional `data_volume_count` key to the number of volumes that is to be attached and the `data_volume_size` to the size (in GB) for each volume.
+```
+master                      = {instance_type    = "<master-compute-template>", image_id    = "<image-uuid-rhcos>", "count"   = 3, data_volume_count  = 0, data_volume_size  = 100}
+worker                      = {instance_type    = "<worker-compute-template>", image_id    = "<image-uuid-rhcos>", "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
+```
 These set of variables specify the username and the SSH key to be used for accessing the bastion node.
 ```
 rhel_username               = "root"
