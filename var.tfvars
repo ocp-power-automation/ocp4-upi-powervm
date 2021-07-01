@@ -47,7 +47,8 @@ cluster_id                  = ""         # It will use random generated id with 
 
 #network_type               = "SRIOV"
 #scg_id                     = "df21cec9-c244-4d3d-b927-df1518672e87"
-
+#sriov_vnic_failover_vfs    = 1
+#sriov_capacity             = 0.02
 
 #enable_local_registry      = false  #Set to true to enable usage of local registry for restricted network install.
 #local_registry_image       = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"

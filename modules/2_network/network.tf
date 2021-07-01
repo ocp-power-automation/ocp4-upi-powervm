@@ -126,8 +126,8 @@ locals {
    sriov   = <<EOF
    {
        "delete_with_instance": 1,
-       "vnic_required_vfs": 1,
-       "capacity": 0.02,
+       "vnic_required_vfs": ${var.sriov_vnic_failover_vfs},
+       "capacity": ${var.sriov_capacity},
        "vlan_type": "allowed"
    }
    EOF

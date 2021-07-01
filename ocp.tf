@@ -79,6 +79,8 @@ module "network" {
     master                          = var.master
     worker                          = var.worker
     network_type                    = var.network_type
+    sriov_vnic_failover_vfs         = var.sriov_vnic_failover_vfs
+    sriov_capacity                  = var.sriov_capacity
 }
 
 module "helpernode" {
