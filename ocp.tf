@@ -87,6 +87,8 @@ module "helpernode" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     dns_forwarders                  = var.dns_forwarders
+    lb_ipaddr                       = var.lb_ipaddr
+    ext_dns                         = var.ext_dns
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
     allocation_pools                = module.network.allocation_pools

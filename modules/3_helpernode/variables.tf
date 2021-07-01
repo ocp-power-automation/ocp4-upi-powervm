@@ -29,6 +29,8 @@ variable "dns_forwarders" {
     default   = "8.8.8.8; 9.9.9.9"
 }
 
+variable "lb_ipaddr" {}
+variable "ext_dns" {}
 variable "gateway_ip" {}
 variable "cidr" {}
 variable "allocation_pools" {}

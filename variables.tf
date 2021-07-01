@@ -310,6 +310,16 @@ variable "dns_forwarders" {
     default   = "8.8.8.8; 8.8.4.4"
 }
 
+variable "lb_ipaddr" {
+    description = "Define the preconfigured external Load Balancer"
+    default = ""    
+}
+
+variable "ext_dns" {
+    description = "Define the preconfigured external DNS and Load Balancer"
+    default = ""
+}
+
 variable "mount_etcd_ramdisk" {
     description = "Whether mount etcd directory in the ramdisk (Only for dev/test) on low performance disk"
     default     = false

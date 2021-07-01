@@ -134,6 +134,12 @@ The total length of `cluster_id_prefix`.`cluster_id` should not exceed 14 charac
 
 These variables provides miscellaneous customizations. For common usage scenarios these are not required and should be left unchanged.
 
+The following variables are used to set the external DNS and load balancer, use IP address for these two variables. They can be used only when external DNS and load balancer are pre-configured for the OCP installation. 
+```
+lb_ipaddr                       = ""
+ext_dns                         = ""
+```
+
 The following variable is used to set the network adapter type for the VMs. By default the VMs will use SEA. If SRIOV is required then uncomment the variable
 ```
 network_type                = "SRIOV"
