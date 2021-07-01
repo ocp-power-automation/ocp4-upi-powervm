@@ -293,6 +293,7 @@ resource "openstack_blockstorage_volume_v2" "storage_volume" {
 }
 
 resource "openstack_compute_volume_attach_v2" "storage_v_attach" {
+    depends_on      = [null_resource.bastion_init]
     count       = var.storage_type == "nfs" ? 1 : 0
 
     volume_id   = openstack_blockstorage_volume_v2.storage_volume[count.index].id
