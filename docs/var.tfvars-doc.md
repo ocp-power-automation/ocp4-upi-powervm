@@ -134,7 +134,7 @@ The total length of `cluster_id_prefix`.`cluster_id` should not exceed 14 charac
 
 These variables provides miscellaneous customizations. For common usage scenarios these are not required and should be left unchanged.
 
-The following variables are used to set the external DNS and load balancer, use IP address for these two variables. They can be used only when external DNS and load balancer are pre-configured for the OCP installation. 
+The following variables are used to define the IP address for the preconfigured external DNS and the Load-balancer 
 ```
 lb_ipaddr                       = ""
 ext_dns                         = ""
