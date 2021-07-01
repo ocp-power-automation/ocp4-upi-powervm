@@ -69,6 +69,7 @@ variable "bastion" {
         # availability_zone = ""
         # optional fixed IP address
         # fixed_ip_v4   = "123.45.67.89"
+        # fixed_ips = []
     }
 }
 variable "bootstrap" {

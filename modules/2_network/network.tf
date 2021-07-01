@@ -27,14 +27,14 @@ data "openstack_networking_subnet_v2" "subnet" {
 }
 
 resource "openstack_networking_port_v2" "bastion_vip" {
-    count           = var.bastion_count > 1 ? 1 : 0
+    count           = local.bastion_count > 1 ? 1 : 0
 
     name            = "${var.cluster_id}-bastion-vip"
     network_id      = data.openstack_networking_network_v2.network.id
     admin_state_up  = "true"
     fixed_ip {
         subnet_id   = data.openstack_networking_subnet_v2.subnet.id
-        ip_address  = var.fixed_ip_v4
+        ip_address  = local.fixed_ip_v4
     }
     dynamic "binding" {
         for_each = local.bindings
@@ -46,7 +46,7 @@ resource "openstack_networking_port_v2" "bastion_vip" {
 }
 
 resource "openstack_networking_port_v2" "bastion_port" {
-    count           = var.bastion_count
+    count           = local.bastion_count
     depends_on      = [openstack_networking_port_v2.bastion_vip]
 
     name            = "${var.cluster_id}-bastion-port-${count.index}"
@@ -54,7 +54,7 @@ resource "openstack_networking_port_v2" "bastion_port" {
     admin_state_up  = "true"
     fixed_ip {
         subnet_id   = data.openstack_networking_subnet_v2.subnet.id
-        ip_address  = var.bastion_count == 1 ? var.fixed_ip_v4 : ""
+        ip_address  = local.bastion_count == 1 ? local.fixed_ip_v4 : (length(local.bastion_ips) == 0 ? "" : local.bastion_ips[count.index])
     }
     dynamic "binding" {
         for_each = local.bindings
@@ -133,6 +133,9 @@ locals {
    EOF
    bindings = var.network_type == "SRIOV" ? [{vnic_type = "direct", profile = local.sriov }] : []
 
+   bastion_count = lookup(var.bastion, "count", 1)
+   fixed_ip_v4 = lookup(var.bastion, "fixed_ip_v4", "")
+   bastion_ips = lookup(var.bastion, "fixed_ips", [])
    bootstrap_count = var.bootstrap["count"]
    master_count = var.master["count"]
    worker_count = var.worker["count"]

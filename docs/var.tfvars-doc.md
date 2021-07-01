@@ -66,12 +66,16 @@ To set a pre-defined IPv4 address for the bastion node, make use of the optional
 ```
 bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>",  "count"   = 1,  fixed_ip_v4 = "<IPv4 address>"}
 ```
-
+For bastion HA with pre-defined IPs, here the `fixed_ip_v4` will be the VIP for bastions:
+```
+bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>",  "count"   = 2,  fixed_ip_v4 = "<IPv4 address>", fixed_ips = ["<IPv4 address>", "<IPv4 address>"]}
+```
 To use predefined IPs for bootstrap, master and worker node, use the optional `fixed_ips` in bootstrap, master and worker variables, number of IPs have to match the count number as shown below:
+```
 bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 1, fixed_ips = ["<IPv4 address>"]}
 master                      = {instance_type    = "<master-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 3, fixed_ips = ["<IPv4 address>", "<IPv4 address>", "<IPv4 address>"]}
 worker                      = {instance_type    = "<worker-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 2, fixed_ips = ["<IPv4 address>", "<IPv4 address>"]}
-
+```
 These set of variables specify the username and the SSH key to be used for accessing the bastion node.
 ```
 rhel_username               = "root"
