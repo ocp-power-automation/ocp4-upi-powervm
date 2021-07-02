@@ -143,6 +143,18 @@ The following variable is used to set the network adapter type for the VMs. By d
 network_type                = "SRIOV"
 ```
 
+The following variable is used to define the amount of SR-IOV Virtual Functions used for VNIC failover of the network adapter for the VMs. By default the VMs will use 1, which defines `no VNIC failover`. Any setting higher then 1 creates additional virtual functions and configures them in a VNIC failover setup. `Be aware of the fact, that RHCOS and some Linux releases might not handle VNIC failover with more then 2 SR-IOV Virtual Functions properly. The recommended value is 2 for VNIC failover.`
+Valid options are: Any number supported for VNIC failover from 1 to 6
+```
+sriov_vnic_failover_vfs                = 1
+```
+
+The following variable is used to define the capacity of SR-IOV Logical Ports of the 1st network adapter for the VMs. By default the VMs will use 2%.
+Valid options are: Any number which can be devided by 2 and results in an integer. 100% = 1.0; 80% = 0.80; 60% = 0.60; etc
+```
+sriov_capacity                = 0.02
+```
+
 The following variable is used to specify the PowerVC [Storage Connectivity Group](https://www.ibm.com/support/knowledgecenter/SSVSPA_1.4.4/com.ibm.powervc.cloud.help.doc/powervc_storage_connectivity_groups_cloud.html) (SCG). Empty value will use the default SCG
 ```
 scg_id                      = ""

@@ -28,3 +28,5 @@ variable "master" {}
 variable "worker" {}
 
 variable "network_type" {}
+variable "sriov_vnic_failover_vfs" {}
+variable "sriov_capacity" {}

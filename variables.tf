@@ -123,6 +123,22 @@ variable "network_type" {
     description = "Specify the name of the network adapter type to use for creating hosts"
 }
 
+variable "sriov_vnic_failover_vfs" {
+    # Eg: 1 = VNIC without failover; 2 = VNIC failover with 2 SR-IOV VFs
+    default = 1
+    description = "Specifies the amount of VNIC failover virtual functions (max. is 6)"
+    validation {
+        condition = var.sriov_vnic_failover_vfs > 0 && var.sriov_vnic_failover_vfs < 7
+        error_message = "The number of virtual functions for the parameter sriov_vnic_failover_vfs must be min. 1 and cannot exceed 6."
+    }
+}
+
+variable "sriov_capacity" {
+    # Eg: 0.02 = 2%; 0.20 = 20%; 1.00 = 100%
+    default = 0.02
+    description = "Specifies the SR-IOV LP capacity"
+}
+
 variable "scg_id" {
     description = "The id of PowerVC Storage Connectivity Group to use for all nodes"
     default = ""
