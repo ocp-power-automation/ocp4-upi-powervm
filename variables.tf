@@ -199,6 +199,12 @@ variable "rhel_subscription_org" {
 variable "rhel_subscription_activationkey" {
     default = ""
 }
+
+variable "rhcos_pre_kernel_options" {
+    description = "List of kernel arguments for the cluster nodes for pre-installation"
+    default     = []
+}
+
 variable "rhcos_kernel_options" {
     description = "List of kernel arguments for the cluster nodes"
     default     = []
@@ -249,6 +255,12 @@ variable "jump_host" {
     default     = ""
 }
 
+variable "private_network_mtu" {
+  type        = number
+  description = "MTU value for the private network interface on RHEL and RHCOS nodes"
+  default     = 1450
+}
+
 variable "installer_log_level" {
     description = "Set the log level required for openshift-install commands"
     default = "info"
@@ -263,7 +275,7 @@ variable "helpernode_repo" {
 variable "helpernode_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
     # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-    default = "1ac7f276b537cd734240eda9ed554a254ba80629"
+    default = "324e09e3d303101874f540730c993cd986ddbc04"
 }
 
 variable "install_playbook_repo" {
@@ -275,7 +287,12 @@ variable "install_playbook_repo" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "10fec74c9e987b39f7af1127abe304a9e41f8e65"
+    default = "284b597b3e88c635e3069b82926aa16812238492"
+}
+
+variable "helm_repo" {
+    description = "Set the URL after http_server_repo_main_dir pointing to the Python helm modules"
+    default = "https://get.helm.sh/helm-v3.6.3-linux-ppc64le.tar.gz"
 }
 
 variable "ansible_extra_options" {
@@ -329,8 +346,24 @@ variable "cluster_id" {
     default   = ""
 }
 
+variable "fips_compliant" {
+  type        = bool
+  description = "Set to true to enable usage of FIPS for OCP deployment."
+  default     = false
+}
+
 variable "dns_forwarders" {
     default   = "8.8.8.8; 8.8.4.4"
+}
+
+variable "lb_ipaddr" {
+    description = "Define the preconfigured external Load Balancer"
+    default = ""    
+}
+
+variable "ext_dns" {
+    description = "Define the preconfigured external DNS and Load Balancer"
+    default = ""
 }
 
 variable "mount_etcd_ramdisk" {
@@ -399,6 +432,21 @@ variable "upgrade_delay_time" {
 variable "cni_network_provider" {
     description = "Set the default Container Network Interface (CNI) network provider"
     default = "OpenshiftSDN"
+}
+
+variable "cluster_network_cidr" {
+    description = "blocks of IP addresses from which pod IP addresses are allocated."
+    default = "10.128.0.0/14"
+}
+
+variable "cluster_network_hostprefix" {
+    description = "The subnet prefix length to assign to each individual node."
+    default = "23"
+}
+
+variable "service_network" {
+    description = "blocks of IP addresses from which service addresses are allocated."
+    default = "172.30.0.0/16"
 }
 
 ################################################################

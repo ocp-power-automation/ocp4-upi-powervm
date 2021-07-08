@@ -29,6 +29,8 @@ variable "dns_forwarders" {
     default   = "8.8.8.8; 9.9.9.9"
 }
 
+variable "lb_ipaddr" {}
+variable "ext_dns" {}
 variable "gateway_ip" {}
 variable "cidr" {}
 variable "allocation_pools" {}
@@ -58,6 +60,7 @@ variable "ocp_release_tag" {}
 
 variable "helpernode_repo" {}
 variable "helpernode_tag" {}
+variable "helm_repo" {}
 
 variable "ansible_extra_options" {}
 

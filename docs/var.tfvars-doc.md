@@ -83,10 +83,11 @@ worker                      = {instance_type    = "<worker-compute-template>", i
 ```
 These set of variables specify the username and the SSH key to be used for accessing the bastion node.
 ```
-rhel_username               = "root"
+rhel_username               = "root"  #Set it to an appropriate username for non-root user access
 public_key_file             = "data/id_rsa.pub"
 private_key_file            = "data/id_rsa"
 ```
+rhel_username is set to root. rhel_username can be set to an appropriate username having superuser privileges with no password prompt.
 Please note that only OpenSSH formatted keys are supported. Refer to the following links for instructions on creating SSH key based on your platform.
 - Windows 10 - https://phoenixnap.com/kb/generate-ssh-key-windows-10
 - Mac OSX - https://www.techrepublic.com/article/how-to-generate-ssh-keys-on-macos-mojave/
@@ -139,9 +140,23 @@ If `cluster_if_prefix` is not set, the `cluster_id` will be used only without pr
 A random value will be used for `cluster_id` if not set.
 The total length of `cluster_id_prefix`.`cluster_id` should not exceed 14 characters.
 
+### FIPS Variable for OpenShift deployment
+
+These variables will be used for deploying OCP in FIPS mode.
+Change the values as per your requirement.
+```
+fips_compliant      = false
+```
+
 ### Misc Customizations
 
 These variables provides miscellaneous customizations. For common usage scenarios these are not required and should be left unchanged.
+
+The following variables are used to define the IP address for the preconfigured external DNS and the Load-balancer 
+```
+lb_ipaddr                       = ""
+ext_dns                         = ""
+```
 
 The following variable is used to set the network adapter type for the VMs. By default the VMs will use SEA. If SRIOV is required then uncomment the variable
 ```
@@ -179,12 +194,47 @@ This variable can be used for trying out custom OpenShift install image for deve
 release_image_override     = ""
 ```
 
-These variables specify the ansible playbooks that are used for OpenShift install and post-install customizations.
+These variables specify the ansible playbooks that are used for OpenShift install and post-install customizations. If the URL ends with a file name extension .zip, then it is assumed that it points to a HTTP/HTTPS server and curl/unzip will be used to extract the package. URLs without ending with .zip are recognized as GitHub repositories and git clone && git checkout are used.
+`Only .zip is supported file format on web servers. The all files must be placed in folders starting with ocp4-playbooks, or ocp4-helpernode! It is allowed to extend the directory name with additional informations: e.g. ocp4-helpernode-<master/version number)`
+Valid options: Requires a URL pointing to the packages/GitHub project.
 ```
+helpernode_repo            = "https://<HTTP SERVER>/ocp4-ansible-modules/ocp4-helpernode-master.zip"
+OR
 helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
 helpernode_tag             = "5eab3db53976bb16be582f2edc2de02f7510050d"
+
+install_playbook_repo      = "https://<HTTP SERVER>/ocp4-ansible-modules/ocp4-playbooks-master.zip"
+OR
 install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playbooks"
 install_playbook_tag       = "02a598faa332aa2c3d53e8edd0e840440ff74bd5"
+```
+
+If you want to provide the ansible playbooks by your local HTTP server, follow these steps:
+```
+Use your web browser and visit https://github.com/RedHatOfficial/ocp4-helpernode
+On the main page, stay on the master repository page, or select any supported branch and click on the green "Code" button with a download symbol in front of it
+Click on "Download ZIP"
+Upload the file to your local HTTP server and place it in the appropriate directory
+
+Use your web browser and visit https://github.com/ocp-power-automation/ocp4-playbooks
+On the main page, stay on the master repository page, or select any supported branch and click on the green "Code" button with a download symbol in front of it
+Click on "Download ZIP"
+Upload the file to your local HTTP server and place it in the appropriate directory, like the example below
+
+ls -la /var/www/html/repos/
+total 13452
+-rw-r--r--. 1 root root 13624204 Jul  8 13:43 ocp4-helpernode.zip
+-rw-r--r--. 1 root root   145165 Jul  8 13:44 ocp4-playbooks.zip
+```
+
+This variable can be used to define a different source for the helm package, like a local web server. By default, the help package will be downloaded from the official internet source.
+```
+helm_repo                  = "https://<HTTP SERVER>/python-modules/helm-latest-linux-ppc64le.tar.gz"
+```
+
+This variable specify the MTU value for the private network interface on RHEL and RHCOS nodes. The CNI network will have <private_network_mtu> - 50 for OpenshiftSDN and <private_network_mtu> - 100 for OVNKubernetes network provider.
+```
+private_network_mtu         = 1450
 ```
 
 These variables can be used when debugging ansible playbooks
@@ -197,6 +247,16 @@ This variable specifies the external DNS servers to forward DNS queries that can
 ```
 dns_forwarders              = "1.1.1.1; 9.9.9.9"
 ```
+
+List of [day-1 kernel arguments](https://docs.openshift.com/container-platform/4.8/installing/install_config/installing-customizing.html#installation-special-config-kargs_installing-customizing) for the cluster nodes.
+To add kernel arguments to master or worker nodes, using MachineConfig object and inject that object into the set of manifest files used by Ignition during cluster setup.
+```
+rhcos_pre_kernel_options        = []
+```
+- Example 1
+  ```
+  rhcos_pre_kernel_options   = ["rd.multipath=default","root=/dev/disk/by-label/dm-mpath-root"]
+  ```
 
 List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes.
 Note that this will be applied after the cluster is installed and all the nodes are in `Ready` status.
@@ -255,4 +315,7 @@ This variable is used to set the default Container Network Interface (CNI) netwo
 
 ```
 cni_network_provider       = "OpenshiftSDN"
+cluster_network_cidr        = "10.128.0.0/14"
+cluster_network_hostprefix  = "23"
+service_network             = "172.30.0.0/16"
 ```

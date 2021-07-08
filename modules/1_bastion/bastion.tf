@@ -93,18 +93,18 @@ resource "null_resource" "bastion_init" {
     }
     provisioner "file" {
         content = var.private_key
-        destination = "$HOME/.ssh/id_rsa"
+        destination = ".ssh/id_rsa"
     }
     provisioner "file" {
         content = var.public_key
-        destination = "$HOME/.ssh/id_rsa.pub"
+        destination = ".ssh/id_rsa.pub"
     }
     provisioner "remote-exec" {
         inline = [
-            "sudo chmod 600 $HOME/.ssh/id_rsa*",
+            "sudo chmod 600 .ssh/id_rsa*",
             "sudo sed -i.bak -e 's/^ - set_hostname/# - set_hostname/' -e 's/^ - update_hostname/# - update_hostname/' /etc/cloud/cloud.cfg",
-            "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion-${count.index}.${var.cluster_domain}",
-            "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion-${count.index}.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
+            "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion-${count.index}.${lower(var.cluster_id)}.${var.cluster_domain}",
+            "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion-${count.index}.${lower(var.cluster_id)}.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
             "sudo hostname -F /etc/hostname",
             "echo 'vm.max_map_count = 262144' | sudo tee --append /etc/sysctl.conf > /dev/null",
         ]
@@ -265,12 +265,12 @@ resource "null_resource" "bastion_packages" {
     provisioner "remote-exec" {
         inline = [
             "#sudo yum update -y --skip-broken",
-            "sudo yum install -y wget jq git net-tools vim python3 tar"
+            "sudo yum install -y wget jq git net-tools vim python3 tar curl unzip"
         ]
     }
     provisioner "remote-exec" {
         inline = [
-           "sudo yum install -y ansible"
+           "sudo yum install -y ansible-2.9.*"
         ]
     }
     provisioner "remote-exec" {
@@ -327,11 +327,11 @@ resource "null_resource" "setup_nfs_disk" {
     }
     provisioner "remote-exec" {
         inline = [
-            "rm -rf mkdir ${local.storage_path}; mkdir -p ${local.storage_path}; chmod -R 755 ${local.storage_path}",
+            "sudo rm -rf mkdir ${local.storage_path}; sudo mkdir -p ${local.storage_path}; sudo chmod -R 755 ${local.storage_path}",
             "sudo chmod +x /tmp/create_disk_link.sh",
             # Fix for copying file from Windows OS having CR
-            "sed -i 's/\r//g' /tmp/create_disk_link.sh",
-            "/tmp/create_disk_link.sh",
+            "sudo sed -i 's/\r//g' /tmp/create_disk_link.sh",
+            "sudo /tmp/create_disk_link.sh",
             "sudo mkfs.ext4 -F /dev/${local.disk_config.disk_name}",
             "echo '/dev/${local.disk_config.disk_name} ${local.storage_path} ext4 defaults 0 0' | sudo tee -a /etc/fstab > /dev/null",
             "sudo mount ${local.storage_path}",

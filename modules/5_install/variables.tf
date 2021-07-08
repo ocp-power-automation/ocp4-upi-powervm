@@ -35,6 +35,7 @@ variable "ssh_agent" {}
 variable "connection_timeout" {}
 variable "jump_host" {}
 
+variable "bastion" {}
 variable "bootstrap_ip" {}
 variable "master_ips" {}
 variable "worker_ips" {}
@@ -42,6 +43,9 @@ variable "worker_ips" {}
 variable "public_key" {}
 variable "pull_secret" {}
 variable "release_image_override" {}
+variable "fips_compliant" {}
+
+variable "private_network_mtu" {}
 
 variable "enable_local_registry" {}
 variable "local_registry_image" {}
@@ -54,6 +58,7 @@ variable "storage_type" {}
 variable "log_level" {}
 
 variable "ansible_extra_options" {}
+variable "rhcos_pre_kernel_options" {}
 variable "rhcos_kernel_options" {}
 
 variable "sysctl_tuned_options" {}
@@ -72,3 +77,6 @@ variable "upgrade_pause_time" {}
 variable "upgrade_delay_time" {}
 
 variable "cni_network_provider" {}
+variable "cluster_network_cidr" {}
+variable "cluster_network_hostprefix" {}
+variable "service_network" {}

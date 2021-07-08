@@ -10,8 +10,11 @@ storage_type: ${storage_type}
 log_level: ${log_level}
 release_image_override: '${release_image_override}'
 enable_local_registry: ${enable_local_registry}
+fips_compliant: "${fips_compliant}"
 
 node_connection_timeout: ${node_connection_timeout}
+
+rhcos_pre_kernel_options: [%{ for opt in rhcos_pre_kernel_options ~}"${opt}",%{ endfor ~}]
 
 rhcos_kernel_options: [%{ for opt in rhcos_kernel_options ~}"${opt}",%{ endfor ~}]
 
@@ -54,3 +57,8 @@ bastion_vip: "${bastion_vip}"
 %{ endif ~}
 
 cni_network_provider: "${cni_network_provider}"
+
+cluster_network_cidr: "${cluster_network_cidr}"
+cluster_network_hostprefix: "${cluster_network_hostprefix}"
+service_network: "${service_network}"
+cni_network_mtu: "${cni_network_mtu}"

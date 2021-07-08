@@ -88,6 +88,8 @@ module "helpernode" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     dns_forwarders                  = var.dns_forwarders
+    lb_ipaddr                       = var.lb_ipaddr
+    ext_dns                         = var.ext_dns
     gateway_ip                      = module.network.gateway_ip
     cidr                            = module.network.cidr
     allocation_pools                = module.network.allocation_pools
@@ -111,6 +113,7 @@ module "helpernode" {
     ocp_release_tag                 = var.ocp_release_tag
     helpernode_repo                 = var.helpernode_repo
     helpernode_tag                  = var.helpernode_tag
+    helm_repo                       = var.helm_repo
     ansible_extra_options           = var.ansible_extra_options
     chrony_config                   = var.chrony_config
     chrony_config_servers           = var.chrony_config_servers
@@ -145,6 +148,7 @@ module "install" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     cidr                            = module.network.cidr
+    bastion                         = var.bastion
     bastion_vip                     = module.network.bastion_vip
     bastion_ip                      = module.bastion.bastion_ip
     rhel_username                   = var.rhel_username
@@ -159,13 +163,16 @@ module "install" {
     pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
     storage_type                    = local.storage_type
     release_image_override          = var.release_image_override
+    private_network_mtu             = var.private_network_mtu
     enable_local_registry           = var.enable_local_registry
+    fips_compliant                  = var.fips_compliant
     local_registry_image            = var.local_registry_image
     ocp_release_tag                 = var.ocp_release_tag
     install_playbook_repo           = var.install_playbook_repo
     install_playbook_tag            = var.install_playbook_tag
     log_level                       = var.installer_log_level
     ansible_extra_options           = var.ansible_extra_options
+    rhcos_pre_kernel_options        = var.rhcos_pre_kernel_options
     rhcos_kernel_options            = var.rhcos_kernel_options
     sysctl_tuned_options            = var.sysctl_tuned_options
     sysctl_options                  = var.sysctl_options
@@ -180,4 +187,7 @@ module "install" {
     chrony_config                   = var.chrony_config
     chrony_config_servers           = var.chrony_config_servers
     cni_network_provider            = var.cni_network_provider
+    cluster_network_cidr            = var.cluster_network_cidr
+    cluster_network_hostprefix      = var.cluster_network_hostprefix
+    service_network                 = var.service_network
 }

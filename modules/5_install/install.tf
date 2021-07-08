@@ -24,7 +24,10 @@ locals {
 
     ocp_release_repo    = "ocp4/openshift4"
 
+    bastion_count = lookup(var.bastion, "count", 1)
+
     install_inventory = {
+        rhel_username   = var.rhel_username
         bastion_hosts   = [for ix in range(length(var.bastion_ip)) : "${var.cluster_id}-bastion-${ix}"]
         bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
         master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
@@ -40,28 +43,36 @@ locals {
     local_registry_ocp_image = "registry.${var.cluster_id}.${local.cluster_domain}:5000/${local.ocp_release_repo}:${var.ocp_release_tag}"
 
     install_vars = {
-        bastion_vip             = var.bastion_vip
-        cluster_id              = var.cluster_id
-        cluster_domain          = local.cluster_domain
-        pull_secret             = var.pull_secret
-        public_ssh_key          = var.public_key
-        storage_type            = var.storage_type
-        log_level               = var.log_level
-        release_image_override  = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override
-        enable_local_registry   = var.enable_local_registry
-        node_connection_timeout = 60 * var.connection_timeout
-        rhcos_kernel_options    = var.rhcos_kernel_options
-        sysctl_tuned_options    = var.sysctl_tuned_options
-        sysctl_options          = var.sysctl_options
-        match_array             = indent(2,var.match_array)
-        setup_squid_proxy       = var.setup_squid_proxy
-        squid_source_range      = var.cidr
-        proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
-        no_proxy                = var.cidr
-        chrony_config           = var.chrony_config
-        chrony_config_servers   = var.chrony_config_servers
-        chrony_allow_range      = var.cidr
-        cni_network_provider    = var.cni_network_provider
+        bastion_vip                = var.bastion_vip
+        cluster_id                 = var.cluster_id
+        cluster_domain             = local.cluster_domain
+        pull_secret                = var.pull_secret
+        public_ssh_key             = var.public_key
+        storage_type               = var.storage_type
+        log_level                  = var.log_level
+        release_image_override     = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override
+        enable_local_registry      = var.enable_local_registry
+        fips_compliant             = var.fips_compliant
+        node_connection_timeout    = 60 * var.connection_timeout
+        rhcos_pre_kernel_options   = var.rhcos_pre_kernel_options
+        rhcos_kernel_options       = var.rhcos_kernel_options
+        sysctl_tuned_options       = var.sysctl_tuned_options
+        sysctl_options             = var.sysctl_options
+        match_array                = indent(2,var.match_array)
+        setup_squid_proxy          = var.setup_squid_proxy
+        squid_source_range         = var.cidr
+        proxy_url                  = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
+        no_proxy                   = var.cidr
+        chrony_config              = var.chrony_config
+        chrony_config_servers      = var.chrony_config_servers
+        chrony_allow_range         = var.cidr
+        cni_network_provider       = var.cni_network_provider
+        cluster_network_cidr       = var.cluster_network_cidr
+        cluster_network_hostprefix = var.cluster_network_hostprefix
+        service_network            = var.service_network
+        # Set CNI network MTU to MTU - 100 for OVNKubernetes and MTU - 50 for OpenShiftSDN(default).
+        # Add new conditions here when we have more network providers
+        cni_network_mtu = var.cni_network_provider == "OVNKubernetes" ? var.private_network_mtu - 100 : var.private_network_mtu - 50
     }
 
     upgrade_vars = {
@@ -73,10 +84,8 @@ locals {
     }
 }
 
-resource "null_resource" "install" {
-    triggers = {
-        worker_count    = length(var.worker_ips)
-    }
+resource "null_resource" "prep_playbooks_tools_git" {
+    count = length(regexall("\\.zip$", var.install_playbook_repo)) == 0 ? 1 : 0
 
     connection {
         type        = "ssh"
@@ -96,13 +105,87 @@ resource "null_resource" "install" {
             "cd ocp4-playbooks && git checkout ${var.install_playbook_tag}"
         ]
     }
+}
+
+resource "null_resource" "prep_playbooks_tools_curl" {
+    count = length(regexall("\\.zip$", var.install_playbook_repo)) > 0 ? 1 : 0
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "rm -rf ocp4-playbooks",
+            "rm -rf ocp4-extract-helper",
+            "mkdir -p ocp4-extract-helper", 
+            "echo 'Downloading ocp4-playbooks...'",
+            "curl -o ocp4-extract-helper/ocp4-playbooks.zip ${var.install_playbook_repo}",
+            "echo 'Extracting ocp4-playbooks...'",
+            "cd ocp4-extract-helper && unzip ocp4-playbooks.zip",
+            "cd .. && rm -rf ocp4-extract-helper/ocp4-playbooks.zip",
+            "mv ocp4-extract-helper/ocp4-playbooks* ocp4-playbooks",
+            "rm -rf ocp4-extract-helper"
+        ]
+    }
+}
+
+resource "null_resource" "pre_install" {
+  count      = local.bastion_count
+
+  connection {
+    type        = "ssh"
+    user        = var.rhel_username
+    host        = var.bastion_ip[count.index]
+    private_key = var.private_key
+    agent       = var.ssh_agent
+    timeout     = "${var.connection_timeout}m"
+    bastion_host = var.jump_host
+  }
+
+  # DHCP config for setting MTU; Since helpernode DHCP template does not support MTU setting
+  provisioner "remote-exec" {
+    inline = [
+      # Set specified mtu for private interface.
+      "sudo ip link set dev $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}') mtu ${var.private_network_mtu}",
+      "echo MTU=${var.private_network_mtu} | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-$(ip r | grep ${var.cidr} | awk '{print $3}')",
+      # DHCP config for setting MTU;
+      "sed -i.mtubak '/option routers/i option interface-mtu ${var.private_network_mtu};' /etc/dhcp/dhcpd.conf",
+      "sudo systemctl restart dhcpd.service"
+    ]
+  }
+}
+
+resource "null_resource" "install" {
+    depends_on = [null_resource.prep_playbooks_tools_git, null_resource.prep_playbooks_tools_curl, null_resource.pre_install]
+
+    triggers = {
+        worker_count    = length(var.worker_ips)
+    }
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
     provisioner "file" {
         content     = templatefile("${path.module}/templates/install_inventory", local.install_inventory)
-        destination = "$HOME/ocp4-playbooks/inventory"
+        destination = "ocp4-playbooks/inventory"
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/install_vars.yaml", local.install_vars)
-        destination = "$HOME/ocp4-playbooks/install_vars.yaml"
+        destination = "ocp4-playbooks/install_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [
@@ -128,7 +211,7 @@ resource "null_resource" "upgrade" {
 
     provisioner "file" {
         content     = templatefile("${path.module}/templates/upgrade_vars.yaml", local.upgrade_vars)
-        destination = "$HOME/ocp4-playbooks/upgrade_vars.yaml"
+        destination = "ocp4-playbooks/upgrade_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [
@@ -137,4 +220,3 @@ resource "null_resource" "upgrade" {
         ]
     }
 }
-

@@ -22,7 +22,7 @@ Install the following packages on the automation host. Select the appropriate in
 **Terraform >= 0.13.0**: Please refer to the [link](https://learn.hashicorp.com/terraform/getting-started/install.html) for instructions on installing Terraform. For validating the version run `terraform version` command after install.
 
 Install Terraform and providers for Power environment:
-1. Download the Terraform binary version 0.13.5 from https://www.power-devops.com/terraform and install it to /usr/local/bin.
+1. Download and install the Terraform binary (>= 0.13.0) for Linux/ppc64le from https://www.power-devops.com/terraform.
 2. Download the required Terraform providers for Power into your TF project directory:
 ```
 $ cd <path_to_TF_project>

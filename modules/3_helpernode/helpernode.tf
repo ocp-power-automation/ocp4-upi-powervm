@@ -38,6 +38,8 @@ locals {
         bastion_master_ip   = var.bastion_ip[0]
         bastion_backup_ip   = length(var.bastion_ip) > 1 ? slice(var.bastion_ip, 1, length(var.bastion_ip)) : []
         forwarders      = var.dns_forwarders
+        lb_ipaddr       = var.lb_ipaddr
+        ext_dns         = var.ext_dns
         gateway_ip      = var.gateway_ip
         netmask         = cidrnetmask(var.cidr)
         broadcast       = cidrhost(var.cidr,-1)
@@ -67,20 +69,21 @@ locals {
         ]
 
         local_registry           = local.local_registry
+        helm_repo                = var.helm_repo
         client_tarball           = var.openshift_client_tarball
         install_tarball          = var.openshift_install_tarball
     }
     helpernode_inventory = {
-        bastion_ip  = var.bastion_ip
+        rhel_username = var.rhel_username
+        bastion_ip    = var.bastion_ip
     }
 }
 
-resource "null_resource" "config" {
-
+resource "null_resource" "prep_helpernode_tools_git" {
     triggers = {
         bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
-        worker_count    = length(var.worker_port_ips)
     }
+    count = length(regexall("\\.zip$", var.helpernode_repo)) == 0 ? 1 : 0
 
     connection {
         type        = "ssh"
@@ -101,23 +104,75 @@ resource "null_resource" "config" {
             "cd ocp4-helpernode && git checkout ${var.helpernode_tag}"
         ]
     }
+}
+
+resource "null_resource" "prep_helpernode_tools_curl" {
+    triggers = {
+        bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
+    }
+    count = length(regexall("\\.zip$", var.helpernode_repo)) > 0 ? 1 : 0
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "mkdir -p .openshift",
+            "rm -rf ocp4-helpernode",
+            "rm -rf ocp4-extract-helper",
+            "mkdir -p ocp4-extract-helper", 
+            "echo 'Downloading ocp4-helpernode...'",
+            "curl -o ocp4-extract-helper/ocp4-helpernode.zip ${var.helpernode_repo}",
+            "echo 'Extracting ocp4-helpernode...'",
+            "cd ocp4-extract-helper && unzip ocp4-helpernode.zip",
+            "cd .. && rm -rf ocp4-extract-helper/ocp4-helpernode.zip",
+            "mv ocp4-extract-helper/ocp4-helpernode* ocp4-helpernode",
+            "rm -rf ocp4-extract-helper"
+        ]
+    }
+}
+
+resource "null_resource" "config" {
+    depends_on = [null_resource.prep_helpernode_tools_git, null_resource.prep_helpernode_tools_curl]
+    triggers = {
+        bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
+        worker_count    = length(var.worker_port_ips)
+    }
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
     provisioner "file" {
         content     = templatefile("${path.module}/templates/helpernode_inventory", local.helpernode_inventory)
-        destination = "$HOME/ocp4-helpernode/inventory"
+        destination = "ocp4-helpernode/inventory"
     }
     provisioner "file" {
         content     = var.pull_secret
-        destination = "$HOME/.openshift/pull-secret"
+        destination = ".openshift/pull-secret"
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/helpernode_vars.yaml", local.helpernode_vars)
-        destination = "$HOME/ocp4-helpernode/helpernode_vars.yaml"
+        destination = "ocp4-helpernode/helpernode_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [
             "sed -i \"/^helper:.*/a \\ \\ networkifacename: $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}')\" ocp4-helpernode/helpernode_vars.yaml",
             "echo 'Running ocp4-helpernode playbook...'",
-            "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
+            "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options} --become"
         ]
     }
 }

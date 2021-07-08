@@ -21,7 +21,7 @@ worker                      = {instance_type    = "<worker-compute-template>",  
 # worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
 
 
-rhel_username               = "root"
+rhel_username               = "root"  #Set it to an appropriate username for non-root user access
 public_key_file             = "data/id_rsa.pub"
 private_key_file            = "data/id_rsa"
 rhel_subscription_username  = "<subscription-id>"          #Leave this as-is if using CentOS as bastion image
@@ -41,7 +41,7 @@ pull_secret_file            = "data/pull-secret.txt"
 cluster_domain              = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
 cluster_id_prefix           = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
 cluster_id                  = ""         # It will use random generated id with cluster_id_prefix if this is not set
-
+#fips_compliant             = false   # Set it true if you prefer to use FIPS enable in ocp deployment
 
 ### Misc Customizations
 
@@ -61,11 +61,13 @@ cluster_id                  = ""         # It will use random generated id with 
 #helpernode_tag             = ""
 #install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playbooks"
 #install_playbook_tag       = ""
+#helm_repo                 = "https://get.helm.sh/helm-v3.6.3-linux-ppc64le.tar.gz"
 
 #installer_log_level        = "info"
 #ansible_extra_options      = "-v"
 #ansible_repo_name          = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 #dns_forwarders             = "1.1.1.1; 9.9.9.9"
+#rhcos_pre_kernel_options   = []
 #rhcos_kernel_options       = []
 #chrony_config              = true
 #chrony_config_servers      = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
@@ -90,3 +92,7 @@ cluster_id                  = ""         # It will use random generated id with 
 #upgrade_delay_time         = "600"
 
 #cni_network_provider       = "OpenshiftSDN"
+#cluster_network_cidr        = "10.128.0.0/14"
+#cluster_network_hostprefix  = "23"
+#service_network             = "172.30.0.0/16"
+#private_network_mtu         = "1450"

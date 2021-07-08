@@ -1,5 +1,4 @@
 reviewers:
-  - mkumatag
   - Prajyot-Parab
   - sudeeshjohn
   - yussufsh
@@ -7,4 +6,5 @@ reviewers:
   - cs-zhang
 approvers:
   - bpradipt
+  - cs-zhang
   - yussufsh
