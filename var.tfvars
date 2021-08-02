@@ -66,6 +66,7 @@ cluster_id                  = ""         # It will use random generated id with 
 #ansible_extra_options      = "-v"
 #ansible_repo_name          = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 #dns_forwarders             = "1.1.1.1; 9.9.9.9"
+#rhcos_pre_kernel_options   = []
 #rhcos_kernel_options       = []
 #chrony_config              = true
 #chrony_config_servers      = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
