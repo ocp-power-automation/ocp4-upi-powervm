@@ -183,4 +183,7 @@ module "install" {
     chrony_config                   = var.chrony_config
     chrony_config_servers           = var.chrony_config_servers
     cni_network_provider            = var.cni_network_provider
+    cluster_network_cidr            = var.cluster_network_cidr
+    cluster_network_hostprefix      = var.cluster_network_hostprefix
+    service_network                 = var.service_network
 }
