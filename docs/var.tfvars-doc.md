@@ -143,6 +143,12 @@ The total length of `cluster_id_prefix`.`cluster_id` should not exceed 14 charac
 
 These variables provides miscellaneous customizations. For common usage scenarios these are not required and should be left unchanged.
 
+The following variables are used to define the IP address for the preconfigured external DNS and the Load-balancer 
+```
+lb_ipaddr                       = ""
+ext_dns                         = ""
+```
+
 The following variable is used to set the network adapter type for the VMs. By default the VMs will use SEA. If SRIOV is required then uncomment the variable
 ```
 network_type                = "SRIOV"

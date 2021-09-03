@@ -263,7 +263,7 @@ variable "helpernode_repo" {
 variable "helpernode_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
     # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-    default = "1ac7f276b537cd734240eda9ed554a254ba80629"
+    default = "324e09e3d303101874f540730c993cd986ddbc04"
 }
 
 variable "install_playbook_repo" {
@@ -331,6 +331,16 @@ variable "cluster_id" {
 
 variable "dns_forwarders" {
     default   = "8.8.8.8; 8.8.4.4"
+}
+
+variable "lb_ipaddr" {
+    description = "Define the preconfigured external Load Balancer"
+    default = ""    
+}
+
+variable "ext_dns" {
+    description = "Define the preconfigured external DNS and Load Balancer"
+    default = ""
 }
 
 variable "mount_etcd_ramdisk" {
