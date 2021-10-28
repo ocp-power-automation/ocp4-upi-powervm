@@ -40,28 +40,29 @@ locals {
     local_registry_ocp_image = "registry.${var.cluster_id}.${local.cluster_domain}:5000/${local.ocp_release_repo}:${var.ocp_release_tag}"
 
     install_vars = {
-        bastion_vip             = var.bastion_vip
-        cluster_id              = var.cluster_id
-        cluster_domain          = local.cluster_domain
-        pull_secret             = var.pull_secret
-        public_ssh_key          = var.public_key
-        storage_type            = var.storage_type
-        log_level               = var.log_level
-        release_image_override  = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override
-        enable_local_registry   = var.enable_local_registry
-        node_connection_timeout = 60 * var.connection_timeout
-        rhcos_kernel_options    = var.rhcos_kernel_options
-        sysctl_tuned_options    = var.sysctl_tuned_options
-        sysctl_options          = var.sysctl_options
-        match_array             = indent(2,var.match_array)
-        setup_squid_proxy       = var.setup_squid_proxy
-        squid_source_range      = var.cidr
-        proxy_url               = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
-        no_proxy                = var.cidr
-        chrony_config           = var.chrony_config
-        chrony_config_servers   = var.chrony_config_servers
-        chrony_allow_range      = var.cidr
-        cni_network_provider    = var.cni_network_provider
+        bastion_vip              = var.bastion_vip
+        cluster_id               = var.cluster_id
+        cluster_domain           = local.cluster_domain
+        pull_secret              = var.pull_secret
+        public_ssh_key           = var.public_key
+        storage_type             = var.storage_type
+        log_level                = var.log_level
+        release_image_override   = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override
+        enable_local_registry    = var.enable_local_registry
+        node_connection_timeout  = 60 * var.connection_timeout
+        rhcos_pre_kernel_options = var.rhcos_pre_kernel_options
+        rhcos_kernel_options     = var.rhcos_kernel_options
+        sysctl_tuned_options     = var.sysctl_tuned_options
+        sysctl_options           = var.sysctl_options
+        match_array              = indent(2,var.match_array)
+        setup_squid_proxy        = var.setup_squid_proxy
+        squid_source_range       = var.cidr
+        proxy_url                = local.proxy.server == "" ? "" : "http://${local.proxy.user_pass}${local.proxy.server}:${local.proxy.port}"
+        no_proxy                 = var.cidr
+        chrony_config            = var.chrony_config
+        chrony_config_servers    = var.chrony_config_servers
+        chrony_allow_range       = var.cidr
+        cni_network_provider     = var.cni_network_provider
     }
 
     upgrade_vars = {

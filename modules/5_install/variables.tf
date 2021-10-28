@@ -54,6 +54,7 @@ variable "storage_type" {}
 variable "log_level" {}
 
 variable "ansible_extra_options" {}
+variable "rhcos_pre_kernel_options" {}
 variable "rhcos_kernel_options" {}
 
 variable "sysctl_tuned_options" {}

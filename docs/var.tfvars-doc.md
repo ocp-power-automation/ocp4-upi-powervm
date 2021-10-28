@@ -204,6 +204,16 @@ This variable specifies the external DNS servers to forward DNS queries that can
 dns_forwarders              = "1.1.1.1; 9.9.9.9"
 ```
 
+List of [day-1 kernel arguments](https://docs.openshift.com/container-platform/4.8/installing/install_config/installing-customizing.html#installation-special-config-kargs_installing-customizing) for the cluster nodes.
+To add kernel arguments to master or worker nodes, using MachineConfig object and inject that object into the set of manifest files used by Ignition during cluster setup.
+```
+rhcos_pre_kernel_options        = []
+```
+- Example 1
+  ```
+  rhcos_pre_kernel_options   = ["rd.multipath=default","root=/dev/disk/by-label/dm-mpath-root"]
+  ```
+
 List of [kernel arguments](https://docs.openshift.com/container-platform/4.4/nodes/nodes/nodes-nodes-working.html#nodes-nodes-kernel-arguments_nodes-nodes-working) for the cluster nodes.
 Note that this will be applied after the cluster is installed and all the nodes are in `Ready` status.
 ```

@@ -13,6 +13,8 @@ enable_local_registry: ${enable_local_registry}
 
 node_connection_timeout: ${node_connection_timeout}
 
+rhcos_pre_kernel_options: [%{ for opt in rhcos_pre_kernel_options ~}"${opt}",%{ endfor ~}]
+
 rhcos_kernel_options: [%{ for opt in rhcos_kernel_options ~}"${opt}",%{ endfor ~}]
 
 sysctl_tuned_options: ${sysctl_tuned_options}
