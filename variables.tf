@@ -255,6 +255,12 @@ variable "jump_host" {
     default     = ""
 }
 
+variable "private_network_mtu" {
+  type        = number
+  description = "MTU value for the private network interface on RHEL and RHCOS nodes"
+  default     = 1450
+}
+
 variable "installer_log_level" {
     description = "Set the log level required for openshift-install commands"
     default = "info"

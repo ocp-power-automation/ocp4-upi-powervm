@@ -147,6 +147,7 @@ module "install" {
     cluster_domain                  = var.cluster_domain
     cluster_id                      = local.cluster_id
     cidr                            = module.network.cidr
+    bastion                         = var.bastion
     bastion_vip                     = module.network.bastion_vip
     bastion_ip                      = module.bastion.bastion_ip
     rhel_username                   = var.rhel_username
@@ -161,6 +162,7 @@ module "install" {
     pull_secret                     = file(coalesce(var.pull_secret_file, "/dev/null"))
     storage_type                    = local.storage_type
     release_image_override          = var.release_image_override
+    private_network_mtu             = var.private_network_mtu
     enable_local_registry           = var.enable_local_registry
     local_registry_image            = var.local_registry_image
     ocp_release_tag                 = var.ocp_release_tag

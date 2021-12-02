@@ -193,6 +193,11 @@ install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playb
 install_playbook_tag       = "02a598faa332aa2c3d53e8edd0e840440ff74bd5"
 ```
 
+This variable specify the MTU value for the private network interface on RHEL and RHCOS nodes. The CNI network will have <private_network_mtu> - 50 for OpenshiftSDN and <private_network_mtu> - 100 for OVNKubernetes network provider.
+```
+private_network_mtu         = 1450
+```
+
 These variables can be used when debugging ansible playbooks
 ```
 installer_log_level         = "info"
