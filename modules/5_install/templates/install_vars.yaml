@@ -50,3 +50,7 @@ no_proxy: "${no_proxy}"
 dhcp_shared_network: true
 
 cni_network_provider: "${cni_network_provider}"
+
+cluster_network_cidr: "${cluster_network_cidr}"
+cluster_network_hostprefix: "${cluster_network_hostprefix}"
+service_network: "${service_network}"
