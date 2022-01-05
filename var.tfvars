@@ -89,3 +89,6 @@ cluster_id                  = ""         # It will use random generated id with 
 #upgrade_delay_time         = "600"
 
 #cni_network_provider       = "OpenshiftSDN"
+#cluster_network_cidr        = "10.128.0.0/14"
+#cluster_network_hostprefix  = "23"
+#service_network             = "172.30.0.0/16"

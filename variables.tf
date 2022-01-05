@@ -246,7 +246,7 @@ variable "install_playbook_repo" {
 variable "install_playbook_tag" {
     description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
     # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "9e2b6c66c28a864c6815a3c9e1f0488c0c43ef0c"
+    default = "e78e16b10f1b05b3dccdb027865ae20972ee95f0"
 }
 
 variable "ansible_extra_options" {
@@ -370,6 +370,21 @@ variable "upgrade_delay_time" {
 variable "cni_network_provider" {
     description = "Set the default Container Network Interface (CNI) network provider"
     default = "OpenshiftSDN"
+}
+
+variable "cluster_network_cidr" {
+    description = "blocks of IP addresses from which pod IP addresses are allocated."
+    default = "10.128.0.0/14"
+}
+
+variable "cluster_network_hostprefix" {
+    description = "The subnet prefix length to assign to each individual node."
+    default = "23"
+}
+
+variable "service_network" {
+    description = "blocks of IP addresses from which service addresses are allocated."
+    default = "172.30.0.0/16"
 }
 
 ################################################################
