@@ -27,6 +27,7 @@ locals {
     bastion_count = lookup(var.bastion, "count", 1)
 
     install_inventory = {
+        rhel_username   = var.rhel_username
         bastion_hosts   = [for ix in range(length(var.bastion_ip)) : "${var.cluster_id}-bastion-${ix}"]
         bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
         master_hosts    = [for ix in range(length(var.master_ips)) : "master-${ix}"]
