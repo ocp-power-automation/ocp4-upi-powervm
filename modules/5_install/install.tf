@@ -24,6 +24,8 @@ locals {
 
     ocp_release_repo    = "ocp4/openshift4"
 
+    bastion_count = lookup(var.bastion, "count", 1)
+
     install_inventory = {
         bastion_hosts   = [for ix in range(length(var.bastion_ip)) : "${var.cluster_id}-bastion-${ix}"]
         bootstrap_host  = var.bootstrap_ip == "" ? "" : "bootstrap"
@@ -66,6 +68,9 @@ locals {
         cluster_network_cidr       = var.cluster_network_cidr
         cluster_network_hostprefix = var.cluster_network_hostprefix
         service_network            = var.service_network
+        # Set CNI network MTU to MTU - 100 for OVNKubernetes and MTU - 50 for OpenShiftSDN(default).
+        # Add new conditions here when we have more network providers
+        cni_network_mtu = var.cni_network_provider == "OVNKubernetes" ? var.private_network_mtu - 100 : var.private_network_mtu - 50
     }
 
     upgrade_vars = {
@@ -77,7 +82,35 @@ locals {
     }
 }
 
+resource "null_resource" "pre_install" {
+  count      = local.bastion_count
+
+  connection {
+    type        = "ssh"
+    user        = var.rhel_username
+    host        = var.bastion_ip[count.index]
+    private_key = var.private_key
+    agent       = var.ssh_agent
+    timeout     = "${var.connection_timeout}m"
+    bastion_host = var.jump_host
+  }
+
+  # DHCP config for setting MTU; Since helpernode DHCP template does not support MTU setting
+  provisioner "remote-exec" {
+    inline = [
+      # Set specified mtu for private interface.
+      "sudo ip link set dev $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}') mtu ${var.private_network_mtu}",
+      "echo MTU=${var.private_network_mtu} | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-$(ip r | grep ${var.cidr} | awk '{print $3}')",
+      # DHCP config for setting MTU;
+      "sed -i.mtubak '/option routers/i option interface-mtu ${var.private_network_mtu};' /etc/dhcp/dhcpd.conf",
+      "sudo systemctl restart dhcpd.service"
+    ]
+  }
+}
+
 resource "null_resource" "install" {
+    depends_on = [null_resource.pre_install]
+
     triggers = {
         worker_count    = length(var.worker_ips)
     }

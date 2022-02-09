@@ -35,6 +35,7 @@ variable "ssh_agent" {}
 variable "connection_timeout" {}
 variable "jump_host" {}
 
+variable "bastion" {}
 variable "bootstrap_ip" {}
 variable "master_ips" {}
 variable "worker_ips" {}
@@ -42,6 +43,8 @@ variable "worker_ips" {}
 variable "public_key" {}
 variable "pull_secret" {}
 variable "release_image_override" {}
+
+variable "private_network_mtu" {}
 
 variable "enable_local_registry" {}
 variable "local_registry_image" {}
