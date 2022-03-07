@@ -83,10 +83,11 @@ worker                      = {instance_type    = "<worker-compute-template>", i
 ```
 These set of variables specify the username and the SSH key to be used for accessing the bastion node.
 ```
-rhel_username               = "root"
+rhel_username               = "root"  #Set it to an appropriate username for non-root user access
 public_key_file             = "data/id_rsa.pub"
 private_key_file            = "data/id_rsa"
 ```
+rhel_username is set to root. rhel_username can be set to an appropriate username having superuser privileges with no password prompt.
 Please note that only OpenSSH formatted keys are supported. Refer to the following links for instructions on creating SSH key based on your platform.
 - Windows 10 - https://phoenixnap.com/kb/generate-ssh-key-windows-10
 - Mac OSX - https://www.techrepublic.com/article/how-to-generate-ssh-keys-on-macos-mojave/

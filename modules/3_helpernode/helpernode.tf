@@ -73,7 +73,8 @@ locals {
         install_tarball          = var.openshift_install_tarball
     }
     helpernode_inventory = {
-        bastion_ip  = var.bastion_ip
+        rhel_username = var.rhel_username
+        bastion_ip    = var.bastion_ip
     }
 }
 
@@ -119,7 +120,7 @@ resource "null_resource" "config" {
         inline = [
             "sed -i \"/^helper:.*/a \\ \\ networkifacename: $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}')\" ocp4-helpernode/helpernode_vars.yaml",
             "echo 'Running ocp4-helpernode playbook...'",
-            "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options}"
+            "cd ocp4-helpernode && ansible-playbook  -i inventory -e @helpernode_vars.yaml tasks/main.yml ${var.ansible_extra_options} --become"
         ]
     }
 }

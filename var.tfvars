@@ -21,7 +21,7 @@ worker                      = {instance_type    = "<worker-compute-template>",  
 # worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
 
 
-rhel_username               = "root"
+rhel_username               = "root"  #Set it to an appropriate username for non-root user access
 public_key_file             = "data/id_rsa.pub"
 private_key_file            = "data/id_rsa"
 rhel_subscription_username  = "<subscription-id>"          #Leave this as-is if using CentOS as bastion image
