@@ -270,7 +270,7 @@ resource "null_resource" "bastion_packages" {
     }
     provisioner "remote-exec" {
         inline = [
-           "sudo yum install -y ansible"
+           "sudo yum install -y ansible-2.9.*"
         ]
     }
     provisioner "remote-exec" {
