@@ -103,8 +103,8 @@ resource "null_resource" "bastion_init" {
         inline = [
             "sudo chmod 600 $HOME/.ssh/id_rsa*",
             "sudo sed -i.bak -e 's/^ - set_hostname/# - set_hostname/' -e 's/^ - update_hostname/# - update_hostname/' /etc/cloud/cloud.cfg",
-            "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion-${count.index}.${var.cluster_domain}",
-            "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion-${count.index}.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
+            "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion-${count.index}.${lower(var.cluster_id)}.${var.cluster_domain}",
+            "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion-${count.index}.${lower(var.cluster_id)}.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",
             "sudo hostname -F /etc/hostname",
             "echo 'vm.max_map_count = 262144' | sudo tee --append /etc/sysctl.conf > /dev/null",
         ]
