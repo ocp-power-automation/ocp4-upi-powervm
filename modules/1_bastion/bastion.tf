@@ -93,15 +93,15 @@ resource "null_resource" "bastion_init" {
     }
     provisioner "file" {
         content = var.private_key
-        destination = "$HOME/.ssh/id_rsa"
+        destination = ".ssh/id_rsa"
     }
     provisioner "file" {
         content = var.public_key
-        destination = "$HOME/.ssh/id_rsa.pub"
+        destination = ".ssh/id_rsa.pub"
     }
     provisioner "remote-exec" {
         inline = [
-            "sudo chmod 600 $HOME/.ssh/id_rsa*",
+            "sudo chmod 600 .ssh/id_rsa*",
             "sudo sed -i.bak -e 's/^ - set_hostname/# - set_hostname/' -e 's/^ - update_hostname/# - update_hostname/' /etc/cloud/cloud.cfg",
             "sudo hostnamectl set-hostname --static ${lower(var.cluster_id)}-bastion-${count.index}.${lower(var.cluster_id)}.${var.cluster_domain}",
             "echo 'HOSTNAME=${lower(var.cluster_id)}-bastion-${count.index}.${lower(var.cluster_id)}.${var.cluster_domain}' | sudo tee -a /etc/sysconfig/network > /dev/null",

@@ -106,15 +106,15 @@ resource "null_resource" "config" {
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/helpernode_inventory", local.helpernode_inventory)
-        destination = "$HOME/ocp4-helpernode/inventory"
+        destination = "ocp4-helpernode/inventory"
     }
     provisioner "file" {
         content     = var.pull_secret
-        destination = "$HOME/.openshift/pull-secret"
+        destination = ".openshift/pull-secret"
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/helpernode_vars.yaml", local.helpernode_vars)
-        destination = "$HOME/ocp4-helpernode/helpernode_vars.yaml"
+        destination = "ocp4-helpernode/helpernode_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [

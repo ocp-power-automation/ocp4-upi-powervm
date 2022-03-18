@@ -136,11 +136,11 @@ resource "null_resource" "install" {
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/install_inventory", local.install_inventory)
-        destination = "$HOME/ocp4-playbooks/inventory"
+        destination = "ocp4-playbooks/inventory"
     }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/install_vars.yaml", local.install_vars)
-        destination = "$HOME/ocp4-playbooks/install_vars.yaml"
+        destination = "ocp4-playbooks/install_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [
@@ -166,7 +166,7 @@ resource "null_resource" "upgrade" {
 
     provisioner "file" {
         content     = templatefile("${path.module}/templates/upgrade_vars.yaml", local.upgrade_vars)
-        destination = "$HOME/ocp4-playbooks/upgrade_vars.yaml"
+        destination = "ocp4-playbooks/upgrade_vars.yaml"
     }
     provisioner "remote-exec" {
         inline = [
