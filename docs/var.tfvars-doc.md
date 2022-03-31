@@ -140,6 +140,14 @@ If `cluster_if_prefix` is not set, the `cluster_id` will be used only without pr
 A random value will be used for `cluster_id` if not set.
 The total length of `cluster_id_prefix`.`cluster_id` should not exceed 14 characters.
 
+### FIPS Variable for OpenShift deployment
+
+These variables will be used for deploying OCP in FIPS mode.
+Change the values as per your requirement.
+```
+fips_compliant      = false
+```
+
 ### Misc Customizations
 
 These variables provides miscellaneous customizations. For common usage scenarios these are not required and should be left unchanged.
