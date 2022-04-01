@@ -164,6 +164,7 @@ module "install" {
     release_image_override          = var.release_image_override
     private_network_mtu             = var.private_network_mtu
     enable_local_registry           = var.enable_local_registry
+    fips_compliant                  = var.fips_compliant
     local_registry_image            = var.local_registry_image
     ocp_release_tag                 = var.ocp_release_tag
     install_playbook_repo           = var.install_playbook_repo

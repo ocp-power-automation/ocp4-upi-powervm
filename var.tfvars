@@ -41,7 +41,7 @@ pull_secret_file            = "data/pull-secret.txt"
 cluster_domain              = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
 cluster_id_prefix           = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
 cluster_id                  = ""         # It will use random generated id with cluster_id_prefix if this is not set
-
+#fips_compliant             = false   # Set it true if you prefer to use FIPS enable in ocp deployment
 
 ### Misc Customizations
 

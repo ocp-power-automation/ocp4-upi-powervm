@@ -43,6 +43,7 @@ variable "worker_ips" {}
 variable "public_key" {}
 variable "pull_secret" {}
 variable "release_image_override" {}
+variable "fips_compliant" {}
 
 variable "private_network_mtu" {}
 
