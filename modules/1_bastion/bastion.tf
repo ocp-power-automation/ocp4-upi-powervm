@@ -265,7 +265,7 @@ resource "null_resource" "bastion_packages" {
     provisioner "remote-exec" {
         inline = [
             "#sudo yum update -y --skip-broken",
-            "sudo yum install -y wget jq git net-tools vim python3 tar"
+            "sudo yum install -y wget jq git net-tools vim python3 tar curl unzip"
         ]
     }
     provisioner "remote-exec" {

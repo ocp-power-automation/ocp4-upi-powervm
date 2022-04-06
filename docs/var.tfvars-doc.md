@@ -194,12 +194,42 @@ This variable can be used for trying out custom OpenShift install image for deve
 release_image_override     = ""
 ```
 
-These variables specify the ansible playbooks that are used for OpenShift install and post-install customizations.
+These variables specify the ansible playbooks that are used for OpenShift install and post-install customizations. If the URL ends with a file name extension .zip, then it is assumed that it points to a HTTP/HTTPS server and curl/unzip will be used to extract the package. URLs without ending with .zip are recognized as GitHub repositories and git clone && git checkout are used.
+`Only .zip is supported file format on web servers. The all files must be placed in folders starting with ocp4-playbooks, or ocp4-helpernode! It is allowed to extend the directory name with additional informations: e.g. ocp4-helpernode-<master/version number)`
+Valid options: Requires a URL pointing to the packages/GitHub project.
 ```
+helpernode_repo            = "https://<HTTP SERVER>/ocp4-ansible-modules/ocp4-helpernode-master.zip"
+OR
 helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
 helpernode_tag             = "5eab3db53976bb16be582f2edc2de02f7510050d"
+
+install_playbook_repo      = "https://<HTTP SERVER>/ocp4-ansible-modules/ocp4-playbooks-master.zip"
+OR
 install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playbooks"
 install_playbook_tag       = "02a598faa332aa2c3d53e8edd0e840440ff74bd5"
+```
+
+If you want to provide the ansible playbooks by your local HTTP server, follow these steps:
+```
+Use your web browser and visit https://github.com/RedHatOfficial/ocp4-helpernode
+On the main page, stay on the master repository page, or select any supported branch and click on the green "Code" button with a download symbol in front of it
+Click on "Download ZIP"
+Upload the file to your local HTTP server and place it in the appropriate directory
+
+Use your web browser and visit https://github.com/ocp-power-automation/ocp4-playbooks
+On the main page, stay on the master repository page, or select any supported branch and click on the green "Code" button with a download symbol in front of it
+Click on "Download ZIP"
+Upload the file to your local HTTP server and place it in the appropriate directory, like the example below
+
+ls -la /var/www/html/repos/
+total 13452
+-rw-r--r--. 1 root root 13624204 Jul  8 13:43 ocp4-helpernode.zip
+-rw-r--r--. 1 root root   145165 Jul  8 13:44 ocp4-playbooks.zip
+```
+
+This variable can be used to define a different source for the helm package, like a local web server. By default, the help package will be downloaded from the official internet source.
+```
+helm_repo                  = "https://<HTTP SERVER>/python-modules/helm-latest-linux-ppc64le.tar.gz"
 ```
 
 This variable specify the MTU value for the private network interface on RHEL and RHCOS nodes. The CNI network will have <private_network_mtu> - 50 for OpenshiftSDN and <private_network_mtu> - 100 for OVNKubernetes network provider.

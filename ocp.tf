@@ -113,6 +113,7 @@ module "helpernode" {
     ocp_release_tag                 = var.ocp_release_tag
     helpernode_repo                 = var.helpernode_repo
     helpernode_tag                  = var.helpernode_tag
+    helm_repo                       = var.helm_repo
     ansible_extra_options           = var.ansible_extra_options
     chrony_config                   = var.chrony_config
     chrony_config_servers           = var.chrony_config_servers

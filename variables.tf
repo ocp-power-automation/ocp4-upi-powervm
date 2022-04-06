@@ -290,6 +290,11 @@ variable "install_playbook_tag" {
     default = "284b597b3e88c635e3069b82926aa16812238492"
 }
 
+variable "helm_repo" {
+    description = "Set the URL after http_server_repo_main_dir pointing to the Python helm modules"
+    default = "https://get.helm.sh/helm-v3.6.3-linux-ppc64le.tar.gz"
+}
+ 
 variable "ansible_extra_options" {
     description = "Extra options string to append to ansible-playbook commands"
     default     = "-v"

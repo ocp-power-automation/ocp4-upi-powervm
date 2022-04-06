@@ -90,4 +90,4 @@ ocp_initramfs: "file:///dev/null"
 ocp_install_kernel: "file:///dev/null"
 
 # This is required for latest helpernode. TODO: Remove when https://github.com/RedHatOfficial/ocp4-helpernode/pull/140 is merged
-helm_source: "https://get.helm.sh/helm-v3.4.0-linux-ppc64le.tar.gz"
+helm_source: "${helm_repo}"

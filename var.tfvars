@@ -61,6 +61,7 @@ cluster_id                  = ""         # It will use random generated id with 
 #helpernode_tag             = ""
 #install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playbooks"
 #install_playbook_tag       = ""
+#helm_repo                 = "https://get.helm.sh/helm-v3.6.3-linux-ppc64le.tar.gz"
 
 #installer_log_level        = "info"
 #ansible_extra_options      = "-v"

@@ -69,6 +69,7 @@ locals {
         ]
 
         local_registry           = local.local_registry
+        helm_repo                = var.helm_repo
         client_tarball           = var.openshift_client_tarball
         install_tarball          = var.openshift_install_tarball
     }
@@ -78,12 +79,11 @@ locals {
     }
 }
 
-resource "null_resource" "config" {
-
+resource "null_resource" "prep_helpernode_tools_git" {
     triggers = {
         bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
-        worker_count    = length(var.worker_port_ips)
     }
+    count = length(regexall("\\.zip$", var.helpernode_repo)) == 0 ? 1 : 0
 
     connection {
         type        = "ssh"
@@ -104,6 +104,59 @@ resource "null_resource" "config" {
             "cd ocp4-helpernode && git checkout ${var.helpernode_tag}"
         ]
     }
+}
+
+resource "null_resource" "prep_helpernode_tools_curl" {
+    triggers = {
+        bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
+    }
+    count = length(regexall("\\.zip$", var.helpernode_repo)) > 0 ? 1 : 0
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "mkdir -p .openshift",
+            "rm -rf ocp4-helpernode",
+            "rm -rf ocp4-extract-helper",
+            "mkdir -p ocp4-extract-helper", 
+            "echo 'Downloading ocp4-helpernode...'",
+            "curl -o ocp4-extract-helper/ocp4-helpernode.zip ${var.helpernode_repo}",
+            "echo 'Extracting ocp4-helpernode...'",
+            "cd ocp4-extract-helper && unzip ocp4-helpernode.zip",
+            "cd .. && rm -rf ocp4-extract-helper/ocp4-helpernode.zip",
+            "mv ocp4-extract-helper/ocp4-helpernode* ocp4-helpernode",
+            "rm -rf ocp4-extract-helper"
+        ]
+    }
+}
+
+resource "null_resource" "config" {
+    depends_on = [null_resource.prep_helpernode_tools_git, null_resource.prep_helpernode_tools_curl]
+
+    triggers = {
+        bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
+        worker_count    = length(var.worker_port_ips)
+    }
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
     provisioner "file" {
         content     = templatefile("${path.module}/templates/helpernode_inventory", local.helpernode_inventory)
         destination = "ocp4-helpernode/inventory"

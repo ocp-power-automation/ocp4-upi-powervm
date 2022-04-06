@@ -84,6 +84,58 @@ locals {
     }
 }
 
+resource "null_resource" "prep_playbooks_tools_git" {
+    count = length(regexall("\\.zip$", var.install_playbook_repo)) == 0 ? 1 : 0
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "rm -rf ocp4-playbooks",
+            "echo 'Cloning into ocp4-playbooks...'",
+            "git clone ${var.install_playbook_repo} --quiet",
+            "cd ocp4-playbooks && git checkout ${var.install_playbook_tag}"
+        ]
+    }
+}
+
+resource "null_resource" "prep_playbooks_tools_curl" {
+    count = length(regexall("\\.zip$", var.install_playbook_repo)) > 0 ? 1 : 0
+
+    connection {
+        type        = "ssh"
+        user        = var.rhel_username
+        host        = var.bastion_ip[0]
+        private_key = var.private_key
+        agent       = var.ssh_agent
+        timeout     = "${var.connection_timeout}m"
+        bastion_host = var.jump_host
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "rm -rf ocp4-playbooks",
+            "rm -rf ocp4-extract-helper",
+            "mkdir -p ocp4-extract-helper", 
+            "echo 'Downloading ocp4-playbooks...'",
+            "curl -o ocp4-extract-helper/ocp4-playbooks.zip ${var.install_playbook_repo}",
+            "echo 'Extracting ocp4-playbooks...'",
+            "cd ocp4-extract-helper && unzip ocp4-playbooks.zip",
+            "cd .. && rm -rf ocp4-extract-helper/ocp4-playbooks.zip",
+            "mv ocp4-extract-helper/ocp4-playbooks* ocp4-playbooks",
+            "rm -rf ocp4-extract-helper"
+        ]
+    }
+}
+
 resource "null_resource" "pre_install" {
   count      = local.bastion_count
 
@@ -111,7 +163,7 @@ resource "null_resource" "pre_install" {
 }
 
 resource "null_resource" "install" {
-    depends_on = [null_resource.pre_install]
+    depends_on = [null_resource.prep_playbooks_tools_git, null_resource.prep_playbooks_tools_curl, null_resource.pre_install]
 
     triggers = {
         worker_count    = length(var.worker_ips)
@@ -127,14 +179,6 @@ resource "null_resource" "install" {
         bastion_host = var.jump_host
     }
 
-    provisioner "remote-exec" {
-        inline = [
-            "rm -rf ocp4-playbooks",
-            "echo 'Cloning into ocp4-playbooks...'",
-            "git clone ${var.install_playbook_repo} --quiet",
-            "cd ocp4-playbooks && git checkout ${var.install_playbook_tag}"
-        ]
-    }
     provisioner "file" {
         content     = templatefile("${path.module}/templates/install_inventory", local.install_inventory)
         destination = "ocp4-playbooks/inventory"
