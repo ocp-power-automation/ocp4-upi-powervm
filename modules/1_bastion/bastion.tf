@@ -287,7 +287,7 @@ resource "null_resource" "bastion_packages" {
     }
 }
 
-resource "openstack_blockstorage_volume_v2" "storage_volume" {
+resource "openstack_blockstorage_volume_v3" "storage_volume" {
     count       = var.storage_type == "nfs" ? 1 : 0
 
     name        = "${var.cluster_id}-${var.storage_type}-storage-vol"
@@ -299,7 +299,7 @@ resource "openstack_compute_volume_attach_v2" "storage_v_attach" {
     depends_on      = [null_resource.bastion_init]
     count       = var.storage_type == "nfs" ? 1 : 0
 
-    volume_id   = openstack_blockstorage_volume_v2.storage_volume[count.index].id
+    volume_id   = openstack_blockstorage_volume_v3.storage_volume[count.index].id
     instance_id = openstack_compute_instance_v2.bastion[count.index].id
 }
 
