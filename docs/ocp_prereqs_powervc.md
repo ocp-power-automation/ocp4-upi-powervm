@@ -3,11 +3,12 @@
 ## RHCOS and RHEL 8.X Images for OpenShift
 You'll need to create RedHat CoreOS (RHCOS) and RHEL 8.2 (or later) image in PowerVC. RHEL 8.x image is used by bastion node, and RHCOS image is used for boostrap, master and worker nodes.
 
-For RHEL image creation follow the steps mentioned in the following [doc](https://www.ibm.com/support/knowledgecenter/en/SSXK2N_1.4.0/com.ibm.powervc.standard.help.doc/powervc_creating_initial_vm.html
-)
 
 For RHCOS image creation, follow the steps mentioned
 in the following [doc](./rhcos-image-creation.md).
+
+For RHEL image creation follow the steps mentioned in the following [doc](https://www.ibm.com/docs/en/powervc/2.0.3?topic=working-images
+) , you may either create a new image from ISO, or use a similar method like CoreOS with a qcow2 image.
 
 
 ## Compute Templates
