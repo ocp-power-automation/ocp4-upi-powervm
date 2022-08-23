@@ -19,7 +19,7 @@ Install the following packages on the automation host. Select the appropriate in
 
 ### Terraform
 
-**Terraform**: Please open the [link](https://www.terraform.io/downloads) for downloading the latest Terraform. For validating the version run `terraform version` command after install.
+**Terraform**: Please open the [link](https://www.terraform.io/downloads) for downloading the latest Terraform. For validating the version run `terraform version` command after install. Terraform version 1.2.0 and above is required.
 
 Install Terraform and providers for Power environment:
 1. Download and install the latest Terraform binary for Linux/ppc64le from https://github.com/ppc64le-development/terraform-ppc64le/releases.
