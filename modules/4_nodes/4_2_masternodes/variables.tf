@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,15 +21,6 @@
 variable "bastion_ip" {}
 variable "cluster_id" {}
 
-variable "bootstrap" {
-  # only one node is supported
-  default = {
-    instance_type = "m1.xlarge"
-    # rhcos image id
-    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-    count    = 1
-  }
-}
 variable "master" {
   default = {
     instance_type = "m1.xlarge"
@@ -38,26 +29,10 @@ variable "master" {
     count    = 3
   }
 }
-variable "worker" {
-  default = {
-    instance_type = "m1.xlarge"
-    # rhcos image id
-    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-    count    = 2
-  }
-}
 
 variable "scg_id" {}
 variable "openstack_availability_zone" {}
 
-variable "bootstrap_port_id" {}
 variable "master_port_ids" {}
-variable "worker_port_ids" {}
 
 variable "mount_etcd_ramdisk" {}
-
-variable "rhel_username" {}
-variable "private_key" {}
-variable "ssh_agent" {}
-variable "connection_timeout" {}
-variable "jump_host" {}

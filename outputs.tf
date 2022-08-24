@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,15 +35,15 @@ output "bastion_ssh_command" {
 }
 
 output "bootstrap_ip" {
-  value = module.nodes.bootstrap_ip
+  value = module.bootstrapnode.bootstrap_ip
 }
 
 output "master_ips" {
-  value = module.nodes.master_ips
+  value = module.masternodes.master_ips
 }
 
 output "worker_ips" {
-  value = module.nodes.worker_ips
+  value = module.workernodes.worker_ips
 }
 
 output "etc_hosts_entries" {

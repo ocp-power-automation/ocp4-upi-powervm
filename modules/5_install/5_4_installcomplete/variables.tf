@@ -1,4 +1,4 @@
-################################################################
+##################v##############################################
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,20 +18,29 @@
 #
 ################################################################
 
-terraform {
-  required_providers {
-    ignition = {
-      source  = "community-terraform-providers/ignition"
-      version = "~> 2.1.0"
-    }
-    openstack = {
-      source  = "terraform-provider-openstack/openstack"
-      version = "~> 1.32"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 2.3"
-    }
-  }
-  required_version = ">= 1.2.0"
+variable "cluster_domain" {
+  default = "example.com"
 }
+variable "cluster_id" {
+  default = "test-ocp"
+}
+
+variable "bastion_vip" {}
+variable "bastion_ip" {}
+variable "rhel_username" {}
+variable "private_key" {}
+variable "ssh_agent" {}
+variable "connection_timeout" {}
+variable "jump_host" {}
+
+variable "worker_ips" {}
+
+
+variable "ansible_extra_options" {}
+
+
+variable "upgrade_version" {}
+variable "upgrade_channel" {}
+variable "upgrade_image" {}
+variable "upgrade_pause_time" {}
+variable "upgrade_delay_time" {}

@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -110,12 +110,8 @@ resource "null_resource" "pre_install" {
   }
 }
 
-resource "null_resource" "install" {
+resource "null_resource" "install_config" {
   depends_on = [null_resource.pre_install]
-
-  triggers = {
-    worker_count = length(var.worker_ips)
-  }
 
   connection {
     type         = "ssh"
@@ -146,34 +142,7 @@ resource "null_resource" "install" {
   provisioner "remote-exec" {
     inline = [
       "echo 'Running ocp install playbook...'",
-      "cd ocp4-playbooks && ansible-playbook -i inventory -e @install_vars.yaml playbooks/install.yaml ${var.ansible_extra_options}"
+      "cd ocp4-playbooks && ansible-playbook -i inventory -e @install_vars.yaml playbooks/install-config.yaml ${var.ansible_extra_options}"
     ]
   }
 }
-
-resource "null_resource" "upgrade" {
-  depends_on = [null_resource.install]
-  count      = (var.upgrade_version != "" || var.upgrade_image != "") != "" ? 1 : 0
-
-  connection {
-    type         = "ssh"
-    user         = var.rhel_username
-    host         = var.bastion_ip[0]
-    private_key  = var.private_key
-    agent        = var.ssh_agent
-    timeout      = "${var.connection_timeout}m"
-    bastion_host = var.jump_host
-  }
-
-  provisioner "file" {
-    content     = templatefile("${path.module}/templates/upgrade_vars.yaml", local.upgrade_vars)
-    destination = "ocp4-playbooks/upgrade_vars.yaml"
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "echo 'Running ocp upgrade playbook...'",
-      "cd ocp4-playbooks && ansible-playbook -i inventory -e @upgrade_vars.yaml playbooks/upgrade.yaml ${var.ansible_extra_options}"
-    ]
-  }
-}
-

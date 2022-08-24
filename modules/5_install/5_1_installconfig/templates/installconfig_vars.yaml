@@ -1,0 +1,52 @@
+---
+install_config:
+   cluster_domain: ${cluster_domain}
+   cluster_id: ${cluster_id}
+   pull_secret: '${pull_secret}'
+   public_ssh_key: '${public_ssh_key}'
+
+workdir: ~/openstack-upi
+log_level: ${log_level}
+
+release_image_override: '${release_image_override}'
+enable_local_registry: ${enable_local_registry}
+fips_compliant: "${fips_compliant}"
+
+
+rhcos_pre_kernel_options: [%{ for opt in rhcos_pre_kernel_options ~}"${opt}",%{ endfor ~}]
+
+
+%{ if chrony_config ~}
+chronyconfig:
+  enabled: true
+  allow:
+    - ${chrony_allow_range}
+%{ if length(chrony_config_servers) > 0 ~}
+  content:
+%{ endif ~}
+%{ for item in chrony_config_servers ~}
+    - server: ${item.server}
+      options: ${item.options}
+%{ endfor ~}
+%{ endif ~}
+
+setup_squid_proxy : ${setup_squid_proxy}
+squid_acl_localnet:
+  - acl localnet src ${squid_source_range}
+
+proxy_url: "${proxy_url}"
+no_proxy: "${no_proxy}"
+
+# This flag when true/yes will allow sharing same network for multiple dhcp servers
+dhcp_shared_network: true
+
+%{ if bastion_vip != "" }
+bastion_vip: "${bastion_vip}"
+%{ endif ~}
+
+cni_network_provider: "${cni_network_provider}"
+
+cluster_network_cidr: "${cluster_network_cidr}"
+cluster_network_hostprefix: "${cluster_network_hostprefix}"
+service_network: "${service_network}"
+cni_network_mtu: "${cni_network_mtu}"

@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -119,30 +119,9 @@ module "helpernode" {
   pull_secret               = file(coalesce(var.pull_secret_file, "/dev/null"))
 }
 
-module "nodes" {
-  source = "./modules/4_nodes"
-
-  bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
-  cluster_id                  = local.cluster_id
-  bootstrap                   = var.bootstrap
-  master                      = var.master
-  worker                      = var.worker
-  scg_id                      = var.scg_id
-  openstack_availability_zone = var.openstack_availability_zone
-  bootstrap_port_id           = module.network.bootstrap_port_id
-  master_port_ids             = module.network.master_port_ids
-  worker_port_ids             = module.network.worker_port_ids
-  mount_etcd_ramdisk          = var.mount_etcd_ramdisk
-  rhel_username               = var.rhel_username
-  private_key                 = local.private_key
-  ssh_agent                   = var.ssh_agent
-  connection_timeout          = var.connection_timeout
-  jump_host                   = var.jump_host
-}
-
-module "install" {
-  depends_on = [module.helpernode, module.nodes]
-  source     = "./modules/5_install"
+module "installconfig" {
+  depends_on = [module.helpernode]
+  source     = "./modules/5_install/5_1_installconfig"
 
   cluster_domain             = var.cluster_domain
   cluster_id                 = local.cluster_id
@@ -155,9 +134,9 @@ module "install" {
   ssh_agent                  = var.ssh_agent
   connection_timeout         = var.connection_timeout
   jump_host                  = var.jump_host
-  bootstrap_ip               = module.nodes.bootstrap_ip
-  master_ips                 = module.nodes.master_ips
-  worker_ips                 = module.nodes.worker_ips
+  bootstrap_ip               = module.network.bootstrap_port_ip
+  master_ips                 = module.network.master_port_ips
+  worker_ips                 = module.network.worker_port_ips
   public_key                 = local.public_key
   pull_secret                = file(coalesce(var.pull_secret_file, "/dev/null"))
   storage_type               = local.storage_type
@@ -189,4 +168,94 @@ module "install" {
   cluster_network_cidr       = var.cluster_network_cidr
   cluster_network_hostprefix = var.cluster_network_hostprefix
   service_network            = var.service_network
+}
+
+module "bootstrapnode" {
+  depends_on = [module.installconfig]
+  source     = "./modules/4_nodes/4_1_bootstrapnode"
+
+  bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
+  cluster_id                  = local.cluster_id
+  bootstrap                   = var.bootstrap
+  scg_id                      = var.scg_id
+  openstack_availability_zone = var.openstack_availability_zone
+  bootstrap_port_id           = module.network.bootstrap_port_id
+}
+
+module "bootstrapconfig" {
+  depends_on = [module.bootstrapnode]
+  source     = "./modules/5_install/5_2_bootstrapconfig"
+
+  bastion_ip            = module.bastion.bastion_ip
+  rhel_username         = var.rhel_username
+  private_key           = local.private_key
+  ssh_agent             = var.ssh_agent
+  connection_timeout    = var.connection_timeout
+  jump_host             = var.jump_host
+  ansible_extra_options = var.ansible_extra_options
+}
+
+
+module "masternodes" {
+  depends_on = [module.bootstrapconfig]
+  source     = "./modules/4_nodes/4_2_masternodes"
+
+  bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
+  cluster_id                  = local.cluster_id
+  master                      = var.master
+  scg_id                      = var.scg_id
+  openstack_availability_zone = var.openstack_availability_zone
+  master_port_ids             = module.network.master_port_ids
+  mount_etcd_ramdisk          = var.mount_etcd_ramdisk
+}
+
+module "bootstrapcomplete" {
+  depends_on = [module.masternodes]
+  source     = "./modules/5_install/5_3_bootstrapcomplete"
+
+  bastion_ip            = module.bastion.bastion_ip
+  rhel_username         = var.rhel_username
+  private_key           = local.private_key
+  ssh_agent             = var.ssh_agent
+  connection_timeout    = var.connection_timeout
+  jump_host             = var.jump_host
+  ansible_extra_options = var.ansible_extra_options
+}
+
+module "workernodes" {
+  depends_on = [module.bootstrapcomplete]
+  source     = "./modules/4_nodes/4_3_workernodes"
+
+  bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
+  cluster_id                  = local.cluster_id
+  worker                      = var.worker
+  scg_id                      = var.scg_id
+  openstack_availability_zone = var.openstack_availability_zone
+  worker_port_ids             = module.network.worker_port_ids
+  rhel_username               = var.rhel_username
+  private_key                 = local.private_key
+  ssh_agent                   = var.ssh_agent
+  connection_timeout          = var.connection_timeout
+  jump_host                   = var.jump_host
+}
+module "install" {
+  depends_on = [module.workernodes]
+  source     = "./modules/5_install/5_4_installcomplete"
+
+  cluster_domain        = var.cluster_domain
+  cluster_id            = local.cluster_id
+  bastion_vip           = module.network.bastion_vip
+  bastion_ip            = module.bastion.bastion_ip
+  rhel_username         = var.rhel_username
+  private_key           = local.private_key
+  ssh_agent             = var.ssh_agent
+  connection_timeout    = var.connection_timeout
+  jump_host             = var.jump_host
+  worker_ips            = module.network.worker_port_ips
+  ansible_extra_options = var.ansible_extra_options
+  upgrade_version       = var.upgrade_version
+  upgrade_channel       = var.upgrade_channel
+  upgrade_image         = var.upgrade_image
+  upgrade_pause_time    = var.upgrade_pause_time
+  upgrade_delay_time    = var.upgrade_delay_time
 }
