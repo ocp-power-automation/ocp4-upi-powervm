@@ -19,14 +19,14 @@
 ################################################################
 
 variable "cluster_domain" {
-  default   = "example.com"
+  default = "example.com"
 }
 variable "cluster_id" {
-  default   = "test-ocp"
+  default = "test-ocp"
 }
 
 variable "dns_forwarders" {
-    default   = "8.8.8.8; 9.9.9.9"
+  default = "8.8.8.8; 9.9.9.9"
 }
 
 variable "lb_ipaddr" {}

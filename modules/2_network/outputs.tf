@@ -19,57 +19,57 @@
 ################################################################
 
 output "bastion_port_ids" {
-    value = openstack_networking_port_v2.bastion_port.*.id
+  value = openstack_networking_port_v2.bastion_port.*.id
 }
 
 output "bastion_vip" {
-    value = join("", flatten(openstack_networking_port_v2.bastion_vip.*.all_fixed_ips))
+  value = join("", flatten(openstack_networking_port_v2.bastion_vip.*.all_fixed_ips))
 }
 
 output "bootstrap_port_id" {
-    value = join("", openstack_networking_port_v2.bootstrap_port.*.id)
+  value = join("", openstack_networking_port_v2.bootstrap_port.*.id)
 }
 
 output "master_port_ids" {
-    value = openstack_networking_port_v2.master_port.*.id
+  value = openstack_networking_port_v2.master_port.*.id
 }
 
 output "worker_port_ids" {
-    value = openstack_networking_port_v2.worker_port.*.id
+  value = openstack_networking_port_v2.worker_port.*.id
 }
 
-output bootstrap_mac {
-    value = join("", openstack_networking_port_v2.bootstrap_port.*.mac_address)
+output "bootstrap_mac" {
+  value = join("", openstack_networking_port_v2.bootstrap_port.*.mac_address)
 }
 
-output master_macs {
-    value = openstack_networking_port_v2.master_port.*.mac_address
+output "master_macs" {
+  value = openstack_networking_port_v2.master_port.*.mac_address
 }
 
-output worker_macs {
-    value = openstack_networking_port_v2.worker_port.*.mac_address
+output "worker_macs" {
+  value = openstack_networking_port_v2.worker_port.*.mac_address
 }
 
 output "bootstrap_port_ip" {
-    value = join("", flatten(openstack_networking_port_v2.bootstrap_port.*.all_fixed_ips))
+  value = join("", flatten(openstack_networking_port_v2.bootstrap_port.*.all_fixed_ips))
 }
 
 output "master_port_ips" {
-    value = flatten(openstack_networking_port_v2.master_port.*.all_fixed_ips)
+  value = flatten(openstack_networking_port_v2.master_port.*.all_fixed_ips)
 }
 
 output "worker_port_ips" {
-    value = flatten(openstack_networking_port_v2.worker_port.*.all_fixed_ips)
+  value = flatten(openstack_networking_port_v2.worker_port.*.all_fixed_ips)
 }
 
-output gateway_ip {
-    value = data.openstack_networking_subnet_v2.subnet.gateway_ip
+output "gateway_ip" {
+  value = data.openstack_networking_subnet_v2.subnet.gateway_ip
 }
 
-output cidr {
-    value = data.openstack_networking_subnet_v2.subnet.cidr
+output "cidr" {
+  value = data.openstack_networking_subnet_v2.subnet.cidr
 }
 
-output allocation_pools {
-    value = data.openstack_networking_subnet_v2.subnet.allocation_pools
+output "allocation_pools" {
+  value = data.openstack_networking_subnet_v2.subnet.allocation_pools
 }

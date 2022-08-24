@@ -19,10 +19,10 @@
 ################################################################
 
 variable "cluster_domain" {
-  default   = "example.com"
+  default = "example.com"
 }
 variable "cluster_id" {
-  default   = "test-ocp"
+  default = "test-ocp"
 }
 
 variable "cidr" {}

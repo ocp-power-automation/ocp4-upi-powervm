@@ -22,29 +22,29 @@ variable "bastion_ip" {}
 variable "cluster_id" {}
 
 variable "bootstrap" {
-    # only one node is supported
-    default = {
-        instance_type = "m1.xlarge"
-        # rhcos image id
-        image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-        count = 1
-    }
+  # only one node is supported
+  default = {
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    count    = 1
+  }
 }
 variable "master" {
-    default = {
-        instance_type = "m1.xlarge"
-        # rhcos image id
-        image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-        count = 3
-    }
+  default = {
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    count    = 3
+  }
 }
 variable "worker" {
-    default = {
-        instance_type = "m1.xlarge"
-        # rhcos image id
-        image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-        count = 2
-    }
+  default = {
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    count    = 2
+  }
 }
 
 variable "scg_id" {}

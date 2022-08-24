@@ -22,28 +22,28 @@
 # Configure the OpenStack Provider
 ################################################################
 variable "user_name" {
-    description = "The user name used to connect to OpenStack/PowerVC"
-    default = "my_user_name"
+  description = "The user name used to connect to OpenStack/PowerVC"
+  default     = "my_user_name"
 }
 
 variable "password" {
-    description = "The password for the user"
-    default = "my_password"
+  description = "The password for the user"
+  default     = "my_password"
 }
 
 variable "tenant_name" {
-    description = "The name of the project (a.k.a. tenant) used"
-    default = "ibm-default"
+  description = "The name of the project (a.k.a. tenant) used"
+  default     = "ibm-default"
 }
 
 variable "domain_name" {
-    description = "The domain to be used"
-    default = "Default"
+  description = "The domain to be used"
+  default     = "Default"
 }
 
 variable "auth_url" {
-    description = "The endpoint URL used to connect to OpenStack/PowerVC"
-    default = "https://<HOSTNAME>:5000/v3/"
+  description = "The endpoint URL used to connect to OpenStack/PowerVC"
+  default     = "https://<HOSTNAME>:5000/v3/"
 }
 
 variable "insecure" {
@@ -51,8 +51,8 @@ variable "insecure" {
 }
 
 variable "openstack_availability_zone" {
-    description = "The name of Availability Zone for deploy operation"
-    default = ""
+  description = "The name of Availability Zone for deploy operation"
+  default     = ""
 }
 
 
@@ -61,97 +61,97 @@ variable "openstack_availability_zone" {
 ################################################################
 
 variable "bastion" {
-    default = {
-        count           = 1
-        instance_type   = "m1.xlarge"
-        image_id        = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"
-        # optional availability_zone
-        # availability_zone = ""
-        # optional fixed IP address
-        # fixed_ip_v4   = "123.45.67.89"
-        # fixed_ips = []
-    }
+  default = {
+    count         = 1
+    instance_type = "m1.xlarge"
+    image_id      = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"
+    # optional availability_zone
+    # availability_zone = ""
+    # optional fixed IP address
+    # fixed_ip_v4   = "123.45.67.89"
+    # fixed_ips = []
+  }
 }
 variable "bootstrap" {
-    default = {
-        # only one node is supported
-        count = 1
-        instance_type = "m1.xlarge"
-        # rhcos image id
-        image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-        # optional availability_zone
-        # availability_zone = ""
-        # optional fixed IPs
-        # fixed_ips = []
-    }
+  default = {
+    # only one node is supported
+    count         = 1
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    # optional availability_zone
+    # availability_zone = ""
+    # optional fixed IPs
+    # fixed_ips = []
+  }
 }
 
 variable "master" {
-    default = {
-        count = 3
-        instance_type = "m1.xlarge"
-        # rhcos image id
-        image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-        # optional availability_zone
-        # availability_zone = ""
-        # optional fixed IPs
-        # fixed_ips = []
-        # optional data volumes to master nodes
-        # data_volume_size = 100 #Default volume size (in GB) to be attached to the master nodes.
-        # data_volume_count = 0 #Number of volumes to be attached to each master node.
-    }
+  default = {
+    count         = 3
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    # optional availability_zone
+    # availability_zone = ""
+    # optional fixed IPs
+    # fixed_ips = []
+    # optional data volumes to master nodes
+    # data_volume_size = 100 #Default volume size (in GB) to be attached to the master nodes.
+    # data_volume_count = 0 #Number of volumes to be attached to each master node.
+  }
 }
 
 variable "worker" {
-    default = {
-        count = 2
-        instance_type = "m1.xlarge"
-        # rhcos image id
-        image_id      = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
-        # optional availability_zone
-        # availability_zone = ""
-        # optional fixed IPs
-        # fixed_ips = []
-        # optional data volumes to worker nodes
-        # data_volume_size = 100 #Default volume size (in GB) to be attached to the worker nodes.
-        # data_volume_count = 0 #Number of volumes to be attached to each worker node.
-    }
+  default = {
+    count         = 2
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    # optional availability_zone
+    # availability_zone = ""
+    # optional fixed IPs
+    # fixed_ips = []
+    # optional data volumes to worker nodes
+    # data_volume_size = 100 #Default volume size (in GB) to be attached to the worker nodes.
+    # data_volume_count = 0 #Number of volumes to be attached to each worker node.
+  }
 }
 
 variable "network_name" {
-    description = "The name of the network to be used for deploy operations"
-    default = "my_network_name"
+  description = "The name of the network to be used for deploy operations"
+  default     = "my_network_name"
 }
 
 variable "network_type" {
-    #Eg: SEA or SRIOV
-    default = "SEA"
-    description = "Specify the name of the network adapter type to use for creating hosts"
+  #Eg: SEA or SRIOV
+  default     = "SEA"
+  description = "Specify the name of the network adapter type to use for creating hosts"
 }
 
 variable "sriov_vnic_failover_vfs" {
-    # Eg: 1 = VNIC without failover; 2 = VNIC failover with 2 SR-IOV VFs
-    default = 1
-    description = "Specifies the amount of VNIC failover virtual functions (max. is 6)"
-    validation {
-        condition = var.sriov_vnic_failover_vfs > 0 && var.sriov_vnic_failover_vfs < 7
-        error_message = "The number of virtual functions for the parameter sriov_vnic_failover_vfs must be min. 1 and cannot exceed 6."
-    }
+  # Eg: 1 = VNIC without failover; 2 = VNIC failover with 2 SR-IOV VFs
+  default     = 1
+  description = "Specifies the amount of VNIC failover virtual functions (max. is 6)"
+  validation {
+    condition     = var.sriov_vnic_failover_vfs > 0 && var.sriov_vnic_failover_vfs < 7
+    error_message = "The number of virtual functions for the parameter sriov_vnic_failover_vfs must be min. 1 and cannot exceed 6."
+  }
 }
 
 variable "sriov_capacity" {
-    # Eg: 0.02 = 2%; 0.20 = 20%; 1.00 = 100%
-    default = 0.02
-    description = "Specifies the SR-IOV LP capacity"
+  # Eg: 0.02 = 2%; 0.20 = 20%; 1.00 = 100%
+  default     = 0.02
+  description = "Specifies the SR-IOV LP capacity"
 }
 
 variable "scg_id" {
-    description = "The id of PowerVC Storage Connectivity Group to use for all nodes"
-    default = ""
+  description = "The id of PowerVC Storage Connectivity Group to use for all nodes"
+  default     = ""
 }
 
 variable "rhel_username" {
-    default = "root"
+  default = "root"
 }
 
 variable "keypair_name" {
@@ -161,98 +161,98 @@ variable "keypair_name" {
 }
 
 variable "public_key_file" {
-    description = "Path to public key file"
-    # if empty, will default to ${path.cwd}/data/id_rsa.pub
-    default     = ""
+  description = "Path to public key file"
+  # if empty, will default to ${path.cwd}/data/id_rsa.pub
+  default = ""
 }
 
 variable "private_key_file" {
-    description = "Path to private key file"
-    # if empty, will default to ${path.cwd}/data/id_rsa
-    default     = ""
+  description = "Path to private key file"
+  # if empty, will default to ${path.cwd}/data/id_rsa
+  default = ""
 }
 
 variable "private_key" {
-    description = "content of private ssh key"
-    # if empty string will read contents of file at var.private_key_file
-    default = ""
+  description = "content of private ssh key"
+  # if empty string will read contents of file at var.private_key_file
+  default = ""
 }
 
 variable "public_key" {
-    description = "Public key"
-    # if empty string will read contents of file at var.public_key_file
-    default     = ""
+  description = "Public key"
+  # if empty string will read contents of file at var.public_key_file
+  default = ""
 }
 
 variable "rhel_subscription_username" {
-    default = ""
+  default = ""
 }
 
 variable "rhel_subscription_password" {
-    default = ""
+  default = ""
 }
 
 variable "rhel_subscription_org" {
-    default = ""
+  default = ""
 }
 
 variable "rhel_subscription_activationkey" {
-    default = ""
+  default = ""
 }
 
 variable "rhcos_pre_kernel_options" {
-    description = "List of kernel arguments for the cluster nodes for pre-installation"
-    default     = []
+  description = "List of kernel arguments for the cluster nodes for pre-installation"
+  default     = []
 }
 
 variable "rhcos_kernel_options" {
-    description = "List of kernel arguments for the cluster nodes"
-    default     = []
+  description = "List of kernel arguments for the cluster nodes"
+  default     = []
 }
 
 variable "sysctl_tuned_options" {
-    description = "Set to true to apply sysctl options via tuned operator. Default: false"
-    default     = false
+  description = "Set to true to apply sysctl options via tuned operator. Default: false"
+  default     = false
 }
 
 variable "sysctl_options" {
-    description = "List of sysctl options to apply."
-    default     = []
+  description = "List of sysctl options to apply."
+  default     = []
 }
 
 variable "match_array" {
-    description = "Criteria for node/pod selection."
-    default     = <<EOF
+  description = "Criteria for node/pod selection."
+  default     = <<EOF
 EOF
 }
 
 variable "chrony_config" {
-    description = "Set to true to setup time synchronization and setup chrony. Default: false"
-    default     = true
+  description = "Set to true to setup time synchronization and setup chrony. Default: false"
+  default     = true
 }
 
 variable "chrony_config_servers" {
-    description = "List of ntp servers and options to apply"
-    default     = []
-    # example: chrony_config_servers = [ {server = "10.3.21.254", options = "iburst"}, {server = "10.5.21.254", options = "iburst"} ]
+  description = "List of ntp servers and options to apply"
+  default     = []
+  # example: chrony_config_servers = [ {server = "10.3.21.254", options = "iburst"}, {server = "10.5.21.254", options = "iburst"} ]
 }
 
 ################################################################
 ### Instrumentation
 ################################################################
 variable "ssh_agent" {
-    description = "Enable or disable SSH Agent. Can correct some connectivity issues. Default: false"
-    default     = false
+  description = "Enable or disable SSH Agent. Can correct some connectivity issues. Default: false"
+  default     = false
 }
 
 variable "connection_timeout" {
-    description = "Timeout in minutes for SSH connections"
-    default     = 45
+  description = "Timeout in minutes for SSH connections"
+  default     = 45
 }
 
 variable "jump_host" {
-    description = "Jump server hostname/IP to be used for SSH connections"
-    default     = ""
+  description = "Jump server hostname/IP to be used for SSH connections"
+  default     = ""
 }
 
 variable "private_network_mtu" {
@@ -262,49 +262,49 @@ variable "private_network_mtu" {
 }
 
 variable "installer_log_level" {
-    description = "Set the log level required for openshift-install commands"
-    default = "info"
+  description = "Set the log level required for openshift-install commands"
+  default     = "info"
 }
 
 variable "helpernode_repo" {
-    description = "Set the repo URL for using ocp4-helpernode"
-    # Repo for running ocp4 helpernode setup steps.
-    default = "https://github.com/RedHatOfficial/ocp4-helpernode"
+  description = "Set the repo URL for using ocp4-helpernode"
+  # Repo for running ocp4 helpernode setup steps.
+  default = "https://github.com/RedHatOfficial/ocp4-helpernode"
 }
 
 variable "helpernode_tag" {
-    description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
-    # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-    default = "324e09e3d303101874f540730c993cd986ddbc04"
+  description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
+  # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
+  default = "324e09e3d303101874f540730c993cd986ddbc04"
 }
 
 variable "install_playbook_repo" {
-    description = "Set the repo URL for using ocp4-playbooks"
-    # Repo for running ocp4 installations steps.
-    default = "https://github.com/ocp-power-automation/ocp4-playbooks"
+  description = "Set the repo URL for using ocp4-playbooks"
+  # Repo for running ocp4 installations steps.
+  default = "https://github.com/ocp-power-automation/ocp4-playbooks"
 }
 
 variable "install_playbook_tag" {
-    description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
-    # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
-    default = "284b597b3e88c635e3069b82926aa16812238492"
+  description = "Set the branch/tag name or commit# for using ocp4-playbooks repo"
+  # Checkout level for https://github.com/ocp-power-automation/ocp4-playbooks which is used for running ocp4 installations steps
+  default = "284b597b3e88c635e3069b82926aa16812238492"
 }
 
 variable "ansible_extra_options" {
-    description = "Extra options string to append to ansible-playbook commands"
-    default     = "-v"
+  description = "Extra options string to append to ansible-playbook commands"
+  default     = "-v"
 }
 
 variable "ansible_repo_name" {
-    default = "ansible-2.9-for-rhel-8-ppc64le-rpms"
+  default = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 }
 
 locals {
-    private_key_file    = var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : var.private_key_file
-    public_key_file     = var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : var.public_key_file
-    private_key         = var.private_key == "" ? file(coalesce(local.private_key_file, "/dev/null")) : var.private_key
-    public_key          = var.public_key == "" ? file(coalesce(local.public_key_file, "/dev/null")) : var.public_key
-    create_keypair      = var.keypair_name == "" ? "1": "0"
+  private_key_file = var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : var.private_key_file
+  public_key_file  = var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : var.public_key_file
+  private_key      = var.private_key == "" ? file(coalesce(local.private_key_file, "/dev/null")) : var.private_key
+  public_key       = var.public_key == "" ? file(coalesce(local.public_key_file, "/dev/null")) : var.public_key
+  create_keypair   = var.keypair_name == "" ? "1" : "0"
 }
 
 
@@ -312,33 +312,33 @@ locals {
 ### OpenShift variables
 ################################################################
 variable "openshift_install_tarball" {
-    default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-install-linux.tar.gz"
+  default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-install-linux.tar.gz"
 }
 
 variable "openshift_client_tarball" {
-     default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-client-linux.tar.gz"
+  default = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-client-linux.tar.gz"
 }
 
 variable "release_image_override" {
-    default = ""
+  default = ""
 }
 
 variable "pull_secret_file" {
-    default   = "data/pull-secret.txt"
+  default = "data/pull-secret.txt"
 }
 # Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
 variable "cluster_domain" {
-    default   = "rhocp.com"
+  default = "rhocp.com"
 }
 # Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
 # Should not be more than 14 characters
 variable "cluster_id_prefix" {
-    default   = "test-ocp"
+  default = "test-ocp"
 }
 # Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
 # Length cannot exceed 14 characters when combined with cluster_id_prefix
 variable "cluster_id" {
-    default   = ""
+  default = ""
 }
 
 variable "fips_compliant" {
@@ -348,100 +348,100 @@ variable "fips_compliant" {
 }
 
 variable "dns_forwarders" {
-    default   = "8.8.8.8; 8.8.4.4"
+  default = "8.8.8.8; 8.8.4.4"
 }
 
 variable "lb_ipaddr" {
-    description = "Define the preconfigured external Load Balancer"
-    default = ""    
+  description = "Define the preconfigured external Load Balancer"
+  default     = ""
 }
 
 variable "ext_dns" {
-    description = "Define the preconfigured external DNS and Load Balancer"
-    default = ""
+  description = "Define the preconfigured external DNS and Load Balancer"
+  default     = ""
 }
 
 variable "mount_etcd_ramdisk" {
-    description = "Whether mount etcd directory in the ramdisk (Only for dev/test) on low performance disk"
-    default     = false
+  description = "Whether mount etcd directory in the ramdisk (Only for dev/test) on low performance disk"
+  default     = false
 }
 
 variable "setup_squid_proxy" {
-    description = "Flag to install and configure squid proxy server on bastion node"
-    default     = false
+  description = "Flag to install and configure squid proxy server on bastion node"
+  default     = false
 }
 
 # Applicable only when `setup_squid_proxy = false`
-variable proxy {
-    description = "External proxy server details in a map of server, port(default=3128), user & password"
-    default = {}
-#    default = {
-#        server = "10.10.1.166",
-#        port = "3128"
-#        user = "pxuser",
-#        password = "pxpassword"
-#    }
+variable "proxy" {
+  description = "External proxy server details in a map of server, port(default=3128), user & password"
+  default     = {}
+  #    default = {
+  #        server = "10.10.1.166",
+  #        port = "3128"
+  #        user = "pxuser",
+  #        password = "pxpassword"
+  #    }
 }
 
 variable "storage_type" {
-    #Supported values: nfs (other value won't setup a storageclass)
-    default = "nfs"
+  #Supported values: nfs (other value won't setup a storageclass)
+  default = "nfs"
 }
 
 variable "volume_size" {
-    # If storage_type = nfs, a new volume of this size will be attached to the bastion node.
-    # Value in GB
-    default = "300"
+  # If storage_type = nfs, a new volume of this size will be attached to the bastion node.
+  # Value in GB
+  default = "300"
 }
 
 variable "volume_storage_template" {
-    # Storage template name or ID for creating the volume.
-    default = ""
+  # Storage template name or ID for creating the volume.
+  default = ""
 }
 
 variable "upgrade_version" {
-    description = "OCP upgrade version eg. 4.5.4"
-    default = ""
+  description = "OCP upgrade version eg. 4.5.4"
+  default     = ""
 }
 
 variable "upgrade_channel" {
-    description = "Upgrade channel having required version availble for cluster upgrade (stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.5"
-    default = ""
+  description = "Upgrade channel having required version availble for cluster upgrade (stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.5"
+  default     = ""
 }
 
 variable "upgrade_image" {
-    description = "OCP upgrade image e.g. quay.io/openshift-release-dev/ocp-release-nightly@sha256:xxxxx"
-    default = ""
+  description = "OCP upgrade image e.g. quay.io/openshift-release-dev/ocp-release-nightly@sha256:xxxxx"
+  default     = ""
 }
 
 variable "upgrade_pause_time" {
-    description = "Number of minutes to pause the playbook execution before starting to check the upgrade status once the upgrade command is executed."
-    default = "90"
+  description = "Number of minutes to pause the playbook execution before starting to check the upgrade status once the upgrade command is executed."
+  default     = "90"
 }
 
 variable "upgrade_delay_time" {
-    description = "Number of seconds to wait before re-checking the upgrade status once the playbook execution resumes."
-    default = "600"
+  description = "Number of seconds to wait before re-checking the upgrade status once the playbook execution resumes."
+  default     = "600"
 }
 
 variable "cni_network_provider" {
-    description = "Set the default Container Network Interface (CNI) network provider"
-    default = "OpenshiftSDN"
+  description = "Set the default Container Network Interface (CNI) network provider"
+  default     = "OpenshiftSDN"
 }
 
 variable "cluster_network_cidr" {
-    description = "blocks of IP addresses from which pod IP addresses are allocated."
-    default = "10.128.0.0/14"
+  description = "blocks of IP addresses from which pod IP addresses are allocated."
+  default     = "10.128.0.0/14"
 }
 
 variable "cluster_network_hostprefix" {
-    description = "The subnet prefix length to assign to each individual node."
-    default = "23"
+  description = "The subnet prefix length to assign to each individual node."
+  default     = "23"
 }
 
 variable "service_network" {
-    description = "blocks of IP addresses from which service addresses are allocated."
-    default = "172.30.0.0/16"
+  description = "blocks of IP addresses from which service addresses are allocated."
+  default     = "172.30.0.0/16"
 }
 
 ################################################################
@@ -449,16 +449,16 @@ variable "service_network" {
 ################################################################
 variable "enable_local_registry" {
   description = "Set to true to enable usage of local registry for restricted network install."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "local_registry_image" {
-    description = "Name of the image used for creating the local registry container."
-    default = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
+  description = "Name of the image used for creating the local registry container."
+  default     = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
 }
 
 variable "ocp_release_tag" {
-    description = "The version of OpenShift you want to sync."
-    default = "4.4.9-ppc64le"
+  description = "The version of OpenShift you want to sync."
+  default     = "4.4.9-ppc64le"
 }

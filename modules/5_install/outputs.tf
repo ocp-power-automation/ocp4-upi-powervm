@@ -19,16 +19,16 @@
 ################################################################
 
 output "install_status" {
-    depends_on = [null_resource.install]
-    value = "COMPLETED"
+  depends_on = [null_resource.install]
+  value      = "COMPLETED"
 }
 
 output "oc_server_url" {
-    depends_on = [null_resource.install]
-    value = "https://api.${var.cluster_id}.${local.cluster_domain}:6443"
+  depends_on = [null_resource.install]
+  value      = "https://api.${var.cluster_id}.${local.cluster_domain}:6443"
 }
 
 output "web_console_url" {
-    depends_on = [null_resource.install]
-    value = "https://console-openshift-console.apps.${var.cluster_id}.${local.cluster_domain}"
+  depends_on = [null_resource.install]
+  value      = "https://console-openshift-console.apps.${var.cluster_id}.${local.cluster_domain}"
 }
