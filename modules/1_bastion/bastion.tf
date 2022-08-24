@@ -185,7 +185,7 @@ resource "null_resource" "bastion_register" {
 # Give some more time to subscription-manager
 sudo subscription-manager config --server.server_timeout=600
 sudo subscription-manager clean
-if [[ '${var.rhel_subscription_org}' == '' ]]; then 
+if [[ '${var.rhel_subscription_org}' == '' ]]; then
     sudo subscription-manager register --username='${var.rhel_subscription_username}' --password='${var.rhel_subscription_password}' --force
 else
     sudo subscription-manager register --org='${var.rhel_subscription_org}' --activationkey='${var.rhel_subscription_activationkey}' --force
@@ -313,7 +313,7 @@ locals {
 
 resource "null_resource" "setup_nfs_disk" {
   count      = var.storage_type == "nfs" ? 1 : 0
-  depends_on = [openstack_compute_volume_attach_v2.storage_v_attach, null_resource.bastion_packages]
+  depends_on = [openstack_compute_volume_attach_v2.storage_v_attach]
 
   connection {
     type         = "ssh"
