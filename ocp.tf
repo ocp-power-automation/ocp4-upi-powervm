@@ -171,8 +171,7 @@ module "installconfig" {
 }
 
 module "bootstrapnode" {
-  depends_on = [module.installconfig]
-  source     = "./modules/4_nodes/4_1_bootstrapnode"
+  source = "./modules/4_nodes/4_1_bootstrapnode"
 
   bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
   cluster_id                  = local.cluster_id
@@ -180,6 +179,7 @@ module "bootstrapnode" {
   scg_id                      = var.scg_id
   openstack_availability_zone = var.openstack_availability_zone
   bootstrap_port_id           = module.network.bootstrap_port_id
+  install_status              = module.installconfig.install_status
 }
 
 module "bootstrapconfig" {
@@ -197,8 +197,7 @@ module "bootstrapconfig" {
 
 
 module "masternodes" {
-  depends_on = [module.bootstrapconfig]
-  source     = "./modules/4_nodes/4_2_masternodes"
+  source = "./modules/4_nodes/4_2_masternodes"
 
   bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
   cluster_id                  = local.cluster_id
@@ -207,6 +206,7 @@ module "masternodes" {
   openstack_availability_zone = var.openstack_availability_zone
   master_port_ids             = module.network.master_port_ids
   mount_etcd_ramdisk          = var.mount_etcd_ramdisk
+  install_status              = module.bootstrapconfig.install_status
 }
 
 module "bootstrapcomplete" {
@@ -223,8 +223,7 @@ module "bootstrapcomplete" {
 }
 
 module "workernodes" {
-  depends_on = [module.bootstrapcomplete]
-  source     = "./modules/4_nodes/4_3_workernodes"
+  source = "./modules/4_nodes/4_3_workernodes"
 
   bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
   cluster_id                  = local.cluster_id
@@ -237,6 +236,7 @@ module "workernodes" {
   ssh_agent                   = var.ssh_agent
   connection_timeout          = var.connection_timeout
   jump_host                   = var.jump_host
+  install_status              = module.bootstrapcomplete.install_status
 }
 module "install" {
   depends_on = [module.workernodes]

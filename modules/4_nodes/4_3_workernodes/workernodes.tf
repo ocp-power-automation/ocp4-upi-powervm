@@ -65,8 +65,10 @@ data "openstack_compute_flavor_v2" "worker" {
 }
 
 resource "openstack_compute_instance_v2" "worker" {
+  depends_on = [var.install_status]
+  count      = var.worker["count"]
+
   name              = "${var.cluster_id}-worker-${count.index}"
-  count             = var.worker["count"]
   flavor_id         = var.scg_id == "" ? data.openstack_compute_flavor_v2.worker.id : openstack_compute_flavor_v2.worker_scg[0].id
   image_id          = var.worker["image_id"]
   availability_zone = lookup(var.worker, "availability_zone", var.openstack_availability_zone)
@@ -86,9 +88,10 @@ locals {
 }
 
 resource "openstack_blockstorage_volume_v2" "worker" {
-  count = local.worker.volume_count * var.worker["count"]
-  name  = "${var.cluster_id}-worker-${count.index}-volume"
-  size  = local.worker.volume_size
+  depends_on = [openstack_compute_instance_v2.worker]
+  count      = local.worker.volume_count * var.worker["count"]
+  name       = "${var.cluster_id}-worker-${count.index}-volume"
+  size       = local.worker.volume_size
 }
 
 resource "openstack_compute_volume_attach_v2" "worker" {

@@ -36,3 +36,5 @@ variable "openstack_availability_zone" {}
 variable "master_port_ids" {}
 
 variable "mount_etcd_ramdisk" {}
+
+variable "install_status" {}

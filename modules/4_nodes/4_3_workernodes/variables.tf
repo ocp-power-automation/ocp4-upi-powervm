@@ -41,3 +41,5 @@ variable "private_key" {}
 variable "ssh_agent" {}
 variable "connection_timeout" {}
 variable "jump_host" {}
+
+variable "install_status" {}

@@ -36,3 +36,4 @@ variable "openstack_availability_zone" {}
 
 variable "bootstrap_port_id" {}
 
+variable "install_status" {}

@@ -70,8 +70,10 @@ data "openstack_compute_flavor_v2" "master" {
 }
 
 resource "openstack_compute_instance_v2" "master" {
+  depends_on = [var.install_status]
+  count      = var.master["count"]
+
   name              = "${var.cluster_id}-master-${count.index}"
-  count             = var.master["count"]
   flavor_id         = var.scg_id == "" ? data.openstack_compute_flavor_v2.master.id : openstack_compute_flavor_v2.master_scg[0].id
   image_id          = var.master["image_id"]
   availability_zone = lookup(var.master, "availability_zone", var.openstack_availability_zone)
@@ -91,9 +93,10 @@ locals {
 }
 
 resource "openstack_blockstorage_volume_v2" "master" {
-  count = local.master.volume_count * var.master["count"]
-  name  = "${var.cluster_id}-master-${count.index}-volume"
-  size  = local.master.volume_size
+  depends_on = [openstack_compute_instance_v2.master]
+  count      = local.master.volume_count * var.master["count"]
+  name       = "${var.cluster_id}-master-${count.index}-volume"
+  size       = local.master.volume_size
 }
 
 resource "openstack_compute_volume_attach_v2" "master" {

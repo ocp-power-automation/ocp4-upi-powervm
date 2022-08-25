@@ -61,6 +61,8 @@ data "openstack_compute_flavor_v2" "bootstrap" {
 }
 
 resource "openstack_compute_instance_v2" "bootstrap" {
+  depends_on = [var.install_status]
+
   # Only 1 node is supported
   count             = var.bootstrap["count"] == 0 ? 0 : 1
   name              = "${var.cluster_id}-bootstrap"
