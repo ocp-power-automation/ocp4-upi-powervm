@@ -113,6 +113,10 @@ resource "null_resource" "pre_install" {
 resource "null_resource" "install_config" {
   depends_on = [null_resource.pre_install]
 
+  triggers = {
+    worker_count = length(var.worker_ips)
+  }
+
   connection {
     type         = "ssh"
     user         = var.rhel_username

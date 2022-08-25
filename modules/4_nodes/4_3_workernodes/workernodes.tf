@@ -65,7 +65,7 @@ data "openstack_compute_flavor_v2" "worker" {
 }
 
 resource "openstack_compute_instance_v2" "worker" {
-  depends_on = [var.install_status]
+  depends_on = [var.installconfig_status, var.bootstrapcomplete_status]
   count      = var.worker["count"]
 
   name              = "${var.cluster_id}-worker-${count.index}"

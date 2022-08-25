@@ -236,10 +236,11 @@ module "workernodes" {
   ssh_agent                   = var.ssh_agent
   connection_timeout          = var.connection_timeout
   jump_host                   = var.jump_host
-  install_status              = module.bootstrapcomplete.install_status
+  installconfig_status        = module.installconfig.install_status
+  bootstrapcomplete_status    = module.bootstrapcomplete.install_status
 }
 module "install" {
-  depends_on = [module.workernodes]
+  depends_on = [module.helpernode, module.installconfig, module.workernodes]
   source     = "./modules/5_install/5_4_installcomplete"
 
   cluster_domain        = var.cluster_domain

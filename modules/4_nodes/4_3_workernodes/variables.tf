@@ -42,4 +42,5 @@ variable "ssh_agent" {}
 variable "connection_timeout" {}
 variable "jump_host" {}
 
-variable "install_status" {}
+variable "installconfig_status" {}
+variable "bootstrapcomplete_status" {}
