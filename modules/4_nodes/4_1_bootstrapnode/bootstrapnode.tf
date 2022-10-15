@@ -70,7 +70,7 @@ resource "openstack_compute_instance_v2" "bootstrap" {
   image_id          = var.bootstrap["image_id"]
   availability_zone = lookup(var.bootstrap, "availability_zone", var.openstack_availability_zone)
 
-  user_data = replace(data.ignition_config.bootstrap.rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
+  user_data = data.ignition_config.bootstrap.rendered
 
   network {
     port = var.bootstrap_port_id

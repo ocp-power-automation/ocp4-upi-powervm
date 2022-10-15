@@ -73,7 +73,7 @@ resource "openstack_compute_instance_v2" "worker" {
   image_id          = var.worker["image_id"]
   availability_zone = lookup(var.worker, "availability_zone", var.openstack_availability_zone)
 
-  user_data = replace(data.ignition_config.worker[count.index].rendered, "\"timeouts\":{}", "\"timeouts\":{\"httpTotal\":500}")
+  user_data = data.ignition_config.worker[count.index].rendered
 
   network {
     port = var.worker_port_ids[count.index]
