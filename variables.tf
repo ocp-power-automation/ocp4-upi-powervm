@@ -400,12 +400,12 @@ variable "volume_storage_template" {
 }
 
 variable "upgrade_version" {
-  description = "OCP upgrade version eg. 4.5.4"
+  description = "OCP upgrade version eg. 4.11.4"
   default     = ""
 }
 
 variable "upgrade_channel" {
-  description = "Upgrade channel having required version availble for cluster upgrade (stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.5"
+  description = "Upgrade channel having required version availble for cluster upgrade (stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.11"
   default     = ""
 }
 
