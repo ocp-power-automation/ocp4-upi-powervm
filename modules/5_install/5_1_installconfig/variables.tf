@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,10 +19,10 @@
 ################################################################
 
 variable "cluster_domain" {
-  default   = "example.com"
+  default = "example.com"
 }
 variable "cluster_id" {
-  default   = "test-ocp"
+  default = "test-ocp"
 }
 
 variable "cidr" {}

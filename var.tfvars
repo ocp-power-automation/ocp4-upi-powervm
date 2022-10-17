@@ -6,14 +6,14 @@ tenant_name                 = "<tenant_name>"
 domain_name                 = "Default"
 openstack_availability_zone = ""
 
-network_name                = "<network_name>"
+network_name = "<network_name>"
 
 ### OpenShift Cluster Details
 
-bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   "count"   = 1}
-bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  "count"   = 1}
-master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  "count"   = 3}
-worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  "count"   = 2}
+bastion   = { instance_type = "<bastion-compute-template>", image_id = "<image-uuid-rhel>", "count" = 1 }
+bootstrap = { instance_type = "<bootstrap-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 1 }
+master    = { instance_type = "<master-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 3 }
+worker    = { instance_type = "<worker-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 2 }
 # With all optional attributes
 # bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   availability_zone = "<availability zone>",  "count"   = 1, fixed_ip_v4 = "<IPv4 address>"}
 # bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 1}
@@ -21,26 +21,26 @@ worker                      = {instance_type    = "<worker-compute-template>",  
 # worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
 
 
-rhel_username               = "root"  #Set it to an appropriate username for non-root user access
-public_key_file             = "data/id_rsa.pub"
-private_key_file            = "data/id_rsa"
-rhel_subscription_username  = "<subscription-id>"          #Leave this as-is if using CentOS as bastion image
-rhel_subscription_password  = "<subscription-password>"    #Leave this as-is if using CentOS as bastion image
-rhel_subscription_org           = ""                       # Define it only when using activationkey for RHEL subscription
-rhel_subscription_activationkey = ""                       # Define it only when using activationkey for RHEL subscription
+rhel_username                   = "root" #Set it to an appropriate username for non-root user access
+public_key_file                 = "data/id_rsa.pub"
+private_key_file                = "data/id_rsa"
+rhel_subscription_username      = "<subscription-id>"       #Leave this as-is if using CentOS as bastion image
+rhel_subscription_password      = "<subscription-password>" #Leave this as-is if using CentOS as bastion image
+rhel_subscription_org           = ""                        # Define it only when using activationkey for RHEL subscription
+rhel_subscription_activationkey = ""                        # Define it only when using activationkey for RHEL subscription
 
-connection_timeout          = 45
-jump_host                   = ""
+connection_timeout = 45
+jump_host          = ""
 
 ### OpenShift Installation Details
 
-openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-install-linux.tar.gz"
-openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-client-linux.tar.gz"
-pull_secret_file            = "data/pull-secret.txt"
+openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz"
+openshift_client_tarball  = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-client-linux.tar.gz"
+pull_secret_file          = "data/pull-secret.txt"
 
-cluster_domain              = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
-cluster_id_prefix           = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
-cluster_id                  = ""         # It will use random generated id with cluster_id_prefix if this is not set
+cluster_domain    = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
+cluster_id_prefix = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
+cluster_id        = ""         # It will use random generated id with cluster_id_prefix if this is not set
 #fips_compliant             = false   # Set it true if you prefer to use FIPS enable in ocp deployment
 
 ### Misc Customizations
@@ -85,7 +85,7 @@ cluster_id                  = ""         # It will use random generated id with 
 #volume_storage_template     = ""
 
 #upgrade_version            = ""
-#upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.5
+#upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.11
 #upgrade_image               = "" #quay.io/openshift-release-dev/ocp-release@sha256:xyz.."
 #upgrade_pause_time         = "90"
 #upgrade_delay_time         = "600"

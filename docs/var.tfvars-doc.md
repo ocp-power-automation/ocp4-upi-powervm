@@ -50,10 +50,10 @@ worker                      = {instance_type    = "<worker-compute-template>", i
 
 To enable high availability (HA) for cluster services running on the bastion set the bastion `count` value to 2. Note that in case of HA, the automation will not setup NFS storage. `count` of 1 for bastion implies the default non-HA bastion setup.
 
-You can optionally set worker `count` value to 0 in which case all the cluster pods will be running on the master/supervisor nodes. 
+You can optionally set worker `count` value to 0 in which case all the cluster pods will be running on the master/supervisor nodes.
 Ensure you use proper sizing for master/supervisor nodes to avoid resource starvation for containers.
 
-`availability_zone` is an optional attribute for bastion, bootstrap, master and worker. If it is specified, the VM will be created in the specified `availability_zone`, otherwise value of `openstack_availability_zone` will be used. 
+`availability_zone` is an optional attribute for bastion, bootstrap, master and worker. If it is specified, the VM will be created in the specified `availability_zone`, otherwise value of `openstack_availability_zone` will be used.
 ```
 bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>",  "count"   = 1}
 bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>", availability_zone = "", "count"   = 1}
@@ -96,8 +96,7 @@ Please note that only OpenSSH formatted keys are supported. Refer to the followi
 Create the SSH key-pair and keep it under the `data` directory
 
 These set of variables specify the RHEL subscription details, RHEL subscription supports two methods: one is using username and password, the other is using activation key.
-This is sensitive data, and if you don't want to save it on disk, use environment variables `RHEL_SUBS_USERNAME` and `RHEL_SUBS_PASSWORD` and 
-pass them to `terraform apply` command as shown in the [Quickstart guide](./quickstart.md#setup-terraform-variables).
+This is sensitive data, and if you don't want to save it on disk, use environment variables `RHEL_SUBS_USERNAME` and `RHEL_SUBS_PASSWORD` and pass them to `terraform apply` command as shown in the [Quickstart guide](./quickstart.md#setup-terraform-variables).
 
 ```
 rhel_subscription_username  = "user@test.com"
@@ -111,8 +110,20 @@ rhel_subscription_activationkey = "activation-key"
 ### OpenShift Installation Details
 
 These variables specify the URL for the OpenShift installer and client binaries.
-Change the URL to the specific pre-release version that you want to install on PowerVS.
-Reference link - `https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview`
+Change the URL to the specific stable or pre-release version that you want to install on PowerVS.
+Reference link - `https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/`
+
+For latest stable:
+```
+openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz"
+openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-client-linux.tar.gz"
+```
+For specific stable version:
+```
+openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.11/openshift-install-linux.tar.gz"
+openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.11/openshift-client-linux.tar.gz"
+```
+For pre-release:
 ```
 openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-install-linux.tar.gz"
 openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-client-linux.tar.gz"
@@ -152,7 +163,7 @@ fips_compliant      = false
 
 These variables provides miscellaneous customizations. For common usage scenarios these are not required and should be left unchanged.
 
-The following variables are used to define the IP address for the preconfigured external DNS and the Load-balancer 
+The following variables are used to define the IP address for the preconfigured external DNS and the Load-balancer.
 ```
 lb_ipaddr                       = ""
 ext_dns                         = ""
@@ -218,7 +229,7 @@ This variable specifies the external DNS servers to forward DNS queries that can
 dns_forwarders              = "1.1.1.1; 9.9.9.9"
 ```
 
-List of [day-1 kernel arguments](https://docs.openshift.com/container-platform/4.8/installing/install_config/installing-customizing.html#installation-special-config-kargs_installing-customizing) for the cluster nodes.
+List of [day-1 kernel arguments](https://docs.openshift.com/container-platform/latest/installing/install_config/installing-customizing.html#installation-special-config-kargs_installing-customizing) for the cluster nodes.
 To add kernel arguments to master or worker nodes, using MachineConfig object and inject that object into the set of manifest files used by Ignition during cluster setup.
 ```
 rhcos_pre_kernel_options        = []
@@ -275,7 +286,7 @@ The following variables are specific to upgrading an existing installation.
 
 ```
 upgrade_version            = ""
-upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.5
+upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.11
 upgrade_image              = ""  #(e.g. `"quay.io/openshift-release-dev/ocp-release-nightly@sha256:xxxxx"`)
 upgrade_pause_time         = "90"
 upgrade_delay_time         = "600"

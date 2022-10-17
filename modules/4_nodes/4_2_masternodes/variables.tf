@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,12 +18,23 @@
 #
 ################################################################
 
-terraform {
-  required_providers {
-    openstack = {
-      source  = "terraform-provider-openstack/openstack"
-      version = "~> 1.32"
-    }
+variable "bastion_ip" {}
+variable "cluster_id" {}
+
+variable "master" {
+  default = {
+    instance_type = "m1.xlarge"
+    # rhcos image id
+    image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
+    count    = 3
   }
-  required_version = ">= 1.2.0"
 }
+
+variable "scg_id" {}
+variable "openstack_availability_zone" {}
+
+variable "master_port_ids" {}
+
+variable "mount_etcd_ramdisk" {}
+
+variable "install_status" {}

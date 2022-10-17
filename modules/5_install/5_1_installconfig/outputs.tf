@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,14 +18,7 @@
 #
 ################################################################
 
-output "bootstrap_ip" {
-    value = join("", openstack_compute_instance_v2.bootstrap.*.access_ip_v4)
-}
-
-output "master_ips" {
-    value = openstack_compute_instance_v2.master.*.access_ip_v4
-}
-
-output "worker_ips" {
-    value = openstack_compute_instance_v2.worker.*.access_ip_v4
+output "install_status" {
+  depends_on = [null_resource.install_config]
+  value      = "INSTALL_CONFIGURED"
 }

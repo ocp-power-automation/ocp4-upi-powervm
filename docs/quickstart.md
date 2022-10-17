@@ -15,7 +15,7 @@
 
 ## Download the Automation Code
 
-You'll need to use git to clone the deployment code when working off the master branch
+You'll need to use git to clone the deployment code when working off the main branch
 ```
 $ git clone https://github.com/ocp-power-automation/ocp4-upi-powervm.git
 $ cd ocp4_upi_powervm
@@ -25,7 +25,7 @@ All further instructions assumes you are in the code directory eg. `ocp4-upi-pow
 
 ## Setup Terraform Variables
 
-Update the [var.tfvars](../var.tfvars) based on your environment. Description of the variables are available in the following [link](./var.tfvars-doc.md).
+Update the [var.tfvars](../var.tfvars) based on your environment. Description of the variables are available in [var.tfvars-doc](./var.tfvars-doc.md).
 You can use environment variables for sensitive data that should not be saved to disk.
 
 ```
@@ -198,6 +198,14 @@ $ scp -r -i data/id_rsa root@158.175.161.118:~/openstack-upi/auth/\* .
 
 OpenShift CLI `oc` can be downloaded from the following links. Use the one specific to your client system architecture.
 
+For latest stable:
+
+- [Mac OSX](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-mac.tar.gz)
+- [Linux (x86_64)](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz)
+- [Linux (ppc64le)](https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-client-linux.tar.gz)
+- [Windows](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-windows.zip)
+
+For pre-release:
 
 - [Mac OSX](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-mac.tar.gz)
 - [Linux (x86_64)](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz)
@@ -206,7 +214,7 @@ OpenShift CLI `oc` can be downloaded from the following links. Use the one speci
 
 
 Download the specific file, extract it and place the binary in a directory that is on your `PATH`
-For more details check the following [link](https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html)
+For more details check the following [link](https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html)
 
 The CLI login URL `oc_server_url` will be printed at the end of successful install.
 Alternatively you can retrieve it anytime by running `terraform output` from the install directory.

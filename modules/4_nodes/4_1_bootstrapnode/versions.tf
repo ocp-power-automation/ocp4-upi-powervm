@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,9 +20,17 @@
 
 terraform {
   required_providers {
+    ignition = {
+      source  = "community-terraform-providers/ignition"
+      version = "~> 2.1.0"
+    }
     openstack = {
       source  = "terraform-provider-openstack/openstack"
       version = "~> 1.32"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 2.3"
     }
   }
   required_version = ">= 1.2.0"

@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,16 +19,6 @@
 ################################################################
 
 output "install_status" {
-    depends_on = [null_resource.install]
-    value = "COMPLETED"
-}
-
-output "oc_server_url" {
-    depends_on = [null_resource.install]
-    value = "https://api.${var.cluster_id}.${local.cluster_domain}:6443"
-}
-
-output "web_console_url" {
-    depends_on = [null_resource.install]
-    value = "https://console-openshift-console.apps.${var.cluster_id}.${local.cluster_domain}"
+  depends_on = [null_resource.bootstrap_complete]
+  value      = "BOOTSTRAP_COMPLETED"
 }

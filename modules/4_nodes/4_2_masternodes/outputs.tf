@@ -8,7 +8,7 @@
 #
 # Licensed Materials - Property of IBM
 #
-# ©Copyright IBM Corp. 2020
+# ©Copyright IBM Corp. 2022
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,12 +18,8 @@
 #
 ################################################################
 
-terraform {
-  required_providers {
-    openstack = {
-      source  = "terraform-provider-openstack/openstack"
-      version = "~> 1.32"
-    }
-  }
-  required_version = ">= 1.2.0"
+
+output "master_ips" {
+  value = openstack_compute_instance_v2.master.*.access_ip_v4
 }
+

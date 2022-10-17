@@ -13,7 +13,7 @@ Please note we have a [code of conduct](CODE_OF_CONDUCT.md), please follow it in
 # Pull Request Process
 
  - To contribute code or documentation, please submit a [pull request](https://github.com/ocp-power-automation/ocp4-upi-powervm/pulls).
- - Always take the latest update from upstream/master before creating a pull request.
+ - Always take the latest update from upstream/main before creating a pull request.
  - Ensure your changes work fine and have no syntax problems. Also, verify that it does not break the existing code flow.
  - Update the README.md or relevant documents with details of changes to the code. This includes variables change, added or updated feature, change in steps, dependencies change, etc.
  - Make use of proper commit message. Mention the issue# which you are planning to address eg: Fixes #38.
