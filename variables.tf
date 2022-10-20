@@ -446,7 +446,7 @@ variable "eus_upstream" {
 
 variable "cni_network_provider" {
   description = "Set the default Container Network Interface (CNI) network provider"
-  default     = "OpenshiftSDN"
+  default     = "OVNKubernetes"
 }
 
 variable "cluster_network_cidr" {
