@@ -76,11 +76,15 @@ locals {
   }
 
   upgrade_vars = {
-    upgrade_version = var.upgrade_version
-    upgrade_channel = var.upgrade_channel
-    upgrade_image   = var.upgrade_image
-    pause_time      = var.upgrade_pause_time
-    delay_time      = var.upgrade_delay_time
+    upgrade_version       = var.upgrade_version
+    upgrade_channel       = var.upgrade_channel
+    upgrade_image         = var.upgrade_image
+    eus_upgrade_version   = var.eus_upgrade_version
+    eus_upgrade_channel   = var.eus_upgrade_channel
+    eus_upgrade_image     = var.eus_upgrade_image
+    eus_upstream          = var.eus_upstream
+    pause_time            = var.upgrade_pause_time
+    delay_time            = var.upgrade_delay_time
   }
 }
 
