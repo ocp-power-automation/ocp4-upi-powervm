@@ -95,3 +95,14 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #cluster_network_hostprefix  = "23"
 #service_network             = "172.30.0.0/16"
 #private_network_mtu         = "1450"
+
+#luks_compliant              = false # Set it true if you prefer to use LUKS enable in OCP deployment
+#luks_config                 = [ { thumbprint = "", url = "" } ]
+#luks_filesystem_device      = "/dev/mapper/root"  #Set the Path of device to be luks encrypted
+#luks_format                 = "xfs"  #Set the Format of the FileSystem to be luks encrypted
+#luks_wipe_filesystem         = true  #Configures the FileSystem to be wiped
+#luks_device                 = "/dev/disk/by-partlabel/root"  #Set the Path of luks encrypted partition
+#luks_label                  = "luks-root"  #Set the value for user label of luks encrypted partition
+#luks_options                = ["--cipher", "aes-cbc-essiv:sha256"]  #Set List of luks options for the luks encryption
+#luks_wipe_volume             = true  #Configures the luks encrypted partition to be wiped
+#luks_name                   = "root" #Set the value for the user label of Filesystem to be luks encrypted

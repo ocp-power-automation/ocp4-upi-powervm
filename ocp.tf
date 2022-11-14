@@ -168,6 +168,16 @@ module "installconfig" {
   cluster_network_cidr       = var.cluster_network_cidr
   cluster_network_hostprefix = var.cluster_network_hostprefix
   service_network            = var.service_network
+  luks_compliant             = var.luks_compliant
+  luks_config                = var.luks_config
+  luks_filesystem_device     = var.luks_filesystem_device
+  luks_format                = var.luks_format
+  luks_wipe_filesystem       = var.luks_wipe_filesystem
+  luks_device                = var.luks_device
+  luks_label                 = var.luks_label
+  luks_options               = var.luks_options
+  luks_wipe_volume           = var.luks_wipe_volume
+  luks_name                  = var.luks_name
 }
 
 module "bootstrapnode" {

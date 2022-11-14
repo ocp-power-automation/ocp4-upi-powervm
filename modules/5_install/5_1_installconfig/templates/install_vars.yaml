@@ -62,3 +62,26 @@ cluster_network_cidr: "${cluster_network_cidr}"
 cluster_network_hostprefix: "${cluster_network_hostprefix}"
 service_network: "${service_network}"
 cni_network_mtu: "${cni_network_mtu}"
+
+%{ if luks_compliant && length(luks_config) > 0 ~}
+luks:
+ enabled: true
+ config:
+%{ for item in luks_config ~}
+    - thumbprint: ${item.thumbprint}
+      url: ${item.url}
+%{ endfor ~}
+ filesystem_device: ${luks_filesystem_device}
+ format: ${luks_format}
+ wipeFileSystem: "${luks_wipe_filesystem}"
+ device: ${luks_device}
+ label: ${luks_label}
+%{ if length(luks_options) > 0 ~}
+ options:
+%{ for item in luks_options ~}
+    - ${item}
+%{ endfor ~}
+%{ endif ~}
+ wipeVolume: "${luks_wipe_volume}"
+ name: ${luks_name}
+%{ endif ~}
