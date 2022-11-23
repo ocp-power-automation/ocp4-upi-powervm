@@ -424,6 +424,26 @@ variable "upgrade_delay_time" {
   default     = "600"
 }
 
+variable "eus_upgrade_version" {
+  description = "OCP eus upgrade version eg. 4.11.4"
+  default     = ""
+}
+
+variable "eus_upgrade_channel" {
+  description = "Upgrade channel having required version availble for cluster upgrade (stable-4.x, fast-4.x, candidate-4.x, eus-4.x) eg. stable-4.11"
+  default     = ""
+}
+
+variable "eus_upgrade_image" {
+  description = "OCP upgrade image e.g. quay.io/openshift-release-dev/ocp-release-nightly@sha256:xxxxx"
+  default     = ""
+}
+
+variable "eus_upstream" {
+  description = "URL for OCP update server eg. https://ppc64le.ocp.releases.ci.openshift.org/graph"
+  default     = ""
+}
+
 variable "cni_network_provider" {
   description = "Set the default Container Network Interface (CNI) network provider"
   default     = "OpenshiftSDN"

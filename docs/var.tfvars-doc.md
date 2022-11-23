@@ -292,6 +292,16 @@ upgrade_pause_time         = "90"
 upgrade_delay_time         = "600"
 ```
 
+The following variables are specific to performing EUS upgrades.
+
+```
+eus_upgrade_version        = "4.11.14"
+eus_upgrade_channel        = "stable-4.11"  #(stable-4.x, fast-4.x, candidate-4.x, eus-4.x)
+eus_upgrade_image          = "quay.io/openshift-release-dev/ocp-release:4.11.14-ppc64le"
+eus_upstream               = "" (e.g. `"https://ppc64le.ocp.releases.ci.openshift.org/graph"`)
+```
+
+
 This variable is used to set the default Container Network Interface (CNI) network provider such as OpenShiftSDN or OVNKubernetes
 
 ```

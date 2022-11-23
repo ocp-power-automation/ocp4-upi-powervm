@@ -76,6 +76,11 @@ variable "upgrade_image" {}
 variable "upgrade_pause_time" {}
 variable "upgrade_delay_time" {}
 
+variable "eus_upgrade_version" {}
+variable "eus_upgrade_channel" {}
+variable "eus_upgrade_image" {}
+variable "eus_upstream" {}
+
 variable "cni_network_provider" {}
 variable "cluster_network_cidr" {}
 variable "cluster_network_hostprefix" {}

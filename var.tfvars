@@ -90,6 +90,11 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #upgrade_pause_time         = "90"
 #upgrade_delay_time         = "600"
 
+#eus_upgrade_version        = ""
+#eus_upgrade_channel        = ""  #(stable-4.x, fast-4.x, candidate-4.x, eus-4.x) eg. stable-4.11
+#eus_upgrade_image          = ""  #(quay.io/openshift-release-dev/ocp-release@sha256:xyz..)
+#eus_upstream               = ""  #https://ppc64le.ocp.releases.ci.openshift.org/graph
+
 #cni_network_provider       = "OpenshiftSDN"
 #cluster_network_cidr        = "10.128.0.0/14"
 #cluster_network_hostprefix  = "23"
