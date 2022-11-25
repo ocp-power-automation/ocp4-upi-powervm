@@ -85,3 +85,14 @@ variable "cni_network_provider" {}
 variable "cluster_network_cidr" {}
 variable "cluster_network_hostprefix" {}
 variable "service_network" {}
+
+variable "luks_compliant" { default = false }
+variable "luks_config" {}
+variable "luks_filesystem_device" {}
+variable "luks_format" {}
+variable "luks_wipe_filesystem" {}
+variable "luks_device" {}
+variable "luks_label" {}
+variable "luks_options" {}
+variable "luks_wipe_volume" {}
+variable "luks_name" {}

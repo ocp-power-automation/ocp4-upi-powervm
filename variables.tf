@@ -482,3 +482,71 @@ variable "ocp_release_tag" {
   description = "The version of OpenShift you want to sync."
   default     = "4.4.9-ppc64le"
 }
+
+
+################################################################
+# LUKS variables
+################################################################
+
+variable "luks_compliant" {
+  type        = bool
+  description = "Set to true to enable usage of LUKS for OCP deployment."
+  default     = false
+}
+
+variable "luks_config" {
+  type = list(object({
+    thumbprint = string,
+    url        = string
+  }))
+  description = "List of tang servers and thumbprint to apply"
+  default     = []
+}
+
+variable "luks_filesystem_device" {
+  type        = string
+  description = "Path of device to be luks encrypted"
+  default     = "/dev/mapper/root"
+}
+
+variable "luks_format" {
+  type        = string
+  description = "Format of the FileSystem to be luks encrypted"
+  default     = "xfs"
+}
+
+variable "luks_wipe_filesystem" {
+  type        = bool
+  description = "Configures the FileSystem to be wiped"
+  default     = true
+}
+
+variable "luks_device" {
+  type        = string
+  description = "Path of luks encrypted partition"
+  default     = "/dev/disk/by-partlabel/root"
+}
+
+variable "luks_label" {
+  type        = string
+  description = "User label of luks encrypted partition"
+  default     = "luks-root"
+}
+
+variable "luks_options" {
+  type        = list(string)
+  description = "List of luks options for the luks encryption"
+  default     = ["--cipher", "aes-cbc-essiv:sha256"]
+}
+
+variable "luks_wipe_volume" {
+  type        = bool
+  description = "Configures the luks encrypted partition to be wiped"
+  default     = true
+}
+
+variable "luks_name" {
+  type        = string
+  description = "User label of Filesystem to be luks encrypted"
+  default     = "root"
+}
