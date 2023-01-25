@@ -275,7 +275,7 @@ variable "helpernode_repo" {
 variable "helpernode_tag" {
   description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
   # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-  default = "324e09e3d303101874f540730c993cd986ddbc04"
+  default = "adb1102f64b2f25a8a1b44a96c414f293d72d3fc"
 }
 
 variable "install_playbook_repo" {
