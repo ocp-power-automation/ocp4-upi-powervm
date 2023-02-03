@@ -305,7 +305,7 @@ eus_upstream               = "" (e.g. `"https://ppc64le.ocp.releases.ci.openshif
 This variable is used to set the default Container Network Interface (CNI) network provider such as OpenShiftSDN or OVNKubernetes
 
 ```
-cni_network_provider       = "OpenshiftSDN"
+cni_network_provider       = "OVNKubernetes"
 cluster_network_cidr        = "10.128.0.0/14"
 cluster_network_hostprefix  = "23"
 service_network             = "172.30.0.0/16"
