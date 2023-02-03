@@ -22,7 +22,7 @@ terraform {
   required_providers {
     null = {
       source  = "hashicorp/null"
-      version = "~> 2.1"
+      version = "~> 3.2"
     }
     openstack = {
       source  = "terraform-provider-openstack/openstack"
@@ -30,7 +30,7 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.3"
+      version = "~> 3.4"
     }
   }
   required_version = ">= 1.2.0"
