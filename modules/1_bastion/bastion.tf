@@ -241,8 +241,12 @@ resource "null_resource" "enable_repos" {
 # Additional repo for installing ansible package
 if ( [[ -z "${var.rhel_subscription_username}" ]] || [[ "${var.rhel_subscription_username}" == "<subscription-id>" ]] ) && [[ -z "${var.rhel_subscription_org}" ]]; then
   sudo yum install -y epel-release
+  sudo yum install -y ansible
+elif [[ $(cat /etc/redhat-release | sed 's/[^0-9.]*//g') > 8.5 ]]; then
+  sudo yum install -y ansible-core
 else
   sudo subscription-manager repos --enable ${var.ansible_repo_name}
+  sudo yum install -y ansible
 fi
 EOF
     ]
@@ -270,7 +274,6 @@ resource "null_resource" "bastion_packages" {
   }
   provisioner "remote-exec" {
     inline = [
-      "sudo yum install -y ansible",
       "ansible-galaxy collection install community.crypto",
       "ansible-galaxy collection install ansible.posix",
       "ansible-galaxy collection install kubernetes.core"
