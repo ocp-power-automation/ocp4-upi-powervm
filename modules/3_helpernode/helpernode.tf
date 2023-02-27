@@ -83,6 +83,7 @@ resource "null_resource" "config" {
   triggers = {
     bootstrap_count = var.bootstrap_port_ip == "" ? 0 : 1
     worker_count    = length(var.worker_port_ips)
+    master_count    = length(var.master_port_ips)
   }
 
   connection {
