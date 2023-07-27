@@ -208,9 +208,9 @@ release_image_override     = ""
 These variables specify the ansible playbooks that are used for OpenShift install and post-install customizations.
 ```
 helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
-helpernode_tag             = "5eab3db53976bb16be582f2edc2de02f7510050d"
+helpernode_tag             = "bf7842ec240f1d9ba5b5f9897bb72e7c86500faa"
 install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playbooks"
-install_playbook_tag       = "02a598faa332aa2c3d53e8edd0e840440ff74bd5"
+install_playbook_tag       = "main"
 ```
 
 This variable specify the MTU value for the private network interface on RHEL and RHCOS nodes. The CNI network will have <private_network_mtu> - 50 for OpenshiftSDN and <private_network_mtu> - 100 for OVNKubernetes network provider.
@@ -317,11 +317,11 @@ These set of variables are specific for LUKS encryption configuration and instal
 luks_compliant               = false # Set it true if you prefer to use FIPS enable in ocp deployment
 luks_config                  = [ { thumbprint = "", url = "" }, { thumbprint = "", url = "" }, { thumbprint = "", url = "" } ]
 luks_filesystem_device       = "/dev/mapper/root"  #Set this value for file system device
-luks_format                  = "xfs"  #Set value of format for filesystem 
-luks_wipe_filesystem         = true  #Configures the FileSystem to be wiped 
-luks_device                  = "/dev/disk/by-partlabel/root"  #Set value of luks device 
-luks_label                   = "luks-root"  #Set value of tang label 
-luks_options                 = ["--cipher", "aes-cbc-essiv:sha256"]  #Set List of luks options for the luks encryption 
-luks_wipe_volume             = true  #Configures the luks encrypted partition to be wiped 
-luks_name                    = "root"  #Set value of luks name 
+luks_format                  = "xfs"  #Set value of format for filesystem
+luks_wipe_filesystem         = true  #Configures the FileSystem to be wiped
+luks_device                  = "/dev/disk/by-partlabel/root"  #Set value of luks device
+luks_label                   = "luks-root"  #Set value of tang label
+luks_options                 = ["--cipher", "aes-cbc-essiv:sha256"]  #Set List of luks options for the luks encryption
+luks_wipe_volume             = true  #Configures the luks encrypted partition to be wiped
+luks_name                    = "root"  #Set value of luks name
 ```
