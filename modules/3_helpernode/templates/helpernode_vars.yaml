@@ -56,6 +56,7 @@ workers:
 %{ endfor ~}
 %{ endif }
 
+baremetal: false
 ppc64le: true
 ssh_gen_key: false
 
