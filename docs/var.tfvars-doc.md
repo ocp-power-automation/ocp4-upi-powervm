@@ -249,6 +249,20 @@ rhcos_kernel_options        = []
   rhcos_kernel_options      = ["slub_max_order=0","loglevel=7"]
   ```
 
+These variables are used to apply sysctl options via [Node Tuning Operator](https://docs.openshift.com/container-platform/latest/scalability_and_performance/using-node-tuning-operator.html) in the OpenShift cluster.
+```
+sysctl_tuned_options        = true
+sysctl_options              = ["kernel.shmmni=16384","net.ipv4.tcp_tw_reuse=1"]
+match_array                 = <<EOF
+  - label: node-role.kubernetes.io/master
+  - label: icp4data
+    value: database-db2oltp
+    type: pod
+  - label: disk
+    value: ssd
+EOF
+```
+
 These are NTP specific variables that are used for time-synchronization in the OpenShift cluster.
 ```
 chrony_config               = true

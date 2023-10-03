@@ -68,6 +68,18 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #dns_forwarders             = "1.1.1.1; 9.9.9.9"
 #rhcos_pre_kernel_options   = []
 #rhcos_kernel_options       = []
+
+# sysctl_tuned_options        = true
+# sysctl_options              = ["kernel.shmmni=16384","net.ipv4.tcp_tw_reuse=1"]
+# match_array                 = <<EOF
+#   - label: node-role.kubernetes.io/master
+#   - label: icp4data
+#     value: database-db2oltp
+#     type: pod
+#   - label: disk
+#     value: ssd
+# EOF
+
 #chrony_config              = true
 #chrony_config_servers      = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
 
