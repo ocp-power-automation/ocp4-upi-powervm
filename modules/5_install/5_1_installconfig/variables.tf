@@ -96,3 +96,11 @@ variable "luks_label" {}
 variable "luks_options" {}
 variable "luks_wipe_volume" {}
 variable "luks_name" {}
+
+variable "kdump_enable" { default = false }
+variable "kdump_commandline_remove" {}
+variable "kdump_commandline_append" {}
+variable "kdump_kexec_args" {}
+variable "kdump_img" {}
+variable "kdump_log_path" {}
+variable "kdump_crash_kernel_memory" {}

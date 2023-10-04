@@ -72,17 +72,24 @@ locals {
     service_network            = var.service_network
     # Set CNI network MTU to MTU - 100 for OVNKubernetes and MTU - 50 for OpenShiftSDN(default).
     # Add new conditions here when we have more network providers
-    cni_network_mtu        = var.cni_network_provider == "OVNKubernetes" ? var.private_network_mtu - 100 : var.private_network_mtu - 50
-    luks_compliant         = var.luks_compliant
-    luks_config            = var.luks_config
-    luks_filesystem_device = var.luks_filesystem_device
-    luks_format            = var.luks_format
-    luks_wipe_filesystem   = var.luks_wipe_filesystem
-    luks_device            = var.luks_device
-    luks_label             = var.luks_label
-    luks_options           = var.luks_options
-    luks_wipe_volume       = var.luks_wipe_volume
-    luks_name              = var.luks_name
+    cni_network_mtu           = var.cni_network_provider == "OVNKubernetes" ? var.private_network_mtu - 100 : var.private_network_mtu - 50
+    luks_compliant            = var.luks_compliant
+    luks_config               = var.luks_config
+    luks_filesystem_device    = var.luks_filesystem_device
+    luks_format               = var.luks_format
+    luks_wipe_filesystem      = var.luks_wipe_filesystem
+    luks_device               = var.luks_device
+    luks_label                = var.luks_label
+    luks_options              = var.luks_options
+    luks_wipe_volume          = var.luks_wipe_volume
+    luks_name                 = var.luks_name
+    kdump_enable              = var.kdump_enable
+    kdump_commandline_remove  = var.kdump_commandline_remove
+    kdump_commandline_append  = var.kdump_commandline_append
+    kdump_kexec_args          = var.kdump_kexec_args
+    kdump_img                 = var.kdump_img
+    kdump_log_path            = var.kdump_log_path
+    kdump_crash_kernel_memory = var.kdump_crash_kernel_memory
   }
 
   upgrade_vars = {

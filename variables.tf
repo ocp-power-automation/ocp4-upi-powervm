@@ -550,3 +550,45 @@ variable "luks_name" {
   description = "User label of Filesystem to be luks encrypted"
   default     = "root"
 }
+
+
+################################################################
+# KDUMP variables
+################################################################
+
+
+variable "kdump_enable" {
+  type        = bool
+  description = "Set to true to enable the kdump on Cluster Nodes"
+  default     = false
+}
+variable "kdump_commandline_remove" {
+  type        = string
+  description = "This option removes arguments from the current kdump command line"
+  default     = "hugepages hugepagesz slub_debug quiet log_buf_len swiotlb"
+}
+variable "kdump_commandline_append" {
+  type        = string
+  description = "This option appends arguments to the current kdump command line"
+  default     = "irqpoll maxcpus=1 reset_devices cgroup_disable=memory mce=off numa=off udev.children-max=2 panic=10 rootflags=nofail acpi_no_memhotplug transparent_hugepage=never nokaslr novmcoredd hest_disable srcutree.big_cpu_lim=0"
+}
+variable "kdump_kexec_args" {
+  type        = string
+  description = "For adding any extra argument to pass to kexec command"
+  default     = "-s"
+}
+variable "kdump_img" {
+  type        = string
+  description = "For specifying image other than default kernel image"
+  default     = "vmlinuz"
+}
+variable "kdump_log_path" {
+  type        = string
+  description = "The file system path in which the kdump saves the vmcore file"
+  default     = "/var/crash"
+}
+variable "kdump_crash_kernel_memory" {
+  type        = string
+  description = "The crashkernel memory reservation for kdump occurs during the system boot"
+  default     = "2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G"
+}
