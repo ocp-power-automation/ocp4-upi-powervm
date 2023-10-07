@@ -123,3 +123,11 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #luks_options                = ["--cipher", "aes-cbc-essiv:sha256"]  #Set List of luks options for the luks encryption
 #luks_wipe_volume             = true  #Configures the luks encrypted partition to be wiped
 #luks_name                   = "root" #Set the value for the user label of Filesystem to be luks encrypted
+
+#kdump_enable              = false # Set to true to enable the kdump on Cluster Nodes
+#kdump_commandline_remove  = "hugepages hugepagesz slub_debug quiet log_buf_len swiotlb" # This option removes arguments from the current kdump command line
+#kdump_commandline_append  = "irqpoll maxcpus=1 reset_devices cgroup_disable=memory mce=off numa=off udev.children-max=2 panic=10 rootflags=nofail acpi_no_memhotplug transparent_hugepage=never nokaslr novmcoredd hest_disable srcutree.big_cpu_lim=0" #This option appends arguments to the current kdump command line
+#kdump_kexec_args          = "-s" #For adding any extra argument to pass to kexec command
+#kdump_img                 = "vmlinuz" #For specifying image other than default kernel image
+#kdump_log_path            = "/var/crash" #The file system path in which the kdump saves the vmcore file
+#kdump_crash_kernel_memory = "2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G" #The crashkernel memory reservation for kdump occurs during the system boot
