@@ -92,7 +92,7 @@ locals {
   }
 }
 
-resource "openstack_blockstorage_volume_v2" "master" {
+resource "openstack_blockstorage_volume_v3" "master" {
   depends_on = [openstack_compute_instance_v2.master]
   count      = local.master.volume_count * var.master["count"]
   name       = "${var.cluster_id}-master-${count.index}-volume"
@@ -102,5 +102,5 @@ resource "openstack_blockstorage_volume_v2" "master" {
 resource "openstack_compute_volume_attach_v2" "master" {
   count       = local.master.volume_count * var.master["count"]
   instance_id = openstack_compute_instance_v2.master.*.id[floor(count.index / local.master.volume_count)]
-  volume_id   = openstack_blockstorage_volume_v2.master.*.id[count.index]
+  volume_id   = openstack_blockstorage_volume_v3.master.*.id[count.index]
 }
