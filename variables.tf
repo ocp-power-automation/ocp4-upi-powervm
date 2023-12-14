@@ -117,6 +117,10 @@ variable "worker" {
     # data_volume_count = 0 #Number of volumes to be attached to each worker node.
   }
 }
+variable "pub_network_name" {
+  description = "The name of the public network to be used for disconnected deploy operations"
+  default     = ""
+}
 
 variable "network_name" {
   description = "The name of the network to be used for deploy operations"
