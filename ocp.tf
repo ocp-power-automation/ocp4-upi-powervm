@@ -46,6 +46,7 @@ module "bastion" {
   cluster_id                      = local.cluster_id
   bastion                         = var.bastion
   bastion_port_ids                = module.network.bastion_port_ids
+  pub_network_name                = var.pub_network_name
   scg_id                          = var.scg_id
   openstack_availability_zone     = var.openstack_availability_zone
   rhel_username                   = var.rhel_username

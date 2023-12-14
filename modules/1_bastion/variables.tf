@@ -26,6 +26,7 @@ variable "cluster_id" {
 }
 variable "bastion" {}
 variable "bastion_port_ids" {}
+variable "pub_network_name" {}
 
 variable "scg_id" {}
 variable "scg_flavor_is_public" {}
