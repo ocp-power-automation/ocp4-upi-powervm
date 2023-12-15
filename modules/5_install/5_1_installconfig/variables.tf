@@ -29,6 +29,7 @@ variable "cidr" {}
 
 variable "bastion_vip" {}
 variable "bastion_ip" {}
+variable "pub_bastion_ip" {}
 variable "rhel_username" {}
 variable "private_key" {}
 variable "ssh_agent" {}

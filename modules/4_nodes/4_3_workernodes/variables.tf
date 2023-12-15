@@ -19,6 +19,7 @@
 ################################################################
 
 variable "bastion_ip" {}
+variable "pub_bastion_ip" {}
 variable "cluster_id" {}
 
 variable "worker" {

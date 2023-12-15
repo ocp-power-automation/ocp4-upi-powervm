@@ -111,7 +111,7 @@ resource "null_resource" "pre_install" {
   connection {
     type         = "ssh"
     user         = var.rhel_username
-    host         = var.bastion_ip[count.index]
+    host         = var.pub_bastion_ip == "" ? var.bastion_ip[count.index] : var.pub_bastion_ip
     private_key  = var.private_key
     agent        = var.ssh_agent
     timeout      = "${var.connection_timeout}m"
@@ -141,7 +141,7 @@ resource "null_resource" "install_config" {
   connection {
     type         = "ssh"
     user         = var.rhel_username
-    host         = var.bastion_ip[0]
+    host         = var.pub_bastion_ip == "" ? var.bastion_ip[0] : var.pub_bastion_ip
     private_key  = var.private_key
     agent        = var.ssh_agent
     timeout      = "${var.connection_timeout}m"
