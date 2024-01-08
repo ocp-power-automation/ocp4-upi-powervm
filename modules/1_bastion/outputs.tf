@@ -20,5 +20,11 @@
 
 output "bastion_ip" {
   depends_on = [null_resource.bastion_packages, null_resource.setup_nfs_disk]
-  value      = openstack_compute_instance_v2.bastion.*.access_ip_v4
+  value      = var.pub_network_name == "" ? openstack_compute_instance_v2.bastion.*.access_ip_v4 : [openstack_compute_instance_v2.bastion[0].network[1].fixed_ip_v4]
+}
+
+
+output "pub_bastion_ip" {
+  depends_on = [null_resource.bastion_packages, null_resource.setup_nfs_disk]
+  value      = var.pub_network_name == "" ? "" : openstack_compute_instance_v2.bastion[0].access_ip_v4
 }

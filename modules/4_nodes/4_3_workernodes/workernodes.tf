@@ -104,7 +104,7 @@ resource "null_resource" "remove_worker" {
   count      = var.worker["count"]
   depends_on = [openstack_compute_instance_v2.worker]
   triggers = {
-    bastion_ip         = var.bastion_ip
+    bastion_ip         = var.pub_bastion_ip == "" ? var.bastion_ip : var.pub_bastion_ip
     rhel_username      = var.rhel_username
     private_key        = var.private_key
     ssh_agent          = var.ssh_agent

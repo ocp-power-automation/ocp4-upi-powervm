@@ -50,6 +50,11 @@ data "openstack_compute_flavor_v2" "bastion" {
   name = var.bastion["instance_type"]
 }
 
+data "openstack_networking_network_v2" "pub_network" {
+  count = var.pub_network_name == "" ? 0 : 1
+  name  = var.pub_network_name
+}
+
 resource "openstack_compute_instance_v2" "bastion" {
   count = local.bastion_count
 
@@ -57,6 +62,14 @@ resource "openstack_compute_instance_v2" "bastion" {
   image_id  = var.bastion["image_id"]
   flavor_id = var.scg_id == "" ? data.openstack_compute_flavor_v2.bastion.id : openstack_compute_flavor_v2.bastion_scg[0].id
   key_pair  = openstack_compute_keypair_v2.key-pair.0.name
+  
+  dynamic "network" {
+    for_each = data.openstack_networking_network_v2.pub_network
+    content {
+      uuid = network.value["id"]
+    }
+  }
+
   network {
     port = var.bastion_port_ids[count.index]
   }

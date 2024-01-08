@@ -46,6 +46,7 @@ module "bastion" {
   cluster_id                      = local.cluster_id
   bastion                         = var.bastion
   bastion_port_ids                = module.network.bastion_port_ids
+  pub_network_name                = var.pub_network_name
   scg_id                          = var.scg_id
   openstack_availability_zone     = var.openstack_availability_zone
   rhel_username                   = var.rhel_username
@@ -95,6 +96,7 @@ module "helpernode" {
   allocation_pools          = module.network.allocation_pools
   bastion_vip               = module.network.bastion_vip
   bastion_ip                = module.bastion.bastion_ip
+  pub_bastion_ip            = module.bastion.pub_bastion_ip
   rhel_username             = var.rhel_username
   private_key               = local.private_key
   ssh_agent                 = var.ssh_agent
@@ -129,6 +131,7 @@ module "installconfig" {
   bastion                    = var.bastion
   bastion_vip                = module.network.bastion_vip
   bastion_ip                 = module.bastion.bastion_ip
+  pub_bastion_ip             = module.bastion.pub_bastion_ip
   rhel_username              = var.rhel_username
   private_key                = local.private_key
   ssh_agent                  = var.ssh_agent
@@ -208,6 +211,7 @@ module "bootstrapconfig" {
   source     = "./modules/5_install/5_2_bootstrapconfig"
 
   bastion_ip            = module.bastion.bastion_ip
+  pub_bastion_ip        = module.bastion.pub_bastion_ip
   rhel_username         = var.rhel_username
   private_key           = local.private_key
   ssh_agent             = var.ssh_agent
@@ -235,6 +239,7 @@ module "bootstrapcomplete" {
   source     = "./modules/5_install/5_3_bootstrapcomplete"
 
   bastion_ip            = module.bastion.bastion_ip
+  pub_bastion_ip        = module.bastion.pub_bastion_ip
   rhel_username         = var.rhel_username
   private_key           = local.private_key
   ssh_agent             = var.ssh_agent
@@ -247,6 +252,7 @@ module "workernodes" {
   source = "./modules/4_nodes/4_3_workernodes"
 
   bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
+  pub_bastion_ip              = module.bastion.pub_bastion_ip
   cluster_id                  = local.cluster_id
   worker                      = var.worker
   scg_id                      = var.scg_id
@@ -268,6 +274,7 @@ module "install" {
   cluster_id            = local.cluster_id
   bastion_vip           = module.network.bastion_vip
   bastion_ip            = module.bastion.bastion_ip
+  pub_bastion_ip        = module.bastion.pub_bastion_ip
   rhel_username         = var.rhel_username
   private_key           = local.private_key
   ssh_agent             = var.ssh_agent
