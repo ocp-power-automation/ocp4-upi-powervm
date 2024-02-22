@@ -195,7 +195,7 @@ The following variables can be used for disconnected install by using a local mi
 
 ```
 enable_local_registry      = false  #Set to true to enable usage of local registry for restricted network install.
-local_registry_image       = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
+local_registry_image       = "docker.io/library/registry:2"
 ocp_release_tag            = "4.4.9-ppc64le"
 ocp_release_name           = "ocp-release"
 ```
