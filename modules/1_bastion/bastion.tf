@@ -345,3 +345,52 @@ resource "null_resource" "setup_nfs_disk" {
     ]
   }
 }
+
+resource "null_resource" "fips_enablement" {
+  count = var.fips_compliant ? local.bastion_count : 0
+  depends_on =  [openstack_compute_keypair_v2.key-pair, random_id.label, openstack_compute_flavor_v2.bastion_scg, openstack_compute_instance_v2.bastion, null_resource.bastion_init, null_resource.setup_proxy_info, null_resource.bastion_register, null_resource.enable_repos, null_resource.bastion_packages, openstack_blockstorage_volume_v3.storage_volume, openstack_compute_volume_attach_v2.storage_v_attach, null_resource.setup_nfs_disk]
+
+  connection {
+    type        = "ssh"
+    user        = var.rhel_username
+    host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
+    private_key = var.private_key
+    agent       = var.ssh_agent
+    timeout     = "${var.connection_timeout}m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      <<EOF
+sudo fips-mode-setup --enable
+sudo shutdown -r +1
+EOF
+    ]
+  }
+}
+
+resource "time_sleep" "wait_60_seconds" {
+  count = var.fips_compliant ? local.bastion_count : 0
+  depends_on = [null_resource.fips_enablement]
+
+  create_duration = "60s"
+}
+
+resource "null_resource" "bastion_nop" {
+#This step waits for the bastion to come back up and runs a simple command
+  count = var.fips_compliant ? local.bastion_count : 0
+  depends_on =  [null_resource.fips_enablement, time_sleep.wait_60_seconds]
+
+  connection {
+    type        = "ssh"
+    user        = var.rhel_username
+    host        = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
+    private_key = var.private_key
+    agent       = var.ssh_agent
+    timeout     = "${var.connection_timeout}m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "whoami"
+    ]
+  }
+}

@@ -51,3 +51,4 @@ variable "volume_storage_template" {}
 
 variable "setup_squid_proxy" {}
 variable "proxy" {}
+variable "fips_compliant" {}

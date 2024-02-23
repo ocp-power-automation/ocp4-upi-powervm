@@ -66,6 +66,7 @@ module "bastion" {
   volume_storage_template         = var.volume_storage_template
   setup_squid_proxy               = var.setup_squid_proxy
   proxy                           = var.proxy
+  fips_compliant                  = var.fips_compliant
 }
 
 module "network" {
@@ -83,6 +84,7 @@ module "network" {
 }
 
 module "helpernode" {
+  depends_on = [module.bastion]
   source = "./modules/3_helpernode"
 
   cluster_domain            = var.cluster_domain
