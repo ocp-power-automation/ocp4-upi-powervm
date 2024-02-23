@@ -51,7 +51,7 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #sriov_capacity             = 0.02
 
 #enable_local_registry      = false  #Set to true to enable usage of local registry for restricted network install.
-#local_registry_image       = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
+#local_registry_image       = "docker.io/library/registry:2"
 #ocp_release_tag            = "4.4.9-ppc64le"
 #ocp_release_name           = "ocp-release"
 #release_image_override     = ""
