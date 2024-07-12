@@ -242,7 +242,8 @@ resource "null_resource" "enable_repos" {
 if ( [[ -z "${var.rhel_subscription_username}" ]] || [[ "${var.rhel_subscription_username}" == "<subscription-id>" ]] ) && [[ -z "${var.rhel_subscription_org}" ]]; then
   sudo yum install -y epel-release
   sudo yum install -y ansible
-elif [[ $(cat /etc/redhat-release | sed 's/[^0-9.]*//g') > 8.5 ]]; then
+elif [[ "$(printf '%s\n' "8.5" "$(cat /etc/redhat-release | sed 's/[^0-9.]*//g')" | sort -V | head -n1)" == "8.5" ]]; then
+  # Compared release version with 8.5 (eg: 8.10 > 8.5)
   sudo yum install -y ansible-core
 else
   sudo subscription-manager repos --enable ${var.ansible_repo_name}
