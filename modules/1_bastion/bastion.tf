@@ -74,8 +74,39 @@ locals {
   }
 }
 
+resource "null_resource" "bastion_fips" {
+  count = var.fips_compliant ? local.bastion_count : 0
+
+  connection {
+    type         = "ssh"
+    user         = var.rhel_username
+    host         = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
+    private_key  = var.private_key
+    agent        = var.ssh_agent
+    timeout      = "${var.connection_timeout}m"
+    bastion_host = var.jump_host
+  }
+
+  provisioner "remote-exec" {
+    inline = [<<EOF
+sudo fips-mode-setup --enable
+sudo systemctl reboot
+EOF
+    ]
+  }
+}
+
+resource "time_sleep" "fips_wait_30_seconds" {
+  depends_on = [null_resource.bastion_fips]
+  count      = var.fips_compliant ? 1 : 0
+
+  create_duration = "30s"
+}
+
 resource "null_resource" "bastion_init" {
-  count = local.bastion_count
+  depends_on = [time_sleep.fips_wait_30_seconds]
+  count      = local.bastion_count
+
 
   connection {
     type         = "ssh"

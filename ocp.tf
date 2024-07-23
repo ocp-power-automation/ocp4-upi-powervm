@@ -66,6 +66,7 @@ module "bastion" {
   volume_storage_template         = var.volume_storage_template
   setup_squid_proxy               = var.setup_squid_proxy
   proxy                           = var.proxy
+  fips_compliant                  = var.fips_compliant
 }
 
 module "network" {
@@ -117,6 +118,7 @@ module "helpernode" {
   chrony_config             = var.chrony_config
   chrony_config_servers     = var.chrony_config_servers
   pull_secret               = file(coalesce(var.pull_secret_file, "/dev/null"))
+  fips_compliant            = var.fips_compliant
 }
 
 module "installconfig" {
