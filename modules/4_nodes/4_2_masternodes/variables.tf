@@ -31,6 +31,7 @@ variable "master" {
 }
 
 variable "scg_id" {}
+variable "scg_flavor_is_public" {}
 variable "openstack_availability_zone" {}
 
 variable "master_port_ids" {}

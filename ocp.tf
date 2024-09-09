@@ -67,6 +67,7 @@ module "bastion" {
   setup_squid_proxy               = var.setup_squid_proxy
   proxy                           = var.proxy
   fips_compliant                  = var.fips_compliant
+  scg_flavor_is_public            = var.scg_flavor_is_public
 }
 
 module "network" {
@@ -203,6 +204,7 @@ module "bootstrapnode" {
   openstack_availability_zone = var.openstack_availability_zone
   bootstrap_port_id           = module.network.bootstrap_port_id
   install_status              = module.installconfig.install_status
+  scg_flavor_is_public        = var.scg_flavor_is_public
 }
 
 module "bootstrapconfig" {
@@ -230,6 +232,7 @@ module "masternodes" {
   master_port_ids             = module.network.master_port_ids
   mount_etcd_ramdisk          = var.mount_etcd_ramdisk
   install_status              = module.bootstrapconfig.install_status
+  scg_flavor_is_public        = var.scg_flavor_is_public
 }
 
 module "bootstrapcomplete" {
@@ -261,6 +264,7 @@ module "workernodes" {
   jump_host                   = var.jump_host
   installconfig_status        = module.installconfig.install_status
   bootstrapcomplete_status    = module.bootstrapcomplete.install_status
+  scg_flavor_is_public        = var.scg_flavor_is_public
 }
 module "install" {
   depends_on = [module.helpernode, module.installconfig, module.workernodes]
