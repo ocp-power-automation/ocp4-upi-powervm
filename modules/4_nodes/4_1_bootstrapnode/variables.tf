@@ -32,6 +32,7 @@ variable "bootstrap" {
 }
 
 variable "scg_id" {}
+variable "scg_flavor_is_public" {}
 variable "openstack_availability_zone" {}
 
 variable "bootstrap_port_id" {}

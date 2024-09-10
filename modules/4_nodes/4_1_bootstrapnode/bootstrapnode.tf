@@ -52,7 +52,7 @@ resource "openstack_compute_flavor_v2" "bootstrap_scg" {
   disk         = data.openstack_compute_flavor_v2.bootstrap.disk
   swap         = data.openstack_compute_flavor_v2.bootstrap.swap
   rx_tx_factor = data.openstack_compute_flavor_v2.bootstrap.rx_tx_factor
-  is_public    = data.openstack_compute_flavor_v2.bootstrap.is_public
+  is_public    = var.scg_flavor_is_public
   extra_specs  = merge(data.openstack_compute_flavor_v2.bootstrap.extra_specs, { "powervm:storage_connectivity_group" : var.scg_id })
 }
 

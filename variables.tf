@@ -150,6 +150,11 @@ variable "scg_id" {
   default     = ""
 }
 
+variable "scg_flavor_is_public" {
+  description = "Newly created compute template will be private by default. User can set this to true to make it visible in UI"
+  default     = false
+}
+
 variable "rhel_username" {
   default = "root"
 }

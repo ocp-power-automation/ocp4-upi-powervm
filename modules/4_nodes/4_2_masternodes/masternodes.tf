@@ -61,7 +61,7 @@ resource "openstack_compute_flavor_v2" "master_scg" {
   disk         = data.openstack_compute_flavor_v2.master.disk
   swap         = data.openstack_compute_flavor_v2.master.swap
   rx_tx_factor = data.openstack_compute_flavor_v2.master.rx_tx_factor
-  is_public    = data.openstack_compute_flavor_v2.master.is_public
+  is_public    = var.scg_flavor_is_public
   extra_specs  = merge(data.openstack_compute_flavor_v2.master.extra_specs, { "powervm:storage_connectivity_group" : var.scg_id })
 }
 

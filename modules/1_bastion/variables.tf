@@ -28,6 +28,7 @@ variable "bastion" {}
 variable "bastion_port_ids" {}
 
 variable "scg_id" {}
+variable "scg_flavor_is_public" {}
 variable "openstack_availability_zone" {}
 
 variable "rhel_username" {}

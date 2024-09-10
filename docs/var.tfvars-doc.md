@@ -190,7 +190,11 @@ The following variable is used to specify the PowerVC [Storage Connectivity Grou
 ```
 scg_id                      = ""
 ```
+This variable determines the visibility of a dynamically created compute template (flavor) in Terraform when `scg_id` is specified. By default, its value is set to `false` meaning the compute template remains private and is not displayed in the UI.
+```
 
+scg_flavor_is_public  = false
+```
 The following variables can be used for disconnected install by using a local mirror registry on the bastion node.
 
 ```

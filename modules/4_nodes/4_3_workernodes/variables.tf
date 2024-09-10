@@ -31,6 +31,7 @@ variable "worker" {
 }
 
 variable "scg_id" {}
+variable "scg_flavor_is_public" {}
 variable "openstack_availability_zone" {}
 
 variable "worker_port_ids" {}
