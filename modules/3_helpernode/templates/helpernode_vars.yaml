@@ -93,3 +93,6 @@ ocp_install_kernel: "file:///dev/null"
 # This is required for latest helpernode. TODO: Remove when https://github.com/RedHatOfficial/ocp4-helpernode/pull/140 is merged
 helm_source: "https://get.helm.sh/helm-v3.4.0-linux-ppc64le.tar.gz"
 fips: ${fips}
+secure_named: ${secure_named}
+secure_http: ${secure_http}
+secure_nfs: ${secure_nfs}

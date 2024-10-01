@@ -47,6 +47,9 @@ locals {
     pool                  = var.allocation_pools[0]
     chrony_config         = var.chrony_config
     chrony_config_servers = var.chrony_config_servers
+    secure_named          = var.secure_named
+    secure_http           = var.secure_http
+    secure_nfs            = var.secure_nfs
 
     bootstrap_info = {
       ip   = var.bootstrap_port_ip,
