@@ -280,7 +280,7 @@ variable "helpernode_repo" {
 variable "helpernode_tag" {
   description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
   # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-  default = "d1ab538df6aeba915bf056f7983a60a68717d4d9"
+  default = "f36e843ae24929dcd56bb99049ef157e6dddbc72"
 }
 
 variable "install_playbook_repo" {
@@ -596,4 +596,24 @@ variable "kdump_crash_kernel_memory" {
   type        = string
   description = "The crashkernel memory reservation for kdump occurs during the system boot"
   default     = "2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G"
+}
+
+################################################################
+# Secure service variables
+################################################################
+
+variable "secure_named" {
+  type        = bool
+  description = "Flag to enable the secure_named which limits DNS transfers"
+  default     = false
+}
+variable "secure_http" {
+  type        = bool
+  description = "Flag to enable the secure_http which disables Track/Trace for httpd server."
+  default     = false
+}
+variable "secure_nfs" {
+  type        = bool
+  description = "Flag to enable the secure_nfs which limits the access of NFS server to the compute/control plane"
+  default     = false
 }

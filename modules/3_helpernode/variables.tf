@@ -68,3 +68,7 @@ variable "chrony_config_servers" {}
 
 variable "pull_secret" {}
 variable "fips_compliant" {}
+
+variable "secure_named" {}
+variable "secure_http" {}
+variable "secure_nfs" {}

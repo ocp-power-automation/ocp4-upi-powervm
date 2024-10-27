@@ -120,6 +120,9 @@ module "helpernode" {
   chrony_config_servers     = var.chrony_config_servers
   pull_secret               = file(coalesce(var.pull_secret_file, "/dev/null"))
   fips_compliant            = var.fips_compliant
+  secure_named              = var.secure_named
+  secure_http               = var.secure_http
+  secure_nfs                = var.secure_nfs
 }
 
 module "installconfig" {
