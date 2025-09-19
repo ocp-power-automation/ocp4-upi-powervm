@@ -194,7 +194,7 @@ resource "null_resource" "bastion_register" {
   triggers = {
     bastion_ip         = openstack_compute_instance_v2.bastion[count.index].access_ip_v4
     rhel_username      = var.rhel_username
-    private_key        = var.private_key
+    private_key        = sensitive(var.private_key)
     ssh_agent          = var.ssh_agent
     jump_host          = var.jump_host
     connection_timeout = var.connection_timeout
