@@ -106,7 +106,7 @@ resource "null_resource" "remove_worker" {
   triggers = {
     bastion_ip         = var.bastion_ip
     rhel_username      = var.rhel_username
-    private_key        = var.private_key
+    private_key        = sensitive(var.private_key)
     ssh_agent          = var.ssh_agent
     connection_timeout = var.connection_timeout
     jump_host          = var.jump_host
