@@ -228,6 +228,7 @@ module "masternodes" {
   source = "./modules/4_nodes/4_2_masternodes"
 
   bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
+  cluster_domain              = var.cluster_domain
   cluster_id                  = local.cluster_id
   master                      = var.master
   scg_id                      = var.scg_id
@@ -255,6 +256,7 @@ module "workernodes" {
   source = "./modules/4_nodes/4_3_workernodes"
 
   bastion_ip                  = module.network.bastion_vip == "" ? module.bastion.bastion_ip[0] : module.network.bastion_vip
+  cluster_domain              = var.cluster_domain
   cluster_id                  = local.cluster_id
   worker                      = var.worker
   scg_id                      = var.scg_id

@@ -42,7 +42,7 @@ data "ignition_file" "w_hostname" {
   content {
     mime    = "text/plain"
     content = <<EOF
-worker-${count.index}
+worker-${count.index}.${var.cluster_id}.${var.cluster_domain}
 EOF
   }
 }
@@ -81,6 +81,7 @@ resource "openstack_compute_instance_v2" "worker" {
 }
 
 locals {
+  cluster_domain = var.cluster_domain
   worker = {
     volume_count = lookup(var.worker, "data_volume_count", 0),
     volume_size  = lookup(var.worker, "data_volume_size", 0)

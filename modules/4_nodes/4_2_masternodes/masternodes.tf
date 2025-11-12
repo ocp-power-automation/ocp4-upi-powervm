@@ -47,7 +47,7 @@ data "ignition_file" "m_hostname" {
   content {
     mime    = "text/plain"
     content = <<EOF
-master-${count.index}
+master-${count.index}.${var.cluster_id}.${var.cluster_domain}
 EOF
   }
 }
@@ -86,6 +86,7 @@ resource "openstack_compute_instance_v2" "master" {
 }
 
 locals {
+  cluster_domain = var.cluster_domain
   master = {
     volume_count = lookup(var.master, "data_volume_count", 0),
     volume_size  = lookup(var.master, "data_volume_size", 0)
