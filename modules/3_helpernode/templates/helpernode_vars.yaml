@@ -96,3 +96,4 @@ fips: ${fips}
 secure_named: ${secure_named}
 secure_http: ${secure_http}
 secure_nfs: ${secure_nfs}
+haproxy_apiserver_healthcheck: ${haproxy_apiserver_healthcheck}

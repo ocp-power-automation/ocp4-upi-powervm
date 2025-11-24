@@ -131,3 +131,5 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #kdump_img                 = "vmlinuz" #For specifying image other than default kernel image
 #kdump_log_path            = "/var/crash" #The file system path in which the kdump saves the vmcore file
 #kdump_crash_kernel_memory = "2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G" #The crashkernel memory reservation for kdump occurs during the system boot
+
+#haproxy_apiserver_healthcheck = true #  Flag to enable the haproxy_apiserver_healthcheck which enables API server healthchecks in haproxy

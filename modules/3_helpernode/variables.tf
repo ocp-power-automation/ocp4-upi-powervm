@@ -72,3 +72,4 @@ variable "fips_compliant" {}
 variable "secure_named" {}
 variable "secure_http" {}
 variable "secure_nfs" {}
+variable "haproxy_apiserver_healthcheck" {}

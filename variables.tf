@@ -274,13 +274,13 @@ variable "installer_log_level" {
 variable "helpernode_repo" {
   description = "Set the repo URL for using ocp4-helpernode"
   # Repo for running ocp4 helpernode setup steps.
-  default = "https://github.com/RedHatOfficial/ocp4-helpernode"
+  default = "https://github.com/redhat-cop/ocp4-helpernode"
 }
 
 variable "helpernode_tag" {
   description = "Set the branch/tag name or commit# for using ocp4-helpernode repo"
   # Checkout level for https://github.com/RedHatOfficial/ocp4-helpernode which is used for setting up services required on bastion node
-  default = "aeb0da160c6f6f94a9709ba784bdefb38011e045"
+  default = "53987a8306764dc0ed77e35ac893c831dedaa8f1"
 }
 
 variable "install_playbook_repo" {
@@ -616,4 +616,13 @@ variable "secure_nfs" {
   type        = bool
   description = "Flag to enable the secure_nfs which limits the access of NFS server to the compute/control plane"
   default     = false
+}
+
+###########################################
+# HAProxy API Server HealthCheck variable
+###########################################
+variable "haproxy_apiserver_healthcheck" {
+  type        = bool
+  description = "Flag to enable the haproxy_apiserver_healthcheck which enables API server healthchecks in haproxy"
+  default     = true
 }
