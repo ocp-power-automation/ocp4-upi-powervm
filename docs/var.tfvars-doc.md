@@ -360,3 +360,8 @@ secure_named       = false  # Set to true to enable the secure_named which limit
 secure_http        = false  # Set to true to enable the secure_http excludes the served by header
 secure_nfs         = false  # Set to true to enable the secure_nfs limits the access of NFS served by the bastion to the compute/control plane
 ```
+
+This variable can be used to enable API server health checks in HAProxy.
+```
+haproxy_apiserver_healthcheck = true
+```
