@@ -30,26 +30,27 @@ locals {
   }
 
   helpernode_vars = {
-    cluster_domain        = local.cluster_domain
-    cluster_id            = var.cluster_id
-    bastion_ip            = var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]
-    bastion_name          = var.bastion_vip != "" ? "${var.cluster_id}-bastion" : "${var.cluster_id}-bastion-0"
-    isHA                  = var.bastion_vip != ""
-    bastion_master_ip     = var.bastion_ip[0]
-    bastion_backup_ip     = length(var.bastion_ip) > 1 ? slice(var.bastion_ip, 1, length(var.bastion_ip)) : []
-    forwarders            = var.dns_forwarders
-    lb_ipaddr             = var.lb_ipaddr
-    ext_dns               = var.ext_dns
-    gateway_ip            = var.gateway_ip
-    netmask               = cidrnetmask(var.cidr)
-    broadcast             = cidrhost(var.cidr, -1)
-    ipid                  = cidrhost(var.cidr, 0)
-    pool                  = var.allocation_pools[0]
-    chrony_config         = var.chrony_config
-    chrony_config_servers = var.chrony_config_servers
-    secure_named          = var.secure_named
-    secure_http           = var.secure_http
-    secure_nfs            = var.secure_nfs
+    cluster_domain                = local.cluster_domain
+    cluster_id                    = var.cluster_id
+    bastion_ip                    = var.bastion_vip != "" ? var.bastion_vip : var.bastion_ip[0]
+    bastion_name                  = var.bastion_vip != "" ? "${var.cluster_id}-bastion" : "${var.cluster_id}-bastion-0"
+    isHA                          = var.bastion_vip != ""
+    bastion_master_ip             = var.bastion_ip[0]
+    bastion_backup_ip             = length(var.bastion_ip) > 1 ? slice(var.bastion_ip, 1, length(var.bastion_ip)) : []
+    forwarders                    = var.dns_forwarders
+    lb_ipaddr                     = var.lb_ipaddr
+    ext_dns                       = var.ext_dns
+    gateway_ip                    = var.gateway_ip
+    netmask                       = cidrnetmask(var.cidr)
+    broadcast                     = cidrhost(var.cidr, -1)
+    ipid                          = cidrhost(var.cidr, 0)
+    pool                          = var.allocation_pools[0]
+    chrony_config                 = var.chrony_config
+    chrony_config_servers         = var.chrony_config_servers
+    secure_named                  = var.secure_named
+    secure_http                   = var.secure_http
+    secure_nfs                    = var.secure_nfs
+    haproxy_apiserver_healthcheck = var.haproxy_apiserver_healthcheck
 
     bootstrap_info = {
       ip   = var.bootstrap_port_ip,
