@@ -121,13 +121,21 @@ resource "null_resource" "pre_install" {
 
   # DHCP config for setting MTU; Since helpernode DHCP template does not support MTU setting
   provisioner "remote-exec" {
-    inline = [
-      # Set specified mtu for private interface.
-      "sudo ip link set dev $(ip r | grep \"${var.cidr} dev\" | awk '{print $3}') mtu ${var.private_network_mtu}",
-      "echo MTU=${var.private_network_mtu} | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-$(ip r | grep ${var.cidr} | awk '{print $3}')",
+    inline = [<<-EOF
+      # Set specified MTU for private interface;
+      sudo ip link set dev $(ip r | grep "${var.cidr} dev" | awk '{print $3}') mtu ${var.private_network_mtu}
+      echo MTU=${var.private_network_mtu} | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-$(ip r | grep ${var.cidr} | awk '{print $3}')
       # DHCP config for setting MTU;
-      "sed -i.mtubak '/option routers/i option interface-mtu ${var.private_network_mtu};' /etc/dhcp/dhcpd.conf",
-      "sudo systemctl restart dhcpd.service"
+      RHEL_VERSION=$(grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"' | cut -d'.' -f1)
+      if [ "$RHEL_VERSION" -lt 10 ]; then
+          sudo sed -i.mtubak '/option routers/i option interface-mtu ${var.private_network_mtu};' /etc/dhcp/dhcpd.conf
+          sudo systemctl restart dhcpd.service
+      else
+          sudo jq '.Dhcp4["option-data"] |= [{"name":"interface-mtu","data":"${var.private_network_mtu}"}] + .' /etc/kea/kea-dhcp4.conf > /tmp/kea.conf
+          sudo mv /tmp/kea.conf /etc/kea/kea-dhcp4.conf
+          sudo systemctl restart kea-dhcp4.service
+      fi
+EOF
     ]
   }
 }
