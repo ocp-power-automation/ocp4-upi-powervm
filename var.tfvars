@@ -56,6 +56,8 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 #ocp_release_name           = "ocp-release"
 #release_image_override     = ""
 
+#qe_only_disable_image_policy = false # Set to true to disable ClusterImagePolicy for nightly builds. IBM/Red Hat QE Only: This feature puts a cluster in unsupported mode.
+
 
 #helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
 #helpernode_tag             = ""

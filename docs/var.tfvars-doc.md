@@ -209,6 +209,11 @@ This variable can be used for trying out custom OpenShift install image for deve
 release_image_override     = ""
 ```
 
+This variable is used to disable ClusterImagePolicy for QE testing purposes. Set to `true` to disable the ClusterImagePolicy. IBM/Red Hat QE Only: Disables ClusterImagePolicy so Nightly builds can be deployed. This feature puts a cluster in unsupported mode.
+```
+qe_only_disable_image_policy = false
+```
+
 These variables specify the ansible playbooks that are used for OpenShift install and post-install customizations.
 ```
 helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
