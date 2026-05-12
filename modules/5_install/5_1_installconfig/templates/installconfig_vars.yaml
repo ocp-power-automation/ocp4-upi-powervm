@@ -9,6 +9,7 @@ workdir: ~/openstack-upi
 log_level: ${log_level}
 
 release_image_override: '${release_image_override}'
+qe_only_disable_image_policy: ${qe_only_disable_image_policy}
 enable_local_registry: ${enable_local_registry}
 fips_compliant: "${fips_compliant}"
 
