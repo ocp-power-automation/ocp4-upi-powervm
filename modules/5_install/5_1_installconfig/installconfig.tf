@@ -48,6 +48,7 @@ locals {
     cluster_domain               = local.cluster_domain
     pull_secret                  = var.pull_secret
     public_ssh_key               = var.public_key
+    os_image_stream              = var.os_image_stream
     storage_type                 = var.storage_type
     log_level                    = var.log_level
     release_image_override       = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override

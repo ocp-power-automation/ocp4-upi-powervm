@@ -638,3 +638,14 @@ variable "haproxy_apiserver_healthcheck" {
   description = "Flag to enable the haproxy_apiserver_healthcheck which enables API server healthchecks in haproxy"
   default     = true
 }
+
+variable "os_image_stream" {
+  type        = string
+  description = "OS image stream for RHEL. Accepts 'rhel-9' or 'rhel-10'. If blank, osImageStream is omitted from install-config.yaml"
+  default     = ""
+
+  validation {
+    condition     = var.os_image_stream == "" || var.os_image_stream == "rhel-9" || var.os_image_stream == "rhel-10"
+    error_message = "The os_image_stream value must be blank, 'rhel-9', or 'rhel-10'."
+  }
+}
