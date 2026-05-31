@@ -105,3 +105,5 @@ variable "kdump_kexec_args" {}
 variable "kdump_img" {}
 variable "kdump_log_path" {}
 variable "kdump_crash_kernel_memory" {}
+
+variable "os_image_stream" {}

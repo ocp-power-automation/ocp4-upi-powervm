@@ -197,6 +197,7 @@ module "installconfig" {
   kdump_img                    = var.kdump_img
   kdump_log_path               = var.kdump_log_path
   kdump_crash_kernel_memory    = var.kdump_crash_kernel_memory
+  os_image_stream              = var.os_image_stream
 }
 
 module "bootstrapnode" {
