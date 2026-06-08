@@ -14,7 +14,7 @@ else
     echo "Disk path is /dev/mapper/mpath*"
 fi
 
-for device in $(ls -1 $disk_path|egrep -v "[0-9]$"); do
+for device in $(ls -1 $disk_path | grep -E -v "[0-9]$"); do
     if [[ ! -b $device"1" ]]; then
         # Convert disk size to GB
         device_size=$(lsblk -b -dn -o SIZE $device | awk '{print $1/1073741824}')
