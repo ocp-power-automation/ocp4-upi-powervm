@@ -69,6 +69,7 @@ setup_registry:
   product_repo: "openshift-release-dev"
   release_name: "ocp-release"
   release_tag: "${local_registry.ocp_release_tag}"
+  oc_mirror: ${oc_mirror}
 %{ endif }
 
 %{ if chrony_config ~}

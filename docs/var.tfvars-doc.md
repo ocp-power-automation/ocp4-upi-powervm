@@ -117,16 +117,19 @@ For latest stable:
 ```
 openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz"
 openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-client-linux.tar.gz"
+oc_mirror                   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/oc-mirror.tar.gz"
 ```
 For specific stable version:
 ```
 openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.11/openshift-install-linux.tar.gz"
 openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.11/openshift-client-linux.tar.gz"
+oc_mirror                   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable-4.20/oc-mirror.tar.gz"
 ```
 For pre-release:
 ```
 openshift_install_tarball   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-install-linux.tar.gz"
 openshift_client_tarball    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/openshift-client-linux.tar.gz"
+oc_mirror                   = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/latest/oc-mirror.tar.gz"
 ```
 
 This variable specifies the OpenShift pull secret. This is available from the following link -  https://cloud.redhat.com/openshift/install/power/user-provisioned

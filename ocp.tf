@@ -111,6 +111,7 @@ module "helpernode" {
   openshift_install_tarball     = var.openshift_install_tarball
   openshift_client_tarball      = var.openshift_client_tarball
   enable_local_registry         = var.enable_local_registry
+  oc_mirror                     = var.oc_mirror
   local_registry_image          = var.local_registry_image
   ocp_release_tag               = var.ocp_release_tag
   helpernode_repo               = var.helpernode_repo

@@ -76,6 +76,7 @@ locals {
     client_tarball  = var.openshift_client_tarball
     install_tarball = var.openshift_install_tarball
     fips            = var.fips_compliant
+    oc_mirror       = var.oc_mirror
   }
   helpernode_inventory = {
     rhel_username = var.rhel_username
