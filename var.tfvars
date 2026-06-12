@@ -36,6 +36,7 @@ jump_host          = ""
 
 openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz"
 openshift_client_tarball  = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-client-linux.tar.gz"
+oc_mirror                 = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/oc-mirror.tar.gz"
 pull_secret_file          = "data/pull-secret.txt"
 
 cluster_domain    = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
