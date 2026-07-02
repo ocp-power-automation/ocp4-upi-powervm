@@ -4,6 +4,7 @@ install_config:
    cluster_id: ${cluster_id}
    pull_secret: '${pull_secret}'
    public_ssh_key: '${public_ssh_key}'
+   os_image_stream: '${os_image_stream}'
 
 workdir: ~/openstack-upi
 log_level: ${log_level}
