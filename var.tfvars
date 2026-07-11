@@ -58,6 +58,7 @@ cluster_id        = ""         # It will use random generated id with cluster_id
 
 #qe_only_disable_image_policy = false # Set to true to disable ClusterImagePolicy for nightly builds. IBM/Red Hat QE Only: This feature puts a cluster in unsupported mode.
 
+#os_image_stream = ""  # Set to 'rhel-9' or 'rhel-10' to pin the OS image stream.
 
 #helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
 #helpernode_tag             = ""
