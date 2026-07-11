@@ -495,6 +495,11 @@ variable "local_registry_image" {
   default     = "docker.io/library/registry:2"
 }
 
+variable "oc_mirror_tarball" {
+  description = "Link for the oc-mirror package used for maintaining the mirror registries."
+  default     = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/oc-mirror.tar.gz"
+}
+
 variable "ocp_release_tag" {
   description = "The version of OpenShift you want to sync."
   default     = "4.4.9-ppc64le"

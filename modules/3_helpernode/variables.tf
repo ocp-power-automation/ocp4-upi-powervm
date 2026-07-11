@@ -53,6 +53,7 @@ variable "worker_macs" {}
 
 variable "openshift_client_tarball" {}
 variable "openshift_install_tarball" {}
+variable "oc_mirror_tarball" {}
 
 variable "enable_local_registry" {}
 variable "local_registry_image" {}
