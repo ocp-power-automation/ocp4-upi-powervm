@@ -222,7 +222,14 @@ else
     sudo subscription-manager register --org='${var.rhel_subscription_org}' --activationkey='${var.rhel_subscription_activationkey}' --force
 fi
 sudo subscription-manager refresh
-sudo subscription-manager attach --auto
+
+RHEL_VERSION=$(grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"' | cut -d'.' -f1)
+if [ "$RHEL_VERSION" -lt 10 ]; then
+    echo "RHEL $RHEL_VERSION detected: Attaching subscriptions..."
+    sudo subscription-manager attach --auto
+else
+    echo "RHEL $RHEL_VERSION detected: Skipping 'attach' (SCA active)."
+fi
 
 EOF
     ]
@@ -373,7 +380,7 @@ resource "null_resource" "setup_nfs_disk" {
       "sudo mkfs.xfs /dev/${local.disk_config.disk_name}",
       "MY_DEV_UUID=$(sudo blkid -o export /dev/${local.disk_config.disk_name} | awk '/UUID/{ print }')",
       "echo \"$MY_DEV_UUID ${local.storage_path} xfs defaults 0 0\" | sudo tee -a /etc/fstab > /dev/null",
-      "sudo mount ${local.storage_path}",
+      "sudo mount ${local.storage_path}; sudo systemctl daemon-reload"
     ]
   }
 }
