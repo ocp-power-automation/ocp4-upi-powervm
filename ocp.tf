@@ -110,6 +110,7 @@ module "helpernode" {
   worker_macs                   = module.network.worker_macs
   openshift_install_tarball     = var.openshift_install_tarball
   openshift_client_tarball      = var.openshift_client_tarball
+  oc_mirror_tarball             = var.oc_mirror_tarball
   enable_local_registry         = var.enable_local_registry
   local_registry_image          = var.local_registry_image
   ocp_release_tag               = var.ocp_release_tag
