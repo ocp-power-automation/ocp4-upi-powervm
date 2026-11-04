@@ -60,15 +60,23 @@ data "openstack_compute_flavor_v2" "bootstrap" {
   name = var.bootstrap["instance_type"]
 }
 
+locals {
+  bootstrap_az   = lookup(var.bootstrap, "availability_zone", var.openstack_availability_zone)
+  bootstrap_host = lookup(var.bootstrap, "host", "")
+}
+
 resource "openstack_compute_instance_v2" "bootstrap" {
   depends_on = [var.install_status]
 
   # Only 1 node is supported
-  count             = var.bootstrap["count"] == 0 ? 0 : 1
-  name              = "${var.cluster_id}-bootstrap"
-  flavor_id         = var.scg_id == "" ? data.openstack_compute_flavor_v2.bootstrap.id : openstack_compute_flavor_v2.bootstrap_scg[0].id
-  image_id          = var.bootstrap["image_id"]
-  availability_zone = lookup(var.bootstrap, "availability_zone", var.openstack_availability_zone)
+  count     = var.bootstrap["count"] == 0 ? 0 : 1
+  name      = "${var.cluster_id}-bootstrap"
+  flavor_id = var.scg_id == "" ? data.openstack_compute_flavor_v2.bootstrap.id : openstack_compute_flavor_v2.bootstrap_scg[0].id
+  image_id  = var.bootstrap["image_id"]
+  # When an optional "host" is given, pin the VM to that hypervisor using "ZONE:HOST".
+  # availability_zone conflicts with availability_zone_hints, so only one is set.
+  availability_zone       = local.bootstrap_host == "" ? local.bootstrap_az : null
+  availability_zone_hints = local.bootstrap_host == "" ? null : "${local.bootstrap_az}:${local.bootstrap_host}"
 
   user_data = data.ignition_config.bootstrap.rendered
 

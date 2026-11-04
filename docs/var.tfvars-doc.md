@@ -62,6 +62,13 @@ worker                      = {instance_type    = "<worker-compute-template>", i
 ```
 Above will create the bastion in `openstack_availability_zone`, bootstrap in default availability zone, masters in `master-zone`, and workers in `worker-zone`.
 
+`host` is an optional attribute for bastion, bootstrap, master and worker. If it is specified, all VMs of that type are created on that specific hypervisor within the availability zone (PowerVC Host Group) using `availability_zone_hints = "<availability_zone>:<host>"`. An availability zone must be set, either through the `availability_zone` attribute or `openstack_availability_zone`. Leave `host` unset to let PowerVC pick the hypervisor.
+
+`host` must be the **MTMS name** of the managed system (machine type, model and serial number, in the form `<MachineTypeModel>_<Serial>`, for example `9080M9S_78305A8`). This is the value in the `Hypervisor Hostname` column of `openstack hypervisor list`. The display name shown in the PowerVC UI will not match.
+```
+master                      = {instance_type    = "<master-compute-template>", image_id    = "<image-uuid-rhcos>", availability_zone = "master-zone", host = "9080M9S_78305A8", "count"   = 3}
+```
+
 To set a pre-defined IPv4 address for the bastion node, make use of the optional `fixed_ip_v4` in bastion variable as shown below. Ensure this address is within the given network subnet range and not already in use.
 ```
 bastion                     = {instance_type    = "<bastion-compute-template>", image_id    = "<image-uuid-rhel>",  "count"   = 1,  fixed_ip_v4 = "<IPv4 address>"}
