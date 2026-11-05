@@ -40,8 +40,6 @@ locals {
     user_pass = lookup(var.proxy, "user", "") == "" ? "" : "${lookup(var.proxy, "user", "")}:${lookup(var.proxy, "password", "")}@"
   }
 
-  local_registry_ocp_image = "registry.${var.cluster_id}.${local.cluster_domain}:5000/${local.ocp_release_repo}:${var.ocp_release_tag}"
-
   install_vars = {
     bastion_vip                  = var.bastion_vip
     cluster_id                   = var.cluster_id
@@ -51,7 +49,7 @@ locals {
     os_image_stream              = var.os_image_stream
     storage_type                 = var.storage_type
     log_level                    = var.log_level
-    release_image_override       = var.enable_local_registry ? local.local_registry_ocp_image : var.release_image_override
+    release_image_override       = var.enable_local_registry ? "" : var.release_image_override
     qe_only_disable_image_policy = var.qe_only_disable_image_policy
     enable_local_registry        = var.enable_local_registry
     fips_compliant               = var.fips_compliant
