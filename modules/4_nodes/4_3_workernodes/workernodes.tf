@@ -68,14 +68,22 @@ data "openstack_compute_flavor_v2" "worker" {
   name = var.worker["instance_type"]
 }
 
+locals {
+  worker_az   = lookup(var.worker, "availability_zone", var.openstack_availability_zone)
+  worker_host = lookup(var.worker, "host", "")
+}
+
 resource "openstack_compute_instance_v2" "worker" {
   depends_on = [var.installconfig_status, var.bootstrapcomplete_status]
   count      = var.worker["count"]
 
-  name              = "${var.cluster_id}-worker-${count.index}"
-  flavor_id         = var.scg_id == "" ? data.openstack_compute_flavor_v2.worker.id : openstack_compute_flavor_v2.worker_scg[0].id
-  image_id          = var.worker["image_id"]
-  availability_zone = lookup(var.worker, "availability_zone", var.openstack_availability_zone)
+  name      = "${var.cluster_id}-worker-${count.index}"
+  flavor_id = var.scg_id == "" ? data.openstack_compute_flavor_v2.worker.id : openstack_compute_flavor_v2.worker_scg[0].id
+  image_id  = var.worker["image_id"]
+  # When an optional "host" is given, pin the VM to that hypervisor using "ZONE:HOST".
+  # availability_zone conflicts with availability_zone_hints, so only one is set.
+  availability_zone       = local.worker_host == "" ? local.worker_az : null
+  availability_zone_hints = local.worker_host == "" ? null : "${local.worker_az}:${local.worker_host}"
 
   user_data = data.ignition_config.worker[count.index].rendered
 

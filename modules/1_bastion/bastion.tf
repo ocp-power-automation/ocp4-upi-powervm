@@ -20,6 +20,8 @@
 
 locals {
   bastion_count = lookup(var.bastion, "count", 1)
+  bastion_az    = lookup(var.bastion, "availability_zone", var.openstack_availability_zone)
+  bastion_host  = lookup(var.bastion, "host", "")
 }
 
 resource "openstack_compute_keypair_v2" "key-pair" {
@@ -60,7 +62,10 @@ resource "openstack_compute_instance_v2" "bastion" {
   network {
     port = var.bastion_port_ids[count.index]
   }
-  availability_zone = lookup(var.bastion, "availability_zone", var.openstack_availability_zone)
+  # When an optional "host" is given, pin the VM to that hypervisor using "ZONE:HOST".
+  # availability_zone conflicts with availability_zone_hints, so only one is set.
+  availability_zone       = local.bastion_host == "" ? local.bastion_az : null
+  availability_zone_hints = local.bastion_host == "" ? null : "${local.bastion_az}:${local.bastion_host}"
 }
 
 locals {

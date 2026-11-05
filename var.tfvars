@@ -15,10 +15,13 @@ bootstrap = { instance_type = "<bootstrap-compute-template>", image_id = "<image
 master    = { instance_type = "<master-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 3 }
 worker    = { instance_type = "<worker-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 2 }
 # With all optional attributes
-# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   availability_zone = "<availability zone>",  "count"   = 1, fixed_ip_v4 = "<IPv4 address>"}
-# bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 1}
-# master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 3, data_volume_count  = 0, data_volume_size  = 100}
-# worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
+# "host" pins all VMs of that type to a specific hypervisor in the availability zone (PowerVC host group).
+# "host" is the MTMS name (Machine Type-Model_Serial, e.g. 9080M9S_78305A8) of the managed system, as shown in the
+# "Hypervisor Hostname" column of `openstack hypervisor list`. The display name in the PowerVC UI will not work.
+# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   availability_zone = "<availability zone>",  host = "<MTMS-name>",  "count"   = 1, fixed_ip_v4 = "<IPv4 address>"}
+# bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  host = "<MTMS-name>",  "count"   = 1}
+# master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  host = "<MTMS-name>",  "count"   = 3, data_volume_count  = 0, data_volume_size  = 100}
+# worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  host = "<MTMS-name>",  "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
 
 
 rhel_username                   = "root" #Set it to an appropriate username for non-root user access

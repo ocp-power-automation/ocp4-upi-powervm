@@ -73,14 +73,22 @@ data "openstack_compute_flavor_v2" "master" {
   name = var.master["instance_type"]
 }
 
+locals {
+  master_az   = lookup(var.master, "availability_zone", var.openstack_availability_zone)
+  master_host = lookup(var.master, "host", "")
+}
+
 resource "openstack_compute_instance_v2" "master" {
   depends_on = [var.install_status]
   count      = var.master["count"]
 
-  name              = "${var.cluster_id}-master-${count.index}"
-  flavor_id         = var.scg_id == "" ? data.openstack_compute_flavor_v2.master.id : openstack_compute_flavor_v2.master_scg[0].id
-  image_id          = var.master["image_id"]
-  availability_zone = lookup(var.master, "availability_zone", var.openstack_availability_zone)
+  name      = "${var.cluster_id}-master-${count.index}"
+  flavor_id = var.scg_id == "" ? data.openstack_compute_flavor_v2.master.id : openstack_compute_flavor_v2.master_scg[0].id
+  image_id  = var.master["image_id"]
+  # When an optional "host" is given, pin the VM to that hypervisor using "ZONE:HOST".
+  # availability_zone conflicts with availability_zone_hints, so only one is set.
+  availability_zone       = local.master_host == "" ? local.master_az : null
+  availability_zone_hints = local.master_host == "" ? null : "${local.master_az}:${local.master_host}"
 
   user_data = data.ignition_config.master[count.index].rendered
 

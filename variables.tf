@@ -67,6 +67,8 @@ variable "bastion" {
     image_id      = "daa5d3f4-ab66-4b2d-9f3d-77bd61774419"
     # optional availability_zone
     # availability_zone = ""
+    # optional hypervisor within the availability zone
+    # host = "" # MTMS name (Hypervisor Hostname in `openstack hypervisor list`), e.g. 9080M9S_78305A8
     # optional fixed IP address
     # fixed_ip_v4   = "123.45.67.89"
     # fixed_ips = []
@@ -81,6 +83,8 @@ variable "bootstrap" {
     image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
     # optional availability_zone
     # availability_zone = ""
+    # optional hypervisor within the availability zone
+    # host = "" # MTMS name (Hypervisor Hostname in `openstack hypervisor list`), e.g. 9080M9S_78305A8
     # optional fixed IPs
     # fixed_ips = []
   }
@@ -94,6 +98,8 @@ variable "master" {
     image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
     # optional availability_zone
     # availability_zone = ""
+    # optional hypervisor within the availability zone
+    # host = "" # MTMS name (Hypervisor Hostname in `openstack hypervisor list`), e.g. 9080M9S_78305A8
     # optional fixed IPs
     # fixed_ips = []
     # optional data volumes to master nodes
@@ -110,6 +116,8 @@ variable "worker" {
     image_id = "468863e6-4b33-4e8b-b2c5-c9ef9e6eedf4"
     # optional availability_zone
     # availability_zone = ""
+    # optional hypervisor within the availability zone
+    # host = "" # MTMS name (Hypervisor Hostname in `openstack hypervisor list`), e.g. 9080M9S_78305A8
     # optional fixed IPs
     # fixed_ips = []
     # optional data volumes to worker nodes
